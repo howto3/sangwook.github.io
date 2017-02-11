@@ -1,0 +1,1957 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" hreflang="ko" /><updated>2017-02-11T21:44:37+09:00</updated><id>//</id><title type="html">이상욱</title><subtitle>이상욱</subtitle><author><name>이상욱</name></author><entry><title type="html">Uber의 Message Queue, Akka, Vim, Java</title><link href="/2016/12/14/uber-message-queue-akka-vim-java.html" rel="alternate" type="text/html" title="Uber의 Message Queue, Akka, Vim, Java" /><published>2016-12-14T21:59:00+09:00</published><updated>2016-12-14T21:59:00+09:00</updated><id>/2016/12/14/uber-message-queue-akka-vim-java</id><content type="html" xml:base="/2016/12/14/uber-message-queue-akka-vim-java.html">&lt;h3 id=&quot;uber가-만든-mq-디자인-task-queue-용도&quot;&gt;Uber가 만든 MQ 디자인. (task-queue 용도)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;uber가 며칠전(12/6) 아래의 제목으로 글을 썼다.
+    &lt;ul&gt;
+      &lt;li&gt;“Cherami: Uber Engineering’s Durable and Scalable Task Queue in Go - Uber Engineering Blog”&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://eng.uber.com/cherami/&quot;&gt;https://eng.uber.com/cherami/&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;uber는 microservice-architecture(이하 MSA)로 운영하는 것으로 유명하다.
+    &lt;ul&gt;
+      &lt;li&gt;이 글로 MSA에 필수인 queue를 uber는 어떤 디자인으로 만들었는지 알 수 있다.&lt;/li&gt;
+      &lt;li&gt;또 어떤 디자인이 실제로 어떻게 구현되고 무슨 고민이 있는지도 알 수 있다.&lt;/li&gt;
+      &lt;li&gt;남이 만든 디자인을 관찰하는건 재밌는 일이다.&lt;/li&gt;
+      &lt;li&gt;나는 주로 가용성과 확장성에 주목한다.
+        &lt;ul&gt;
+          &lt;li&gt;(나에게) 처리량은 확장성에 포함되고.&lt;/li&gt;
+          &lt;li&gt;(나에게) fault-tolerance는 가용성에 포함된다.&lt;/li&gt;
+          &lt;li&gt;(물론 엄격히 말하면 다르다.)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;uber는 1억개/일 메시지가 오간다고 한다.
+        &lt;ul&gt;
+          &lt;li&gt;계산해보면 평균 1,157개/초 메시지로 추정할 수 있다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;이 메시지가 uber에서 사용되는 사례로 밝힌 것:
+        &lt;ul&gt;
+          &lt;li&gt;post-trip processing&lt;/li&gt;
+          &lt;li&gt;fraud detection&lt;/li&gt;
+          &lt;li&gt;user notification&lt;/li&gt;
+          &lt;li&gt;incentive campaigns&lt;/li&gt;
+          &lt;li&gt;등&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;주요 디자인 선택.
+    &lt;ul&gt;
+      &lt;li&gt;가용성을 위한 선택.
+        &lt;ul&gt;
+          &lt;li&gt;competing consumers.&lt;/li&gt;
+          &lt;li&gt;replicating messages.&lt;/li&gt;
+          &lt;li&gt;eventual consistency.
+            &lt;ul&gt;
+              &lt;li&gt;이 선택은 아마도 순서를 보장하지 않는단 얘기.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;확장성을 위한 선택.
+        &lt;ul&gt;
+          &lt;li&gt;competing consumers.&lt;/li&gt;
+          &lt;li&gt;write 처리량을 관찰하다가 확장하는 역할도 미들웨어에서 하는 듯 하다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;나는 새로운 솔루션을 사용 하는 일에는 보수적이다.
+    &lt;ul&gt;
+      &lt;li&gt;새로운 솔루션을 선택하는 일은 많은 단점이 있다.
+        &lt;ul&gt;
+          &lt;li&gt;(논증 생략.)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;나는 둘 중 하나의 길을 선호한다.
+        &lt;ol&gt;
+          &lt;li&gt;새로운 솔루션의 “디자인”만 이해하고, 기존 기술로 요구사항에 맞춰 구현한다.&lt;/li&gt;
+          &lt;li&gt;아래 조건을 만족한 경우 새로운 솔루션을 사용한다.
+            &lt;ul&gt;
+              &lt;li&gt;솔루션을 아주 깊이 이해했다.&lt;/li&gt;
+              &lt;li&gt;동시에 전파하기 쉬운 솔루션이다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;보통은 디자인을 제대로 이해하지 못하고, 유행을 쫓아 도입하는 경우가 많다.&lt;/li&gt;
+      &lt;li&gt;그 중 queue 시스템은 다양한 장단점의 솔루션이 있다.
+        &lt;ul&gt;
+          &lt;li&gt;각 회사마다 각 팀마다 저마다의 queue를 만드는 경향도 있다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;고가용성, 고확장성을 가지고.
+        &lt;ul&gt;
+          &lt;li&gt;보장옵션을 선택하게 하면 좋을텐데.&lt;/li&gt;
+          &lt;li&gt;현재는 Amazon SQS 가 그것에 가장 가까웠다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;akka&quot;&gt;Akka&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;최근에 Akka와 Actor model의 디자인도 잠깐 검토할 일이 있었다.&lt;/li&gt;
+  &lt;li&gt;Akka는 해주는게 거의 없는 틀 이었다.&lt;/li&gt;
+  &lt;li&gt;나는 이런 프레임워크를 좋아한다.&lt;/li&gt;
+  &lt;li&gt;보통은 X를 보장하면 Y가 떨어진다.
+    &lt;ul&gt;
+      &lt;li&gt;풍선을 누르면 다른 부분이 올라가는 것 처럼.&lt;/li&gt;
+      &lt;li&gt;세상의 일은 대부분 tradeoff 다.&lt;/li&gt;
+      &lt;li&gt;어떤 프레임워크가 X를 보장한다고 주장한다고 해도.
+        &lt;ul&gt;
+          &lt;li&gt;사실은 그 보장의 경계를 증명하기 위해 많은 비용을 써야한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Akka는 오버헤드가 없는 틀만 있고 대부분을 개발자에게 위임한다.
+    &lt;ul&gt;
+      &lt;li&gt;그리고 actor model이 구조적으로 살을 붙이기 좋아 보였다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;vim&quot;&gt;vim&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;vim 관련 링크들.&lt;/li&gt;
+  &lt;li&gt;2016 NYC Vim talk에서 있었던 “vim 플러그인이 하는 일의 90% 를 플러그인 없이 하는 방법” 이라는 제목의 발표.
+    &lt;ul&gt;
+      &lt;li&gt;영상 &lt;a href='#fn:1' class='footnote' id='fnref:1'&gt;[1]&lt;/a&gt;, 슬라이드 &lt;a href='#fn:2' class='footnote' id='fnref:2'&gt;[2]&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;재밌게 보긴 했지만, 남는건 별로 없었다.&lt;/li&gt;
+      &lt;li&gt;다른 내용은 좀 억지스럽고 부자연스럽게 문제를 해결하려는것 같았다.
+        &lt;ul&gt;
+          &lt;li&gt;플러그인으로 하면 쉬운데 왜 이렇게까지? 하는 기분.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;file browser는 나도 nerdtree 보다 netrw 계열을 쓰는데 동의한다.&lt;/li&gt;
+      &lt;li&gt;하지만 nerdtree 를 여전히 사용은 하고 있다.&lt;/li&gt;
+      &lt;li&gt;그리고 내장된 순수 netrw 는 문제가 좀 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;vim 스크립트 칫싯. &lt;a href='#fn:3' class='footnote' id='fnref:3'&gt;[3]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;스니핏으로 저장해두고 쓰기 좋다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;파이콘2016 에서 vim과 gnome-desktop을 사용하시는 분이 있었다. &lt;a href='#fn:4' class='footnote' id='fnref:4'&gt;[4]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;ruby의 byebug 같은 역할을 python에서는 pudb로 하는것 같다.
+        &lt;ul&gt;
+          &lt;li&gt;gdb와 매핑되는 네이밍으로 보인다.&lt;/li&gt;
+          &lt;li&gt;근데 저렇게 UI까지 제공하는건 좋은 선택일까?&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;nautilus 를 터미널에서 입력하시는거 보니 오래된 gnome-desktop 유저 분이시구나 하는 생각이 들었다.&lt;/li&gt;
+      &lt;li&gt;vim에서 python 자동완성을 위해 jedi-vim &lt;a href='#fn:5' class='footnote' id='fnref:5'&gt;[5]&lt;/a&gt; 을 사용하신다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;redis를 만든 antirez가 vim을 어떻게 사용하는지 쓴 글을 읽었다. &lt;a href='#fn:6' class='footnote' id='fnref:6'&gt;[6]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;antirez가 쓰는 전체 vimrc 는 이것인듯. &lt;a href='#fn:7' class='footnote' id='fnref:7'&gt;[7]&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;특별한건 없고, vim을 최소한의 설정으로 사용한다.
+        &lt;ul&gt;
+          &lt;li&gt;vim을 많이 사용하는 유저는 아닌것 같다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;실수방지를 위해 &lt;code&gt;map 4 $&lt;/code&gt; 을 한건 귀요미.
+        &lt;ul&gt;
+          &lt;li&gt;나도 설정해봤는데.&lt;/li&gt;
+          &lt;li&gt;너무 불편하여 며칠후에 관뒀다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;r!date&lt;/code&gt; 는 나도 설정해서 쓰는데, 나같은 사람을 또 만나다니!&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;java&quot;&gt;java&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;java 생태계는 unix철학을 따르지 않고, 내가 쓰기엔 불편한 점이 많다.
+    &lt;ul&gt;
+      &lt;li&gt;(나와는 정말 안 맞는것 같ㄷ…)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;예를 들어.
+    &lt;ul&gt;
+      &lt;li&gt;현재 프로젝트의 dependency 목록을 보여주는 shell 함수를 만들고 싶었다.
+        &lt;ul&gt;
+          &lt;li&gt;당연히 &lt;code&gt;mvn help:effective-pom | xml2json | jq '...생략...'&lt;/code&gt; 이런식으로 간단히 되겠지. 라고 생각했다.&lt;/li&gt;
+          &lt;li&gt;하지만 &lt;code&gt;mvn help:effective-pom&lt;/code&gt; 결과는 xml 외에도 info log정보를 (verbose하게) stdout에 뿌린다.&lt;/li&gt;
+          &lt;li&gt;xml만 출력하려면 파일에 쓰고, 그 파일을 읽으면서 작업해야한다.&lt;/li&gt;
+          &lt;li&gt;불편하다.&lt;/li&gt;
+          &lt;li&gt;verbose 옵션이 디폴트라니.&lt;/li&gt;
+          &lt;li&gt;quite 옵션도 없다니.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;remote 의존성을 shell에서 검색하고 싶었다.
+        &lt;ul&gt;
+          &lt;li&gt;만약 ruby라면 &lt;code&gt;gem search kafka&lt;/code&gt;
+            &lt;ul&gt;
+              &lt;li&gt;(덧, ruby kafka 라이브러리가 옛날 버전만 지원하는 것을 보고 좀 우울해졌다.)&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;만약 python이라면 &lt;code&gt;pip search kafka&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;만약 docker라면 &lt;code&gt;docker search kafka&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;만약 apt라면 &lt;code&gt;apt search kafka&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;를 했는데. java에서는 도대체 왜 &lt;code&gt;mvn search kafka&lt;/code&gt; 같은게 없는걸까.&lt;/li&gt;
+          &lt;li&gt;라고 생각했는데
+            &lt;ul&gt;
+              &lt;li&gt;&lt;code&gt;mvn-search kafka&lt;/code&gt; 식으로 만들 수 있게, 누군가 savant &lt;a href='#fn:8' class='footnote' id='fnref:8'&gt;[8]&lt;/a&gt; 라는 도구를 만드셨다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;모든 dependency의 문자열 검색을 ag 같은 외부 툴로 하고 싶었다.
+        &lt;ul&gt;
+          &lt;li&gt;ruby라면 &lt;code&gt;ag ~/.rvm/gems/ruby-2.3.1/gems/&lt;/code&gt;으로 검색하면 된다.
+            &lt;ul&gt;
+              &lt;li&gt;실제로 이런 검색을 하는 vim 커맨드를 만들고, 키 하나로 찾아간다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;java에서도 이걸 해볼까 해서 시도했는데.
+            &lt;ul&gt;
+              &lt;li&gt;일단 maven repository 에 소스를 올리지 않는 라이브러리가 많다.&lt;/li&gt;
+              &lt;li&gt;그리고 모두 jar로 압축된 형태로 &lt;code&gt;~/.m2/repository&lt;/code&gt; 아래에 저장된다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;jar를 풀고 class 를 decompile 해서 저장해야.
+            &lt;ul&gt;
+              &lt;li&gt;ag 같은 외부 툴로 검색하는 기능을 만들 수 있다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;악.&lt;/li&gt;
+          &lt;li&gt;안 한다 안 해!&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;java에도 타입추론이 제안되었다. &lt;a href='#fn:9' class='footnote' id='fnref:9'&gt;[9]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;자바커뮤니티는 세계 최고의 보수적인 프로그래머 집단이기 때문에
+        &lt;ul&gt;
+          &lt;li&gt;스칼라와 코틀린의 기능들을 아주 천천히 흡수하고 있다.
+            &lt;ul&gt;
+              &lt;li&gt;neovim 의 핵심기능을 vim8 이 흡수하면서 neovim을 죽이고.&lt;/li&gt;
+              &lt;li&gt;coffeescript 같은 언어도 결국 흡수되면서 죽는 것 처럼.&lt;/li&gt;
+              &lt;li&gt;kotlin 같은 언어는 (너무!) 좋지만 언젠가 죽을 운명의 기술이라 생각한다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;타입추론의 문법은 아래 중 하나로 결정될 것 같다.
+            &lt;ul&gt;
+              &lt;li&gt;var x = expr only (like C#)&lt;/li&gt;
+              &lt;li&gt;var, plus val for immutable locals (like Scala, Kotlin)&lt;/li&gt;
+              &lt;li&gt;var, plus let for immutable locals (like Swift)&lt;/li&gt;
+              &lt;li&gt;auto x = expr (like C++)&lt;/li&gt;
+              &lt;li&gt;const x = expr (already a reserved word)&lt;/li&gt;
+              &lt;li&gt;final x = expr (already a reserved word)&lt;/li&gt;
+              &lt;li&gt;let x = expr&lt;/li&gt;
+              &lt;li&gt;def x = expr (like Groovy)&lt;/li&gt;
+              &lt;li&gt;x := expr (like Go)&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;나는 Go 스타일의 &lt;code&gt;x := expr&lt;/code&gt; 으로 선택되면 좋겠는데.
+            &lt;ul&gt;
+              &lt;li&gt;자바스럽지 않다며 기각되었다.
+                &lt;ul&gt;
+                  &lt;li&gt;The Go syntax (a different kind of assignment operator) seems pretty un-Javaish.&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+              &lt;li&gt;자바스럽지 않다니! (하.)&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=XA2WjJbmmoM&quot;&gt;https://www.youtube.com/watch?v=XA2WjJbmmoM&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/mcantor/no_plugins/blob/master/no_plugins.vim&quot;&gt;https://github.com/mcantor/no_plugins/blob/master/no_plugins.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://ricostacruz.com/cheatsheets/vimscript.html&quot;&gt;http://ricostacruz.com/cheatsheets/vimscript.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=xDz8WVO_wjE&quot;&gt;https://www.youtube.com/watch?v=xDz8WVO_wjE&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/davidhalter/jedi-vim&quot;&gt;https://github.com/davidhalter/jedi-vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://howivim.com/2016/salvatore-sanfilippo/&quot;&gt;http://howivim.com/2016/salvatore-sanfilippo/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://gist.github.com/antirez/3860461&quot;&gt;https://gist.github.com/antirez/3860461&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:8&quot; id=&quot;fn:8&quot; class=&quot;reversefootnote&quot;&gt;[8]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/spilth/savant&quot;&gt;https://github.com/spilth/savant&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:9&quot; id=&quot;fn:9&quot; class=&quot;reversefootnote&quot;&gt;[9]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://openjdk.java.net/jeps/286&quot;&gt;http://openjdk.java.net/jeps/286&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><author><name>이상욱</name></author><summary type="html">Uber가 만든 MQ 디자인. (task-queue 용도)</summary></entry><entry><title type="html">우분투16과 KDE</title><link href="/2016/10/11/ubuntu-1604-kde.html" rel="alternate" type="text/html" title="우분투16과 KDE" /><published>2016-10-11T21:36:00+09:00</published><updated>2016-10-11T21:36:00+09:00</updated><id>/2016/10/11/ubuntu-1604-kde</id><content type="html" xml:base="/2016/10/11/ubuntu-1604-kde.html">&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-screenfetch.jpg&quot;&gt;&lt;img src=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-screenfetch.jpg&quot; alt=&quot;screenfetch&quot; /&gt;&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;오랫동안 Ubuntu 14.04 LTS 를 사용하고 있었다.
+    &lt;ul&gt;
+      &lt;li&gt;Unity 도 불편했지만 적응했고 익숙해졌다.&lt;/li&gt;
+      &lt;li&gt;하지만 다음 OS는 Unity 를 사용하지 않기로 다짐했다.&lt;/li&gt;
+      &lt;li&gt;왜?
+        &lt;ul&gt;
+          &lt;li&gt;라고 묻는다면 명확한 답을 못하겠다.&lt;/li&gt;
+          &lt;li&gt;살짝 느린 느낌? 이라는 (내가 싫어하는) 비과학적인 답을 해야한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;아무튼 다음에는 &lt;code&gt;archlinux&lt;/code&gt; 또는 &lt;code&gt;debian&lt;/code&gt; 처럼 rolling update 가 가능한 OS를 쓰고 싶었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;처음에는 &lt;code&gt;archlinux&lt;/code&gt; 기반에 tiling WM을 검토했다.
+    &lt;ul&gt;
+      &lt;li&gt;다른 hdd 파티션에 &lt;code&gt;archlinux&lt;/code&gt; 와 WM 으로 &lt;code&gt;i3wm&lt;/code&gt; 을 설치했다.&lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;i3wm&lt;/code&gt; 을 선택한 이유는 가장 많이 쓰이기 때문이다. &lt;a href='#fn:1' class='footnote' id='fnref:1'&gt;[1]&lt;/a&gt; &lt;a href='#fn:2' class='footnote' id='fnref:2'&gt;[2]&lt;/a&gt; &lt;a href='#fn:3' class='footnote' id='fnref:3'&gt;[3]&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;결과적으로 &lt;code&gt;i3wm&lt;/code&gt; 은 사용하길 포기했다.
+        &lt;ul&gt;
+          &lt;li&gt;많은 문제가 있었고, 하나씩 문제를 해결했지만.&lt;/li&gt;
+          &lt;li&gt;아래의 문제를 해결하다가 너무 시간을 쓰는 것 같아서 현재 미룬 상태이다.
+            &lt;ul&gt;
+              &lt;li&gt;[문제1] wine 기반에 kakaotalk 을 설치하면 tiling 이 제대로 동작하지 않았다.
+                &lt;ul&gt;
+                  &lt;li&gt;wine만 예외로 tiling 을 disable 했지만. 그래도 이상하게 동작했다.&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+              &lt;li&gt;[문제2] chrome 이 느리다.
+                &lt;ul&gt;
+                  &lt;li&gt;정확히는 url 입력 bar 에서 키 입력에 지연이 있다.&lt;/li&gt;
+                  &lt;li&gt;또 탭 이동, 페이지 로딩 등에서 약간의 지연이 있다.&lt;/li&gt;
+                  &lt;li&gt;아마도 ubuntu 패키지 등에서 자동으로 해결해주던 그래픽 드라이버가 &lt;code&gt;i3wm&lt;/code&gt; 에서는 수동으로 설정을 해줘야 하는 것으로 추측함.&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;2016-03-13 알파고 vs. 이세돌 경기를 매일 재밌게 보는데 발견한 사실.
+    &lt;ul&gt;
+      &lt;li&gt;알파고는 Ubuntu14, Unity에서 돌아가는 것으로 보인다.&lt;/li&gt;
+      &lt;li&gt;근거1. &lt;a href=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-alphago-1.jpg&quot;&gt;&lt;img src=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-alphago-1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;근거2. &lt;a href=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-alphago-2.jpg&quot;&gt;&lt;img src=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-alphago-2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;2016-04-21 Ubuntu 16.04 가 릴리즈 되었다. &lt;a href='#fn:4' class='footnote' id='fnref:4'&gt;[4]&lt;/a&gt; &lt;a href='#fn:5' class='footnote' id='fnref:5'&gt;[5]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;바로 업그레이드 하려고 했으나, 일이 바빠서 미뤘다.&lt;/li&gt;
+      &lt;li&gt;역시 LTS는 16.04.1 이 나오고 업그레이드를 해야한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;2016-07-22 Ubuntu 16.04.1 이 릴리즈 되었다. &lt;a href='#fn:6' class='footnote' id='fnref:6'&gt;[6]&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;회사에 KDE를 좋아하는 쿠퍼에게 설득되서 KDE를 사용해보기로 했다.
+    &lt;ul&gt;
+      &lt;li&gt;KDE의 가장 큰 장점은 file manager인 dolphin 매우 좋다는 점이다.&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-dolphin.jpg&quot;&gt;&lt;img src=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-dolphin.jpg&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;나는 원래 주로 shell에서 파일관리를 하는 편이라&lt;/li&gt;
+      &lt;li&gt;Ubuntu14에서 사용하던 &lt;code&gt;GNOME Files&lt;/code&gt;(=Nautilus) 에도 딱히 불만이 없었다.&lt;/li&gt;
+      &lt;li&gt;Dolphin 을 몇 주 사용해본 결과 아주 만족하고 있는데, 아래의 장점이 있다.
+        &lt;ul&gt;
+          &lt;li&gt;split 이 된다는 점.&lt;/li&gt;
+          &lt;li&gt;아래에 shell이 나온다는 점.&lt;/li&gt;
+          &lt;li&gt;directory 변경 시 아래의 shell 에 자동으로 cd가 된다는 점.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;적어도 macOS의 그지같은 &lt;code&gt;Finder&lt;/code&gt; 보다는 훨씬 좋다.&lt;/li&gt;
+      &lt;li&gt;multiple rename 이 혹시 regex 를 지원할까 기대했는데 그건 되지 않는다.
+        &lt;ul&gt;
+          &lt;li&gt;이거야 shell 에서 하면 되니까.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;다른 HDD 파티션에 kubuntu 16.04.1 를 설치했다.
+    &lt;ul&gt;
+      &lt;li&gt;USB로 부팅.
+        &lt;ul&gt;
+          &lt;li&gt;&lt;code&gt;sudo dd if=./kubuntu-16.04.1-desktop-amd64.iso of=/dev/sdb&lt;/code&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;GRUB: &lt;a href=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-grub.jpg&quot;&gt;&lt;img src=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-grub.jpg&quot; alt=&quot;GRUB&quot; /&gt;&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;start kubuntu &amp;gt; install kubuntu 로 설치 진행.&lt;/li&gt;
+      &lt;li&gt;네트워크 잡고.&lt;/li&gt;
+      &lt;li&gt;git, curl, tmux, zsh, vim, dropbox, fcitx 설치.&lt;/li&gt;
+      &lt;li&gt;system ruby, python, nodejs 를 사용하지 않도록.
+        &lt;ul&gt;
+          &lt;li&gt;rvm, pyenv, nvm 을 설치했다.&lt;/li&gt;
+          &lt;li&gt;system ruby, python 을 사용하지 않도록 &lt;code&gt;/usr/bin/python*&lt;/code&gt; 을 rename 했는데.
+            &lt;ul&gt;
+              &lt;li&gt;이렇게하면 terminator 가 실행하면서 오류가 발생해서 되돌렸다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;wine, kakaotalk 설치.&lt;/li&gt;
+      &lt;li&gt;여기까지 설치하는게 내 필수 환경이라고 생각한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Ubuntu14 를 메인으로 계속 사용하면서 하루에 10-30분씩 Kubuntu16으로 부팅하여 문제/해결을 했다.
+    &lt;ul&gt;
+      &lt;li&gt;3개월정도의 트러블슈팅 끝에 마침내 Kubuntu16 을 메인으로 사용하기 시작했다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;ubuntu14-unity-에서---ubuntu16-kde-로-넘어오면서-생긴-문제해결&quot;&gt;Ubuntu14 Unity 에서 -&amp;gt; Ubuntu16 KDE 로 넘어오면서 생긴 문제/해결&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;[문제] 부팅했을 때 fcitx가 자동실행되지 않음.
+    &lt;ul&gt;
+      &lt;li&gt;[해결] &lt;code&gt;~/.config/autostart/fcitx-autostart.desktop&lt;/code&gt; 파일을 만들었음.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[문제] &lt;code&gt;zshrc&lt;/code&gt; 안에서 DE가 KDE 인지 여부에 따라 분기하는 로직이 필요하다.
+    &lt;ul&gt;
+      &lt;li&gt;[해결] &lt;code&gt;$DESKTOP_SESSION&lt;/code&gt; 을 쓸까 고민하다가, &lt;code&gt;$XDG_CURRENT_DESKTOP&lt;/code&gt;을 사용함.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[문제] KDE가 &lt;code&gt;~/.xprofile&lt;/code&gt; 을 읽지 않는다.
+    &lt;ul&gt;
+      &lt;li&gt;[해결] &lt;code&gt;/etc/X11/Xsession.d/&lt;/code&gt; 아래에 파일을 생성함.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[문제] 나눔고딕코딩 글꼴 설치가 안 된다.
+    &lt;ul&gt;
+      &lt;li&gt;공식 사이트의 설치 가이드 &lt;a href='#fn:7' class='footnote' id='fnref:7'&gt;[7]&lt;/a&gt; 처럼 하면 오류가 난다.&lt;/li&gt;
+      &lt;li&gt;[해결] 패키지 설치.
+        &lt;ul&gt;
+          &lt;li&gt;&lt;code&gt;sudo apt install fonts-nanum fonts-nanum-extra fonts-nanum-coding fonts-baekmuk fonts-unfonts-core fonts-unfonts-extra&lt;/code&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[문제] KDE 기본 터미널인 konsole 에서 NanumGothicCoding 폰트를 선택할 수 없다.
+    &lt;ul&gt;
+      &lt;li&gt;[해결] &lt;code&gt;konsole&lt;/code&gt; 대신 다른 터미널을 쓰기로 함.
+        &lt;ul&gt;
+          &lt;li&gt;처음에는 top-down terminal 을 써보다가.
+            &lt;ul&gt;
+              &lt;li&gt;top-down terminal: 게임 Quake의 채팅창 처럼 F12를 누르면 위에서 터미널이 (언제나) 내려오는 스타일&lt;/li&gt;
+              &lt;li&gt;e.g. Guake, Yakuake, Tilda&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;여기서도 설정 문제가 있어서. &lt;code&gt;terminator&lt;/code&gt; 에 적응했다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[문제] app launcher 를 meta 키 하나로 실행하고 싶다.
+    &lt;ul&gt;
+      &lt;li&gt;[해결?] KDE config 전체적으로 mod 키 만으로는 shortcut 을 지정할 수 없다.
+        &lt;ul&gt;
+          &lt;li&gt;할 수 없이 meta+z 로 shortcut을 지정했다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[문제] 특정 키를 누르면 -&amp;gt; 특정 앱이 실행 되거나 focus가 되는 shortcut을 지정하고 싶다.
+    &lt;ul&gt;
+      &lt;li&gt;[해결] KDE는 command를 global shortcut으로 지정할 수 있고.
+        &lt;ul&gt;
+          &lt;li&gt;아래와 같이 focus 하거나 실행할 수 있다.
+            &lt;ul&gt;
+              &lt;li&gt;&lt;code&gt;wmctrl -xa terminator.Terminator || terminator&lt;/code&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-shortcut-wmctrl.jpg&quot;&gt;&lt;img src=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-shortcut-wmctrl.jpg&quot; alt=&quot;shortcut&quot; /&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[문제] &lt;code&gt;R_ALT&lt;/code&gt; 를 한/영 키로 설정했는데, 빠르게 한영전환이 안 됨.
+    &lt;ul&gt;
+      &lt;li&gt;[해결?] right alt 만 전체적으로 disable 하고 싶은데.
+        &lt;ul&gt;
+          &lt;li&gt;불가능한 것 같다.&lt;/li&gt;
+          &lt;li&gt;사용하지 않는 ALT로 조합되는 shortcut 을 보이는데로 제거했다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[문제] proxy 설정을 shell 에서 하고 싶다.
+    &lt;ul&gt;
+      &lt;li&gt;Ubuntu14 Unity 에서는 &lt;code&gt;gsettings&lt;/code&gt; 명령으로 설정했었다.&lt;/li&gt;
+      &lt;li&gt;[해결] KDE에서는 아래의 파일과 명령으로 가능한 것 같은데. 필요할 때 적용하는 걸로…
+        &lt;ul&gt;
+          &lt;li&gt;&lt;code&gt;~/.kde/share/config/kioslaverc&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;code&gt;kreadconfig --file kioslaverc --group &quot;Proxy Settings&quot; --key httpproxy&lt;/code&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[문제] vim을 소스에서 직접 빌드가 제대로 안 됨.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code&gt;--enable-gui=auto&lt;/code&gt; 옵션으로 빌드하면.&lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;checking --enable-gui argument... no GUI support&lt;/code&gt; 이런 에러가 남.&lt;/li&gt;
+      &lt;li&gt;[해결] &lt;code&gt;/etc/apt/sources.list&lt;/code&gt; 가 디폴트로 &lt;code&gt;deb&lt;/code&gt;만 활성화 되어 있는데 &lt;code&gt;deb-src&lt;/code&gt; 를 주석 해제하고 &lt;code&gt;build-dep&lt;/code&gt;을 하면 된다.&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-vim-version.jpg&quot;&gt;&lt;img src=&quot;http://sangwook.github.io/images/2016/161011-ubuntu16-vim-version.jpg&quot; alt=&quot;vim8&quot; /&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[문제] headphone으로 음악을 듣다가, headphone을 뽑으면 speaker를 음소거 상태로 만들고 싶다.
+    &lt;ul&gt;
+      &lt;li&gt;Ubuntu14 Unity 에서는 자동으로 headphone, speaker 별로 내가 조정한 소리 크기를 기억했다.&lt;/li&gt;
+      &lt;li&gt;그래서 자동으로 내가 원하는대로 동작했다.&lt;/li&gt;
+      &lt;li&gt;KDE는 내 선택을 기억하지 않았고. 해결책을 시간 있을 때 찾아봐야겠다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://pollmill.com/f/which-tiling-window-manager-do-you-use-dax6md8/answers&quot;&gt;http://pollmill.com/f/which-tiling-window-manager-do-you-use-dax6md8/answers&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/archlinux/comments/2t7cek/poll_which_tiling_window_manager_do_you_use/&quot;&gt;https://www.reddit.com/r/archlinux/comments/2t7cek/poll_which_tiling_window_manager_do_you_use/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.slant.co/topics/390/~window-managers-for-linux&quot;&gt;https://www.slant.co/topics/390/~window-managers-for-linux&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/linux/comments/4ftq8e/ubuntu_1604_lts_has_been_officially_released/&quot;&gt;https://www.reddit.com/r/linux/comments/4ftq8e/ubuntu_1604_lts_has_been_officially_released/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/Ubuntu/comments/4ftqs0/ubuntu_1604_lts_has_been_released/&quot;&gt;https://www.reddit.com/r/Ubuntu/comments/4ftqs0/ubuntu_1604_lts_has_been_released/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/linux/comments/4txzoa/ubuntu_16041_lts_released/&quot;&gt;https://www.reddit.com/r/linux/comments/4txzoa/ubuntu_16041_lts_released/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://dev.naver.com/projects/nanumfont/wiki/Install&quot;&gt;http://dev.naver.com/projects/nanumfont/wiki/Install&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><author><name>이상욱</name></author><summary type="html">오랫동안 Ubuntu 14.04 LTS 를 사용하고 있었다.
+    
+      Unity 도 불편했지만 적응했고 익숙해졌다.
+      하지만 다음 OS는 Unity 를 사용하지 않기로 다짐했다.
+      왜?
+        
+          라고 묻는다면 명확한 답을 못하겠다.
+          살짝 느린 느낌? 이라는 (내가 싫어하는) 비과학적인 답을 해야한다.
+        
+      
+      아무튼 다음에는 archlinux 또는 debian 처럼 rolling update 가 가능한 OS를 쓰고 싶었다.
+    
+  
+  처음에는 archlinux 기반에 tiling WM을 검토했다.
+    
+      다른 hdd 파티션에 archlinux 와 WM 으로 i3wm 을 설치했다.
+      i3wm 을 선택한 이유는 가장 많이 쓰이기 때문이다. [1] [2] [3]
+      결과적으로 i3wm 은 사용하길 포기했다.
+        
+          많은 문제가 있었고, 하나씩 문제를 해결했지만.
+          아래의 문제를 해결하다가 너무 시간을 쓰는 것 같아서 현재 미룬 상태이다.
+            
+              [문제1] wine 기반에 kakaotalk 을 설치하면 tiling 이 제대로 동작하지 않았다.
+                
+                  wine만 예외로 tiling 을 disable 했지만. 그래도 이상하게 동작했다.
+                
+              
+              [문제2] chrome 이 느리다.
+                
+                  정확히는 url 입력 bar 에서 키 입력에 지연이 있다.
+                  또 탭 이동, 페이지 로딩 등에서 약간의 지연이 있다.
+                  아마도 ubuntu 패키지 등에서 자동으로 해결해주던 그래픽 드라이버가 i3wm 에서는 수동으로 설정을 해줘야 하는 것으로 추측함.
+                
+              
+            
+          
+        
+      
+    
+  
+  2016-03-13 알파고 vs. 이세돌 경기를 매일 재밌게 보는데 발견한 사실.
+    
+      알파고는 Ubuntu14, Unity에서 돌아가는 것으로 보인다.
+      근거1. 
+      근거2. 
+    
+  
+  2016-04-21 Ubuntu 16.04 가 릴리즈 되었다. [4] [5]
+    
+      바로 업그레이드 하려고 했으나, 일이 바빠서 미뤘다.
+      역시 LTS는 16.04.1 이 나오고 업그레이드를 해야한다.
+    
+  
+  2016-07-22 Ubuntu 16.04.1 이 릴리즈 되었다. [6]
+  회사에 KDE를 좋아하는 쿠퍼에게 설득되서 KDE를 사용해보기로 했다.
+    
+      KDE의 가장 큰 장점은 file manager인 dolphin 매우 좋다는 점이다.
+      
+      나는 원래 주로 shell에서 파일관리를 하는 편이라
+      Ubuntu14에서 사용하던 GNOME Files(=Nautilus) 에도 딱히 불만이 없었다.
+      Dolphin 을 몇 주 사용해본 결과 아주 만족하고 있는데, 아래의 장점이 있다.
+        
+          split 이 된다는 점.
+          아래에 shell이 나온다는 점.
+          directory 변경 시 아래의 shell 에 자동으로 cd가 된다는 점.
+        
+      
+      적어도 macOS의 그지같은 Finder 보다는 훨씬 좋다.
+      multiple rename 이 혹시 regex 를 지원할까 기대했는데 그건 되지 않는다.
+        
+          이거야 shell 에서 하면 되니까.
+        
+      
+    
+  
+  다른 HDD 파티션에 kubuntu 16.04.1 를 설치했다.
+    
+      USB로 부팅.
+        
+          sudo dd if=./kubuntu-16.04.1-desktop-amd64.iso of=/dev/sdb
+        
+      
+      GRUB: 
+      start kubuntu &amp;gt; install kubuntu 로 설치 진행.
+      네트워크 잡고.
+      git, curl, tmux, zsh, vim, dropbox, fcitx 설치.
+      system ruby, python, nodejs 를 사용하지 않도록.
+        
+          rvm, pyenv, nvm 을 설치했다.
+          system ruby, python 을 사용하지 않도록 /usr/bin/python* 을 rename 했는데.
+            
+              이렇게하면 terminator 가 실행하면서 오류가 발생해서 되돌렸다.
+            
+          
+        
+      
+      wine, kakaotalk 설치.
+      여기까지 설치하는게 내 필수 환경이라고 생각한다.
+    
+  
+  Ubuntu14 를 메인으로 계속 사용하면서 하루에 10-30분씩 Kubuntu16으로 부팅하여 문제/해결을 했다.
+    
+      3개월정도의 트러블슈팅 끝에 마침내 Kubuntu16 을 메인으로 사용하기 시작했다.
+    
+  
+
+
+         [1]:        http://pollmill.com/f/which-tiling-window-manager-do-you-use-dax6md8/answers&amp;nbsp;[return]             [2]:        https://www.reddit.com/r/archlinux/comments/2t7cek/poll_which_tiling_window_manager_do_you_use/&amp;nbsp;[return]             [3]:        https://www.slant.co/topics/390/~window-managers-for-linux&amp;nbsp;[return]             [4]:        https://www.reddit.com/r/linux/comments/4ftq8e/ubuntu_1604_lts_has_been_officially_released/&amp;nbsp;[return]             [5]:        https://www.reddit.com/r/Ubuntu/comments/4ftqs0/ubuntu_1604_lts_has_been_released/&amp;nbsp;[return]             [6]:        https://www.reddit.com/r/linux/comments/4txzoa/ubuntu_16041_lts_released/&amp;nbsp;[return]</summary></entry><entry><title type="html">Uber가 PostgreSQL을 MySQL로 바꾼 이유</title><link href="/2016/09/13/uber-mysql-postgresql.html" rel="alternate" type="text/html" title="Uber가 PostgreSQL을 MySQL로 바꾼 이유" /><published>2016-09-13T19:05:00+09:00</published><updated>2016-09-13T19:05:00+09:00</updated><id>/2016/09/13/uber-mysql-postgresql</id><content type="html" xml:base="/2016/09/13/uber-mysql-postgresql.html">&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://eng.uber.com/mysql-migration/&quot;&gt;https://eng.uber.com/mysql-migration/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Postgres의 단점을 매우 잘 정리한 글.&lt;/li&gt;
+  &lt;li&gt;사실 이 글은 아래 그림 하나로 요약할 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;img src=&quot;http://sangwook.github.io/images/2016/160913-14-48-36.jpg&quot; alt=&quot;postgres-vs-mysql&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;읽은 후 쓴 내 메모를 최대한 짧게 요약:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;항목&lt;/th&gt;
+      &lt;th&gt;PostgreSQL&lt;/th&gt;
+      &lt;th&gt;MySQL (InnoDB)&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;secondary index&lt;/td&gt;
+      &lt;td&gt;directly&lt;/td&gt;
+      &lt;td&gt;indirectly&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;secondary key lookup&lt;/td&gt;
+      &lt;td&gt;유리&lt;/td&gt;
+      &lt;td&gt;불리 (index 2개를 찾아야 하니)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;row update 시&lt;/td&gt;
+      &lt;td&gt;모든 index 업데이트&lt;/td&gt;
+      &lt;td&gt;해당 row의 index만 업데이트&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;replication&lt;/td&gt;
+      &lt;td&gt;WAL을 보냄&lt;/td&gt;
+      &lt;td&gt;commands를 보냄&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;MVCC&lt;/td&gt;
+      &lt;td&gt;row를 항상 씀&lt;/td&gt;
+      &lt;td&gt;변경전 row를 rollback segment에 복사.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;cache&lt;/td&gt;
+      &lt;td&gt;OS의 page cache&lt;/td&gt;
+      &lt;td&gt;buffer pool&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;connection&lt;/td&gt;
+      &lt;td&gt;conn 당 process 생성&lt;/td&gt;
+      &lt;td&gt;conn 당 thread 생성&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;upgrade&lt;/td&gt;
+      &lt;td&gt;downtime 필요.&lt;/td&gt;
+      &lt;td&gt;downtime 없이 가능.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;덧,&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;사실 이 글을 보면 pg의 단점만 썼는데.
+    &lt;ul&gt;
+      &lt;li&gt;pg가 tuple 방식의 디자인을 선택한건 tradeoff.&lt;/li&gt;
+      &lt;li&gt;장점도 많다.&lt;/li&gt;
+      &lt;li&gt;그래도 conn 당 process 를 생성하는건 어떤 장점이 있는지 아직 이해가 안 됨.
+        &lt;ul&gt;
+          &lt;li&gt;내가 모르는 이유가 있을지 모르지만.&lt;/li&gt;
+          &lt;li&gt;어떤 기술을 비판하는 일은, 무지가 원인인 경우가 많아 조심.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>이상욱</name></author><summary type="html">https://eng.uber.com/mysql-migration/
+  Postgres의 단점을 매우 잘 정리한 글.
+  사실 이 글은 아래 그림 하나로 요약할 수 있다.
+  
+  읽은 후 쓴 내 메모를 최대한 짧게 요약:</summary></entry><entry><title type="html">“Rails 이제 안 써” 를 읽고</title><link href="/2016/06/14/ruby-rails-solnic.html" rel="alternate" type="text/html" title="&quot;Rails 이제 안 써&quot; 를 읽고" /><published>2016-06-14T23:31:00+09:00</published><updated>2016-06-14T23:31:00+09:00</updated><id>/2016/06/14/ruby-rails-solnic</id><content type="html" xml:base="/2016/06/14/ruby-rails-solnic.html">&lt;ul&gt;
+  &lt;li&gt;며칠전 solnic이 rails를 더이상 쓰지 않는 이유를 썼다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://solnic.eu/2016/05/22/my-time-with-rails-is-up.html&quot;&gt;http://solnic.eu/2016/05/22/my-time-with-rails-is-up.html&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;이 글과 관련 토론을 최근 재밌게 읽었다.&lt;/li&gt;
+      &lt;li&gt;그리고 내 느낀점만 짧게 남겨야 겠다고 생각했다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;일단 나는 ruby와 rails를 좋아한다.&lt;/li&gt;
+  &lt;li&gt;그리고 solnic의 rails에 대한 비판에 공감하는 부분이 많다.&lt;/li&gt;
+  &lt;li&gt;solnic의 글은 한 마디로 Rails의 tight-coupling 을 지적하고 있다.&lt;/li&gt;
+  &lt;li&gt;좀 더 자세히는 Rails 에 대해 아래 3가지를 비판하고 있다고 생각한다.
+    &lt;ol&gt;
+      &lt;li&gt;매우 복잡한 로직을 “쉬운” 인터페이스 뒤에 숨긴다.&lt;/li&gt;
+      &lt;li&gt;앱의 도메인 로직들이 Rails core features 에 tight-coupling 된다.&lt;/li&gt;
+      &lt;li&gt;ActiveSupport 는 나쁘다.&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;지적에 공감하지만 나는 여전히 Rails가 좋다.&lt;/li&gt;
+  &lt;li&gt;그리고 오히려 Rails의 장점으로 생각하는 부분이 있다.&lt;/li&gt;
+  &lt;li&gt;solnic 은 &lt;code&gt;User.create(params[:user])&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;이 코드가 “쉬운 인터페이스 뒤에 복잡한 로직이 숨겨져 있다.” 고 지적한다.&lt;/li&gt;
+      &lt;li&gt;Rails의 ORM인 ActiveRecord는 지적한 데로
+        &lt;ul&gt;
+          &lt;li&gt;매우 많은 일을 하고,&lt;/li&gt;
+          &lt;li&gt;여러곳에 의존하고,&lt;/li&gt;
+          &lt;li&gt;심지어 web form 데이터 까지 AR에 전달한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;결벽스러운 소프트웨어 공학자들이 비명을 지를 것이다.&lt;/li&gt;
+      &lt;li&gt;domain logic과 framework가 loose-coupling 할 수록 더 좋은 소프트웨어가 맞다.&lt;/li&gt;
+      &lt;li&gt;하지만 (내가 이해하는) Rails way 는 loose-coupling 을 지향하지 않는다.&lt;/li&gt;
+      &lt;li&gt;Rails 는 simple 보다 ease-of-use 를 지향한다.
+        &lt;ul&gt;
+          &lt;li&gt;(tight-coupling 한 결정이라도, 그것이 쉽고 편하다면 Rails는 그것을 선택한다.)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;물론 나도 simple 한 모듈들을 조합하는 방식이 이상적이라고 생각한다.&lt;/li&gt;
+      &lt;li&gt;하지만 매우 loose-coupling 하고, 모듈화된 프레임워크가 장점만 있지 않았다.
+        &lt;ul&gt;
+          &lt;li&gt;프로그래머 별로 조합하는 방식에 일관성이 없고,&lt;/li&gt;
+          &lt;li&gt;여러사람의 손을 거치면 오히려 복잡해지고, 유지보수가 힘들었다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;그래서 나는 Rails way 를 좋아하고, 개인 프로젝트는 Rails 를 사용한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;User.create&lt;/code&gt; 는 framework 와 내가 만드는 app 사이의 (일종의) API 이다.
+    &lt;ul&gt;
+      &lt;li&gt;API가 사용하기 쉽고, 내부에 복잡한 일을 한다는 건 중요한 문제가 아니라고 생각한다.&lt;/li&gt;
+      &lt;li&gt;DB엔진 내부가 복잡하고 자세히 몰라도 우리는 SQL 이라는 인터페이스로 쉽게 조회를 한다.&lt;/li&gt;
+      &lt;li&gt;문이 어떻게 열리는지 내부 구조를 몰라도 우리는 손잡이를 돌려 문을 연다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;중요한 문제는 내부 구조를 확장할 정도로 내가 만드는 앱이 복잡해졌을 때 이다.
+    &lt;ul&gt;
+      &lt;li&gt;예를 들면 MySQL 의 내부구조를 전혀 모르고 SQL 인터페이스로 사용만 해오다가.
+        &lt;ul&gt;
+          &lt;li&gt;SELECT 문에 특정 기능을 추가해야 한다면?&lt;/li&gt;
+          &lt;li&gt;MySQL 내부구조를 연구해서, 쪼개고, 직접 수정할 것인가?&lt;/li&gt;
+          &lt;li&gt;Rails 는 이러한 상황에 우아한 해결책을 주는가?&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;내 생각에도 Rails 는 이것을 고려해서 만들지도, 또 중요하게 생각하지 않는 것 같다.&lt;/li&gt;
+  &lt;li&gt;내 경험에 한정하면
+    &lt;ul&gt;
+      &lt;li&gt;Rails의 내부 구조를 쪼개서 기능 변경을 해야할 정도로 비즈니스 로직이 복잡해 진다면.&lt;/li&gt;
+      &lt;li&gt;일단 내 설계를 의심해왔고, 해결되지 않는 문제는 아직 없었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;ActiveRecord.suppress&lt;/code&gt; 와 &lt;code&gt;ActiveSupport&lt;/code&gt; 는 나쁜 접근이라는 점에 동의한다.
+    &lt;ul&gt;
+      &lt;li&gt;나도 가능한 안 써야 한다고 생각한다.&lt;/li&gt;
+      &lt;li&gt;(다들 쓴다는 점에서 조금 우울하지만…)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;나는 무엇보다 사용자가 필요한 기능을 빨리 만들고 변경하는 것을 중요하게 생각한다.
+    &lt;ul&gt;
+      &lt;li&gt;MVC, SOLID, 디자인 패턴, DDD 등에 의해 완벽한 소프트웨어를 만드는건 나중에 해도 된다.
+        &lt;ul&gt;
+          &lt;li&gt;이런건 학교에서 열심히 연구하자.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;나는 quick and dirty 로 사용자가 원하는 것을 구현하고 나중에 리팩토링 하는 길을 선호한다.
+        &lt;ul&gt;
+          &lt;li&gt;quick and dirty 에 최적화된 언어는 PHP 이다.&lt;/li&gt;
+          &lt;li&gt;그게 Facebook, Tumblr 등이 성공한 이유다.&lt;/li&gt;
+          &lt;li&gt;하지만 PHP는 더러운 코드가 유지될 가능성이 높다는 결정적인 단점이 있다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;그런 면에서 Rails 를 사용하며 만족하고 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;사실 Rails 를 쓰는 가장 큰 이유는 테스트 코드 작성이 쉽다는 점이다.
+    &lt;ul&gt;
+      &lt;li&gt;난 Java 진영에서 직업으로서의 프로그래밍을 오랫동안 해오면서
+        &lt;ul&gt;
+          &lt;li&gt;Java 로 작성된 제대로된 테스트 코드를 본 적이 없다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;사람들은 쉬우면 하고 어려우면 하지 않는다.&lt;/li&gt;
+      &lt;li&gt;대중은 어려운 방향으로 수렴하지 않는다.&lt;/li&gt;
+      &lt;li&gt;테스트 코드 없이는 리팩토링도, 반복된 로직을 줄이는 일도 매우 어렵다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;(한 발 더 나가,
+    &lt;ul&gt;
+      &lt;li&gt;요즘엔 테스트 코드 작성과 기존 로직의 “변경”이 어려운 언어/프레임워크를 쓰는 서비스는 실패한다는 편견도 생겼다.)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>이상욱</name></author><summary type="html">며칠전 solnic이 rails를 더이상 쓰지 않는 이유를 썼다.
+    
+      http://solnic.eu/2016/05/22/my-time-with-rails-is-up.html
+      이 글과 관련 토론을 최근 재밌게 읽었다.
+      그리고 내 느낀점만 짧게 남겨야 겠다고 생각했다.
+    
+  
+  일단 나는 ruby와 rails를 좋아한다.
+  그리고 solnic의 rails에 대한 비판에 공감하는 부분이 많다.
+  solnic의 글은 한 마디로 Rails의 tight-coupling 을 지적하고 있다.
+  좀 더 자세히는 Rails 에 대해 아래 3가지를 비판하고 있다고 생각한다.
+    
+      매우 복잡한 로직을 “쉬운” 인터페이스 뒤에 숨긴다.
+      앱의 도메인 로직들이 Rails core features 에 tight-coupling 된다.
+      ActiveSupport 는 나쁘다.
+    
+  
+  지적에 공감하지만 나는 여전히 Rails가 좋다.
+  그리고 오히려 Rails의 장점으로 생각하는 부분이 있다.
+  solnic 은 User.create(params[:user])
+    
+      이 코드가 “쉬운 인터페이스 뒤에 복잡한 로직이 숨겨져 있다.” 고 지적한다.
+      Rails의 ORM인 ActiveRecord는 지적한 데로
+        
+          매우 많은 일을 하고,
+          여러곳에 의존하고,
+          심지어 web form 데이터 까지 AR에 전달한다.
+        
+      
+      결벽스러운 소프트웨어 공학자들이 비명을 지를 것이다.
+      domain logic과 framework가 loose-coupling 할 수록 더 좋은 소프트웨어가 맞다.
+      하지만 (내가 이해하는) Rails way 는 loose-coupling 을 지향하지 않는다.
+      Rails 는 simple 보다 ease-of-use 를 지향한다.
+        
+          (tight-coupling 한 결정이라도, 그것이 쉽고 편하다면 Rails는 그것을 선택한다.)
+        
+      
+      물론 나도 simple 한 모듈들을 조합하는 방식이 이상적이라고 생각한다.
+      하지만 매우 loose-coupling 하고, 모듈화된 프레임워크가 장점만 있지 않았다.
+        
+          프로그래머 별로 조합하는 방식에 일관성이 없고,
+          여러사람의 손을 거치면 오히려 복잡해지고, 유지보수가 힘들었다.
+        
+      
+      그래서 나는 Rails way 를 좋아하고, 개인 프로젝트는 Rails 를 사용한다.
+    
+  
+  User.create 는 framework 와 내가 만드는 app 사이의 (일종의) API 이다.
+    
+      API가 사용하기 쉽고, 내부에 복잡한 일을 한다는 건 중요한 문제가 아니라고 생각한다.
+      DB엔진 내부가 복잡하고 자세히 몰라도 우리는 SQL 이라는 인터페이스로 쉽게 조회를 한다.
+      문이 어떻게 열리는지 내부 구조를 몰라도 우리는 손잡이를 돌려 문을 연다.
+    
+  
+  중요한 문제는 내부 구조를 확장할 정도로 내가 만드는 앱이 복잡해졌을 때 이다.
+    
+      예를 들면 MySQL 의 내부구조를 전혀 모르고 SQL 인터페이스로 사용만 해오다가.
+        
+          SELECT 문에 특정 기능을 추가해야 한다면?
+          MySQL 내부구조를 연구해서, 쪼개고, 직접 수정할 것인가?
+          Rails 는 이러한 상황에 우아한 해결책을 주는가?
+        
+      
+    
+  
+  내 생각에도 Rails 는 이것을 고려해서 만들지도, 또 중요하게 생각하지 않는 것 같다.
+  내 경험에 한정하면
+    
+      Rails의 내부 구조를 쪼개서 기능 변경을 해야할 정도로 비즈니스 로직이 복잡해 진다면.
+      일단 내 설계를 의심해왔고, 해결되지 않는 문제는 아직 없었다.
+    
+  
+  ActiveRecord.suppress 와 ActiveSupport 는 나쁜 접근이라는 점에 동의한다.
+    
+      나도 가능한 안 써야 한다고 생각한다.
+      (다들 쓴다는 점에서 조금 우울하지만…)
+    
+  
+  나는 무엇보다 사용자가 필요한 기능을 빨리 만들고 변경하는 것을 중요하게 생각한다.
+    
+      MVC, SOLID, 디자인 패턴, DDD 등에 의해 완벽한 소프트웨어를 만드는건 나중에 해도 된다.
+        
+          이런건 학교에서 열심히 연구하자.
+        
+      
+      나는 quick and dirty 로 사용자가 원하는 것을 구현하고 나중에 리팩토링 하는 길을 선호한다.
+        
+          quick and dirty 에 최적화된 언어는 PHP 이다.
+          그게 Facebook, Tumblr 등이 성공한 이유다.
+          하지만 PHP는 더러운 코드가 유지될 가능성이 높다는 결정적인 단점이 있다.
+        
+      
+      그런 면에서 Rails 를 사용하며 만족하고 있다.
+    
+  
+  사실 Rails 를 쓰는 가장 큰 이유는 테스트 코드 작성이 쉽다는 점이다.
+    
+      난 Java 진영에서 직업으로서의 프로그래밍을 오랫동안 해오면서
+        
+          Java 로 작성된 제대로된 테스트 코드를 본 적이 없다.
+        
+      
+      사람들은 쉬우면 하고 어려우면 하지 않는다.
+      대중은 어려운 방향으로 수렴하지 않는다.
+      테스트 코드 없이는 리팩토링도, 반복된 로직을 줄이는 일도 매우 어렵다.
+    
+  
+  (한 발 더 나가,
+    
+      요즘엔 테스트 코드 작성과 기존 로직의 “변경”이 어려운 언어/프레임워크를 쓰는 서비스는 실패한다는 편견도 생겼다.)</summary></entry><entry><title type="html">vim 일기</title><link href="/2016/02/21/vim-diary.html" rel="alternate" type="text/html" title="vim 일기" /><published>2016-02-21T19:17:00+09:00</published><updated>2016-02-21T19:17:00+09:00</updated><id>/2016/02/21/vim-diary</id><content type="html" xml:base="/2016/02/21/vim-diary.html">&lt;ul&gt;
+  &lt;li&gt;151113금: 준건님이 splitjoin.vim &lt;a href='#fn:1' class='footnote' id='fnref:1'&gt;[1]&lt;/a&gt; &lt;a href='#fn:2' class='footnote' id='fnref:2'&gt;[2]&lt;/a&gt; 을 알려주셔서 사용해봤다.
+    &lt;ul&gt;
+      &lt;li&gt;사용 예
+        &lt;ul&gt;
+          &lt;li&gt;e.g. ruby 에서 &lt;code&gt;{ ~ }&lt;/code&gt; 블락을 &lt;code&gt;do ~ end&lt;/code&gt; 블락으로 변경할 때.&lt;/li&gt;
+          &lt;li&gt;e.g. html 에서 많은 속성을 가진 태그를 들여쓰기 할 때.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;처음 이 플러그인을 써보고 “우왕!!!” 했지만
+        &lt;ul&gt;
+          &lt;li&gt;시간이 지나고 당장 급하면 이 플러그인이 있다는 사실은 망각하고 macro 를 쓰게 된다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;151218금: neovim 은 설정파일을 XDG directory specification &lt;a href='#fn:3' class='footnote' id='fnref:3'&gt;[3]&lt;/a&gt; 를 따르도록 변경되었다. &lt;a href='#fn:4' class='footnote' id='fnref:4'&gt;[4]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;즉, &lt;code&gt;~/.nvimrc&lt;/code&gt; 대신 &lt;code&gt;~/.config/nvim/init.vim&lt;/code&gt; 을 사용.&lt;/li&gt;
+      &lt;li&gt;XDG directory specification 라는 것도 찾아보니.
+        &lt;ul&gt;
+          &lt;li&gt;application 의 user 별 설정파일을 홈의 닷파일로 저장하면서 홈 디렉터리가 지저분해져서&lt;/li&gt;
+          &lt;li&gt;디렉터리 구조의 표준 사양을 만든 것.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;160105화: 준건님이 만든 zoom 함수 &lt;a href='#fn:5' class='footnote' id='fnref:5'&gt;[5]&lt;/a&gt; 를 모방해서 많이 쓰고 있다.&lt;/li&gt;
+  &lt;li&gt;160118월: gv.vim &lt;a href='#fn:6' class='footnote' id='fnref:6'&gt;[6]&lt;/a&gt; 을 설치함. (fugitive 기반 git browser)
+    &lt;ul&gt;
+      &lt;li&gt;기존에 gitv &lt;a href='#fn:7' class='footnote' id='fnref:7'&gt;[7]&lt;/a&gt; 를 사용하고 있었는데,&lt;/li&gt;
+      &lt;li&gt;gv.vim 이 훨씬 가볍고 단순해서 나한테 맞게 수정하기 좋다.&lt;/li&gt;
+      &lt;li&gt;그래서 gitv 는 지워버리고 gv.vim 만 쓰는 중.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;160121목: eol 문제가 vim 의 옵션으로 추가되었다! (fixeol)
+    &lt;ul&gt;
+      &lt;li&gt;문제:
+        &lt;ul&gt;
+          &lt;li&gt;IntelliJ IDEA 는 default 로 EOL 을 붙이지 않고&lt;/li&gt;
+          &lt;li&gt;vim 은 default 로 EOL 을 붙임.&lt;/li&gt;
+          &lt;li&gt;그래서 intellij 로 작성한 파일을 vim 에서 write 할 때 마다 변경사항이 발생함.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;옛날 해결책:
+        &lt;ul&gt;
+          &lt;li&gt;현재 파일이 eol 이면 set eol, 현재 파일이 noeol 이면 set noeol 로 저장하도록 꼼수 스크립트를 만들어 쓰고 있었음.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;새로운 해결책:
+        &lt;ul&gt;
+          &lt;li&gt;vim v7.4.785 에서 fixeol 옵션이 추가 되었고 &lt;a href='#fn:8' class='footnote' id='fnref:8'&gt;[8]&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;default 가 on 이기 때문에 &lt;code&gt;set nofixeol&lt;/code&gt; 옵션을 넣으면 eol 을 vim 이 강제로 고치지 않음.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;160124일: vim script 의 builtin function 으로 &lt;code&gt;jsonencode()&lt;/code&gt; 와 &lt;code&gt;jsondecode()&lt;/code&gt; 가 추가됨. &lt;a href='#fn:9' class='footnote' id='fnref:9'&gt;[9]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;사람들은 todo.txt &lt;a href='#fn:10' class='footnote' id='fnref:10'&gt;[10]&lt;/a&gt; 와 channel.txt &lt;a href='#fn:11' class='footnote' id='fnref:11'&gt;[11]&lt;/a&gt; 를 보고 비동기 작업 실행의 기반이라고 추측함. &lt;a href='#fn:12' class='footnote' id='fnref:12'&gt;[12]&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;이것은 Neovim 의 좋은 feature 를 모방하는 것으로 보인다.&lt;/li&gt;
+      &lt;li&gt;사실 이렇게 vim 을 따라하는 app 들의 좋은 기능을 모방하는 것이 vim 의 성공이유라는 bram 의 인터뷰도 있었다. &lt;a href='#fn:13' class='footnote' id='fnref:13'&gt;[13]&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;160202화: 오랫동안 tabular &lt;a href='#fn:14' class='footnote' id='fnref:14'&gt;[14]&lt;/a&gt; 를 써왔고, 여기에 익숙해져 있어서 변경할 생각을 못했는데.
+    &lt;ul&gt;
+      &lt;li&gt;이번에 마음먹고 준건님의 vim-easy-align &lt;a href='#fn:15' class='footnote' id='fnref:15'&gt;[15]&lt;/a&gt; 을 사용하도록 변경했다.&lt;/li&gt;
+      &lt;li&gt;tabular 에 비해 장점은.
+        &lt;ul&gt;
+          &lt;li&gt;옵션이 많고. (아직 다 모르겠지만)&lt;/li&gt;
+          &lt;li&gt;align 할때 ignore 할 수 있는 옵션이 정말 좋다!!&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;160204목: pom.xml 파일을 더 예쁘게 보여준다길래 vim-maven-syntax 를 설치했다. &lt;a href='#fn:16' class='footnote' id='fnref:16'&gt;[16]&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;160208월: 비동기적으로 job 을 실행시킬 수 있는 기능이 vim 공식 feature 로 들어감. &lt;a href='#fn:17' class='footnote' id='fnref:17'&gt;[17]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;neovim 과의 관계 때문에 reddit 의 스레드는 폭발함. &lt;a href='#fn:18' class='footnote' id='fnref:18'&gt;[18]&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;내 생각엔 이제 Neovim 은 망할 것 같다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;아무튼 이제 아래와 같은 코드가 가능해졌다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function! Handler(ch, msg) echom a:msg endfunction
+let job = job_start('ls -alh ~/', { 'callback': 'Handler' })
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;160219금: python 을 위한 braceless.vim &lt;a href='#fn:19' class='footnote' id='fnref:19'&gt;[19]&lt;/a&gt; 을 설치함.
+    &lt;ul&gt;
+      &lt;li&gt;python 같은 brace 가 없는 indent 기반 언어를 위한 플러그인.&lt;/li&gt;
+      &lt;li&gt;custom text object, fold, indent guide 를 제공한다.&lt;/li&gt;
+      &lt;li&gt;처음에는 설치할만큼 매력적이지 않다고 생각했다.&lt;/li&gt;
+      &lt;li&gt;하지만 설치하고 써보니 생각보다 편한듯.&lt;/li&gt;
+      &lt;li&gt;특히 custom text object 는 많이 쓸 것 같은데, 왠지 모르게 첫번째 로딩이 느려진다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/AndrewRadev/splitjoin.vim&quot;&gt;https://github.com/AndrewRadev/splitjoin.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370&quot;&gt;https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html&quot;&gt;https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://neovim.io/news/2015/december/&quot;&gt;https://neovim.io/news/2015/december/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://neovim.io/doc/user/vim_diff.html#nvim-configuration&quot;&gt;https://neovim.io/doc/user/vim_diff.html#nvim-configuration&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0&quot;&gt;https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/gv.vim&quot;&gt;https://github.com/junegunn/gv.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:8&quot; id=&quot;fn:8&quot; class=&quot;reversefootnote&quot;&gt;[8]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/gregsexton/gitv&quot;&gt;https://github.com/gregsexton/gitv&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:9&quot; id=&quot;fn:9&quot; class=&quot;reversefootnote&quot;&gt;[9]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc&quot;&gt;https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:10&quot; id=&quot;fn:10&quot; class=&quot;reversefootnote&quot;&gt;[10]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34&quot;&gt;https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:10&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:11&quot; id=&quot;fn:11&quot; class=&quot;reversefootnote&quot;&gt;[11]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168&quot;&gt;https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:11&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:12&quot; id=&quot;fn:12&quot; class=&quot;reversefootnote&quot;&gt;[12]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt&quot;&gt;https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:12&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:13&quot; id=&quot;fn:13&quot; class=&quot;reversefootnote&quot;&gt;[13]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/&quot;&gt;https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:13&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:14&quot; id=&quot;fn:14&quot; class=&quot;reversefootnote&quot;&gt;[14]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://yisangwook.tumblr.com/post/132462551169/neovim-vim&quot;&gt;http://yisangwook.tumblr.com/post/132462551169/neovim-vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:14&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:15&quot; id=&quot;fn:15&quot; class=&quot;reversefootnote&quot;&gt;[15]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/godlygeek/tabular&quot;&gt;https://github.com/godlygeek/tabular&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:15&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:16&quot; id=&quot;fn:16&quot; class=&quot;reversefootnote&quot;&gt;[16]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/vim-easy-align&quot;&gt;https://github.com/junegunn/vim-easy-align&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:16&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:17&quot; id=&quot;fn:17&quot; class=&quot;reversefootnote&quot;&gt;[17]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/NLKNguyen/vim-maven-syntax&quot;&gt;https://github.com/NLKNguyen/vim-maven-syntax&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:17&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:18&quot; id=&quot;fn:18&quot; class=&quot;reversefootnote&quot;&gt;[18]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/&quot;&gt;https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:18&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:19&quot; id=&quot;fn:19&quot; class=&quot;reversefootnote&quot;&gt;[19]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/tweekmonster/braceless.vim&quot;&gt;https://github.com/tweekmonster/braceless.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:19&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><author><name>이상욱</name></author><summary type="html">151113금: 준건님이 splitjoin.vim [1] [2] 을 알려주셔서 사용해봤다.
+    
+      사용 예
+        
+          e.g. ruby 에서 { ~ } 블락을 do ~ end 블락으로 변경할 때.
+          e.g. html 에서 많은 속성을 가진 태그를 들여쓰기 할 때.
+        
+      
+      처음 이 플러그인을 써보고 “우왕!!!” 했지만
+        
+          시간이 지나고 당장 급하면 이 플러그인이 있다는 사실은 망각하고 macro 를 쓰게 된다.
+        
+      
+    
+  
+  151218금: neovim 은 설정파일을 XDG directory specification [3] 를 따르도록 변경되었다. [4]
+    
+      즉, ~/.nvimrc 대신 ~/.config/nvim/init.vim 을 사용.
+      XDG directory specification 라는 것도 찾아보니.
+        
+          application 의 user 별 설정파일을 홈의 닷파일로 저장하면서 홈 디렉터리가 지저분해져서
+          디렉터리 구조의 표준 사양을 만든 것.
+        
+      
+    
+  
+  160105화: 준건님이 만든 zoom 함수 [5] 를 모방해서 많이 쓰고 있다.
+  160118월: gv.vim [6] 을 설치함. (fugitive 기반 git browser)
+    
+      기존에 gitv [7] 를 사용하고 있었는데,
+      gv.vim 이 훨씬 가볍고 단순해서 나한테 맞게 수정하기 좋다.
+      그래서 gitv 는 지워버리고 gv.vim 만 쓰는 중.
+    
+  
+  160121목: eol 문제가 vim 의 옵션으로 추가되었다! (fixeol)
+    
+      문제:
+        
+          IntelliJ IDEA 는 default 로 EOL 을 붙이지 않고
+          vim 은 default 로 EOL 을 붙임.
+          그래서 intellij 로 작성한 파일을 vim 에서 write 할 때 마다 변경사항이 발생함.
+        
+      
+      옛날 해결책:
+        
+          현재 파일이 eol 이면 set eol, 현재 파일이 noeol 이면 set noeol 로 저장하도록 꼼수 스크립트를 만들어 쓰고 있었음.
+        
+      
+      새로운 해결책:
+        
+          vim v7.4.785 에서 fixeol 옵션이 추가 되었고 [8]
+          default 가 on 이기 때문에 set nofixeol 옵션을 넣으면 eol 을 vim 이 강제로 고치지 않음.
+        
+      
+    
+  
+  160124일: vim script 의 builtin function 으로 jsonencode() 와 jsondecode() 가 추가됨. [9]
+    
+      사람들은 todo.txt [10] 와 channel.txt [11] 를 보고 비동기 작업 실행의 기반이라고 추측함. [12]
+      이것은 Neovim 의 좋은 feature 를 모방하는 것으로 보인다.
+      사실 이렇게 vim 을 따라하는 app 들의 좋은 기능을 모방하는 것이 vim 의 성공이유라는 bram 의 인터뷰도 있었다. [13]
+    
+  
+  160202화: 오랫동안 tabular [14] 를 써왔고, 여기에 익숙해져 있어서 변경할 생각을 못했는데.
+    
+      이번에 마음먹고 준건님의 vim-easy-align [15] 을 사용하도록 변경했다.
+      tabular 에 비해 장점은.
+        
+          옵션이 많고. (아직 다 모르겠지만)
+          align 할때 ignore 할 수 있는 옵션이 정말 좋다!!
+        
+      
+    
+  
+  160204목: pom.xml 파일을 더 예쁘게 보여준다길래 vim-maven-syntax 를 설치했다. [16]
+  160208월: 비동기적으로 job 을 실행시킬 수 있는 기능이 vim 공식 feature 로 들어감. [17]
+    
+      neovim 과의 관계 때문에 reddit 의 스레드는 폭발함. [18]
+        
+          내 생각엔 이제 Neovim 은 망할 것 같다.
+        
+      
+    
+  
+
+
+         [1]:        https://github.com/AndrewRadev/splitjoin.vim&amp;nbsp;[return]             [2]:        https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370&amp;nbsp;[return]             [3]:        https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html&amp;nbsp;[return]             [4]:        https://neovim.io/news/2015/december/&amp;nbsp;[return]             [5]:        https://neovim.io/doc/user/vim_diff.html#nvim-configuration&amp;nbsp;[return]             [6]:        https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0&amp;nbsp;[return]             [7]:        https://github.com/junegunn/gv.vim&amp;nbsp;[return]             [8]:        https://github.com/gregsexton/gitv&amp;nbsp;[return]             [9]:        https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc&amp;nbsp;[return]             [10]:        https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34&amp;nbsp;[return]             [11]:        https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168&amp;nbsp;[return]             [12]:        https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt&amp;nbsp;[return]             [13]:        https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/&amp;nbsp;[return]             [14]:        http://yisangwook.tumblr.com/post/132462551169/neovim-vim&amp;nbsp;[return]             [15]:        https://github.com/godlygeek/tabular&amp;nbsp;[return]             [16]:        https://github.com/junegunn/vim-easy-align&amp;nbsp;[return]             [17]:        https://github.com/NLKNguyen/vim-maven-syntax&amp;nbsp;[return]             [18]:        https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/&amp;nbsp;[return]</summary></entry><entry><title type="html">파이썬 역설 The Python Paradox</title><link href="/2015/12/16/python-paradox.html" rel="alternate" type="text/html" title="파이썬 역설 The Python Paradox" /><published>2015-12-16T23:28:00+09:00</published><updated>2015-12-16T23:28:00+09:00</updated><id>/2015/12/16/python-paradox</id><content type="html" xml:base="/2015/12/16/python-paradox.html">&lt;ul&gt;
+  &lt;li&gt;2004년 8월 Paul Graham 의 “The Python Paradox” 라는 제목의 글
+    &lt;ul&gt;
+      &lt;li&gt;원문: &lt;a href=&quot;http://paulgraham.com/pypar.html&quot;&gt;http://paulgraham.com/pypar.html&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;최근에 있었던 강연에서 나는 많은 사람들을 화나게하는 말을 했다:
+    &lt;ul&gt;
+      &lt;li&gt;그것은 “Java 프로젝트로 일을 하는 것 보다, Python 프로젝트로 일하는 것이 더 smarter 한 프로그래머들을 get 할 수 있다”고 말한 것이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;“Java 프로그래머들은 바보다” 라는 의미로 말한것이 아니었다.
+    &lt;ul&gt;
+      &lt;li&gt;내 말은 Python 프로그래머들이 smart 하다는 의미였다.&lt;/li&gt;
+      &lt;li&gt;새로운 언어를 배우는 것은 많은 노력이 필요하다.&lt;/li&gt;
+      &lt;li&gt;그리고 사람들은 job 을 얻기위한 목적으로 Python 을 공부하지 않는다.&lt;/li&gt;
+      &lt;li&gt;그들은 순수하게 프로그래밍을 좋아하기 때문에, 그리고 이미 알고 있는 언어에 대한 불만족 때문에 Python 을 공부한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;회사가 고용해야 하는 프로그래머는 이러한 사람들이다.
+    &lt;ul&gt;
+      &lt;li&gt;더 좋은 이름을 찾지 못해서 나는 이것을 “Python paradox” 라고 부르겠다.&lt;/li&gt;
+      &lt;li&gt;Python paradox:
+        &lt;ul&gt;
+          &lt;li&gt;만약 회사가 소프트웨어를 만드는데 비교적 esoteric(소수만 이해할 수 있는, 난해한)한 언어를 사용하면, 그 회사는 더 좋은 프로그래머를 고용할 수 있다.&lt;/li&gt;
+          &lt;li&gt;왜냐하면 그러한 언어를 공부했을 정도로 열정적인 사람만 모이기 때문이다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;그리고 프로그래머에게는 이 역설이 더욱 선명하게 나타난다.
+        &lt;ul&gt;
+          &lt;li&gt;좋은 job 을 얻기 위해 공부해야 하는 언어는, 사람들이 단지 job 을 얻기 위해 공부하는 언어가 아니어야 한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;이러한 사실을 깨달을 정도로 smart 한 회사는 몇 개 없다.
+    &lt;ul&gt;
+      &lt;li&gt;하지만 이곳에도 선택은 일어나고 있다.
+        &lt;ul&gt;
+          &lt;li&gt;그리고 이러한 것을 아는 회사는 프로그래머가 가장 일하고 싶어하는 회사가 된다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;예를 들어, Google.&lt;/li&gt;
+      &lt;li&gt;그들은 Java programming jobs 의 채용공고를 낼때도 Python 경험을 원한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;내 친구 중 하나는 넓게 사용되는 대부분의 언어를 거의 모두 알고 있는데, 개인 프로젝트는 모두 Python 을 사용한다.
+    &lt;ul&gt;
+      &lt;li&gt;그가 Python 을 좋아하는 가장 큰 이유는 소스 코드의 모양을 좋아하기 때문이라고 한다.&lt;/li&gt;
+      &lt;li&gt;이것은 언어를 선택하는데 경솔한 이유로 보일지 모른다.&lt;/li&gt;
+      &lt;li&gt;하지만 그렇게 경솔하지도 않다:
+        &lt;ul&gt;
+          &lt;li&gt;당신이 프로그래밍을 할 때, 당신은 대부분의 시간을 코드 작성 보다 코드 읽는데 쓴다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;당신은 조각가가 clay 의 blobs 을 push 하는 것 처럼, 소스코드의 blobs 를 push 한다.&lt;/li&gt;
+      &lt;li&gt;그래서 조각가가 clay full of lumps 를 질색하는 것 처럼, ugly 한 소스코드를 만드는 언어는 exacting 한 프로그래머를 미치게한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;ugly 한 소스코드 언급을 보고 사람들은 Perl 을 생각할 것이다.
+    &lt;ul&gt;
+      &lt;li&gt;하지만 Perl 의 외견상의 ugliness 는 내가 말하는 그 의미가 아니다.&lt;/li&gt;
+      &lt;li&gt;Real ugliness 는 거칠어 보이는 문법(harsh-looking syntax)이 아니라, 잘못된 개념으로 프로그램을 build 해야함에 있다.&lt;/li&gt;
+      &lt;li&gt;Perl 은 만화캐릭터가 욕을 하는 것 처럼 보이지만($!@#%!!), 개념적으로 Python 보다 더 나은 부분이 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;아직까진 그렇단 얘기다.
+    &lt;ul&gt;
+      &lt;li&gt;두 언어 모두 움직이고 있다.&lt;/li&gt;
+      &lt;li&gt;중요한 것은 Python, Perl, Ruby (and Icon, and Joy, and J, and Lisp, and Smalltalk) 모두 프로그래밍을 정말 좋아하는 사람들이 만들었고, 사용되고 있다는 점이다.&lt;/li&gt;
+      &lt;li&gt;그리고 그러한 사람들이 더 잘 하는 경향이 있다는 점이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;내-생각&quot;&gt;내 생각&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;이 글은 2004년 당시의 글이고, 지금의 Python 은 당시와 많이 다르다.&lt;/li&gt;
+  &lt;li&gt;내가 아주 좋아하는 글이지만, 오랜만에 이 글을 다시 보고 옮긴 이유는 사실은 무엇인가를 홍보하기 위함이다.&lt;/li&gt;
+  &lt;li&gt;아래 내용은 윗 내용과 아무 관련이 없다.
+    &lt;ul&gt;
+      &lt;li&gt;일종의 광고다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;좋아하는 국회의원에게 10만원을 후원하면 연말정산때 돌려 받는다는 사실을 알리고 싶었다. (정확히는 세액공제 됨)
+    &lt;ul&gt;
+      &lt;li&gt;아래의 선관위 사이트에서 선호하는 당을 선택해서 찾기를 누르면 국회의원이 모두 나오고 골라서 후원하면 된다.&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.give.go.kr/portalnew/donation/donation_sup.jsp&quot;&gt;https://www.give.go.kr/portalnew/donation/donation_sup.jsp&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;사실은 정치와 사회 문제에 관심이 많아서 내가 할 수 있는 일이 없을까 고민했던 적이 많았지만.&lt;/li&gt;
+  &lt;li&gt;최근 몇년간 무력감을 느끼고, 할 수 있는게 거의 없다는 생각이 들었다.&lt;/li&gt;
+  &lt;li&gt;왜냐하면 선거제도가 가장 문제인데.
+    &lt;ul&gt;
+      &lt;li&gt;정당 지지율이 10% 라면 10%의 국회 의석을 차지해야 정상이다.&lt;/li&gt;
+      &lt;li&gt;하지만 지역구의 1등만 뽑히는 소선거구제, 단순다수제 에서는 거대정당이 지지율 이상의 의석을 차지하는 구조이다.
+        &lt;ul&gt;
+          &lt;li&gt;비례대표가 일부 보완하고 있지만 비율이 낮다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;그리고 이 선거제도의 수혜자(여당이든 제1야당이든 모두 수혜자다)가 선거제도를 만드는 한&lt;/li&gt;
+      &lt;li&gt;이 선거제도를 고칠 동기는 지지율 보다 적은 의석을 차지하는 제3당 밖에 없다.&lt;/li&gt;
+      &lt;li&gt;동기가 없으면 선거제도는 바뀌기 어렵고,&lt;/li&gt;
+      &lt;li&gt;선거제도가 바뀌지 않으면 아마 변화는 힘들 것이다. (아마 안 될꺼야…)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그래도 이 글로 1명이라도 더 후원을 하고, 자본을 기반으로 조금 더 내 자식 세대가 살기 좋은 나라가 되었으면 좋겠다.
+    &lt;ul&gt;
+      &lt;li&gt;(10만원 까지는 전액 세액공제가 되니 부담도 없다.)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;내가 블로그에 글을 쓰면서 얻는 이익은 아무것도 없는데.
+    &lt;ul&gt;
+      &lt;li&gt;이렇게 글 뒷부분이나마 하고싶은 말을 써도 괜찮을 것이라 생각했다.
+        &lt;ul&gt;
+          &lt;li&gt;배너 광고를 잔뜩 붙이는 것 보다 좋지 않을까?&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;만약 동의하지 않는 사람이 많다면 다시는 이런 옮김은 안 할 것이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>이상욱</name></author><summary type="html">2004년 8월 Paul Graham 의 “The Python Paradox” 라는 제목의 글
+    
+      원문: http://paulgraham.com/pypar.html
+    
+  
+  최근에 있었던 강연에서 나는 많은 사람들을 화나게하는 말을 했다:
+    
+      그것은 “Java 프로젝트로 일을 하는 것 보다, Python 프로젝트로 일하는 것이 더 smarter 한 프로그래머들을 get 할 수 있다”고 말한 것이다.
+    
+  
+  “Java 프로그래머들은 바보다” 라는 의미로 말한것이 아니었다.
+    
+      내 말은 Python 프로그래머들이 smart 하다는 의미였다.
+      새로운 언어를 배우는 것은 많은 노력이 필요하다.
+      그리고 사람들은 job 을 얻기위한 목적으로 Python 을 공부하지 않는다.
+      그들은 순수하게 프로그래밍을 좋아하기 때문에, 그리고 이미 알고 있는 언어에 대한 불만족 때문에 Python 을 공부한다.
+    
+  
+  회사가 고용해야 하는 프로그래머는 이러한 사람들이다.
+    
+      더 좋은 이름을 찾지 못해서 나는 이것을 “Python paradox” 라고 부르겠다.
+      Python paradox:
+        
+          만약 회사가 소프트웨어를 만드는데 비교적 esoteric(소수만 이해할 수 있는, 난해한)한 언어를 사용하면, 그 회사는 더 좋은 프로그래머를 고용할 수 있다.
+          왜냐하면 그러한 언어를 공부했을 정도로 열정적인 사람만 모이기 때문이다.
+        
+      
+      그리고 프로그래머에게는 이 역설이 더욱 선명하게 나타난다.
+        
+          좋은 job 을 얻기 위해 공부해야 하는 언어는, 사람들이 단지 job 을 얻기 위해 공부하는 언어가 아니어야 한다.
+        
+      
+    
+  
+  이러한 사실을 깨달을 정도로 smart 한 회사는 몇 개 없다.
+    
+      하지만 이곳에도 선택은 일어나고 있다.
+        
+          그리고 이러한 것을 아는 회사는 프로그래머가 가장 일하고 싶어하는 회사가 된다.
+        
+      
+      예를 들어, Google.
+      그들은 Java programming jobs 의 채용공고를 낼때도 Python 경험을 원한다.
+    
+  
+  내 친구 중 하나는 넓게 사용되는 대부분의 언어를 거의 모두 알고 있는데, 개인 프로젝트는 모두 Python 을 사용한다.
+    
+      그가 Python 을 좋아하는 가장 큰 이유는 소스 코드의 모양을 좋아하기 때문이라고 한다.
+      이것은 언어를 선택하는데 경솔한 이유로 보일지 모른다.
+      하지만 그렇게 경솔하지도 않다:
+        
+          당신이 프로그래밍을 할 때, 당신은 대부분의 시간을 코드 작성 보다 코드 읽는데 쓴다.
+        
+      
+      당신은 조각가가 clay 의 blobs 을 push 하는 것 처럼, 소스코드의 blobs 를 push 한다.
+      그래서 조각가가 clay full of lumps 를 질색하는 것 처럼, ugly 한 소스코드를 만드는 언어는 exacting 한 프로그래머를 미치게한다.
+    
+  
+  ugly 한 소스코드 언급을 보고 사람들은 Perl 을 생각할 것이다.
+    
+      하지만 Perl 의 외견상의 ugliness 는 내가 말하는 그 의미가 아니다.
+      Real ugliness 는 거칠어 보이는 문법(harsh-looking syntax)이 아니라, 잘못된 개념으로 프로그램을 build 해야함에 있다.
+      Perl 은 만화캐릭터가 욕을 하는 것 처럼 보이지만($!@#%!!), 개념적으로 Python 보다 더 나은 부분이 있다.
+    
+  
+  아직까진 그렇단 얘기다.
+    
+      두 언어 모두 움직이고 있다.
+      중요한 것은 Python, Perl, Ruby (and Icon, and Joy, and J, and Lisp, and Smalltalk) 모두 프로그래밍을 정말 좋아하는 사람들이 만들었고, 사용되고 있다는 점이다.
+      그리고 그러한 사람들이 더 잘 하는 경향이 있다는 점이다.</summary></entry><entry><title type="html">관심있게 본 facts</title><link href="/2015/11/21/advertisement-facts.html" rel="alternate" type="text/html" title="관심있게 본 facts" /><published>2015-11-21T23:58:00+09:00</published><updated>2015-11-21T23:58:00+09:00</updated><id>/2015/11/21/advertisement-facts</id><content type="html" xml:base="/2015/11/21/advertisement-facts.html">&lt;h3 id=&quot;트위터&quot;&gt;트위터&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;트위터가 339명을 해고함. 2015년 10월 &lt;a href='#fn:1' class='footnote' id='fnref:1'&gt;[1]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;트위터는 이전 분기 직원수가 4,100명 이었음.&lt;/li&gt;
+      &lt;li&gt;해고한 339명은 전체 직원수의 약 8%&lt;/li&gt;
+      &lt;li&gt;그리고 일주일 후 (살아)남은 직원들에게 Jack Dorsey 자신의 주식 1/3 을(약 2,200억원) 분배했다. &lt;a href='#fn:2' class='footnote' id='fnref:2'&gt;[2]&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;상욱: 이 두 선택(해고와 주식 재분배)은 직원들의 “동기”가 무엇보다 중요하다는 jack dorsey 의 판단으로 생각한다.
+        &lt;ul&gt;
+          &lt;li&gt;나는 회사의 성공은 “사람” x “동기” 라고 생각한다.&lt;/li&gt;
+          &lt;li&gt;능력 있는 사람들로 채워져 있고, 헌신할 동기가 있으면 성공한다.
+            &lt;ul&gt;
+              &lt;li&gt;(가장 큰 동기는 존경하는 사람들로 둘러싸여 있는 환경이 아닐까?)&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;트위터 2015 3Q 실적 &lt;a href='#fn:3' class='footnote' id='fnref:3'&gt;[3]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;매출: YoY 58% (약 6,570억원)&lt;/li&gt;
+      &lt;li&gt;광고매출: YoY 60% (약 5,924억원)&lt;/li&gt;
+      &lt;li&gt;광고매출의 86% 가 모바일.&lt;/li&gt;
+      &lt;li&gt;MAU: YoY 11%, 3억2천만명&lt;/li&gt;
+      &lt;li&gt;미국 내 TV광고 계획.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;네이버-line&quot;&gt;네이버, LINE&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;네이버 2015 3Q 실적&lt;/li&gt;
+  &lt;li&gt;매출: YoY 20% (8397억원) &lt;a href='#fn:4' class='footnote' id='fnref:4'&gt;[4]&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;영업이익: YoY 5.6% (1995억원)&lt;/li&gt;
+  &lt;li&gt;영업이익률: 23.8%&lt;/li&gt;
+  &lt;li&gt;상욱: PC매출은 정체지만 크게 줄지는 않아 보임.
+    &lt;ul&gt;
+      &lt;li&gt;PC매출이 정체상태에서 모바일 매출이 성장함.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;LINE 전체 매출은 322억엔 (약 3,030 억원) YoY 35% &lt;a href='#fn:5' class='footnote' id='fnref:5'&gt;[5]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;MAU: 전체 2억1,200만명&lt;/li&gt;
+      &lt;li&gt;인도네시아의 점유율을 꾸준히 올리고 있다는 대표의 발언.&lt;/li&gt;
+      &lt;li&gt;라인 매출 비중은 게임(41%) &amp;gt; 광고(30%) &amp;gt; 스티커(24%) &amp;gt; 기타&lt;/li&gt;
+      &lt;li&gt;스탬프 매출이 증가함. (공식 스탬프, 크리에이터 스탬프 모두)&lt;/li&gt;
+      &lt;li&gt;광고사업에서는 동영상 시청에 대한 인센티브형 광고 실험이 주목할만 하다고 생각함.&lt;/li&gt;
+      &lt;li&gt;게임사업에서는 원피스(ANI)를 주제로한 게임을 대만, 홍콩에 출시하여 대만 앱스토어 매출 순위 1위라는 사실은 주목할만 함.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;LINE MUSIC: 다운로드 860만, MAU 400만명&lt;/li&gt;
+  &lt;li&gt;B612: 다운로드 1억, MAU 5,000만명&lt;/li&gt;
+  &lt;li&gt;LINE 바이트: 600만명 가입. 아르바이트 구인 서비스. TV광고를 하면서 적극적으로 마케팅중.&lt;/li&gt;
+  &lt;li&gt;LINE 만화: 2015년 10월 말. 만화 출판 시장에 진출. 구입하면 만화의 LINE 스탬프를 무료로 다운로드.&lt;/li&gt;
+  &lt;li&gt;네이버 커넥트 2015 (컨퍼런스) &lt;a href='#fn:6' class='footnote' id='fnref:6'&gt;[6]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;별 내용 없었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;카카오&quot;&gt;카카오&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;카카오 2015 3Q 실적 &lt;a href='#fn:7' class='footnote' id='fnref:7'&gt;[7]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;매출: YoY 4% (2,296억원)&lt;/li&gt;
+      &lt;li&gt;영업이익: YoY -47% (162억원)&lt;/li&gt;
+      &lt;li&gt;광고매출: YoY 1% (1,429억원)&lt;/li&gt;
+      &lt;li&gt;게임매출: YoY -24% (514억원)&lt;/li&gt;
+      &lt;li&gt;매출비중: 광고(62%) &amp;gt; 게임(22%) &amp;gt; 기타(9%) &amp;gt; 커머스(7%)&lt;/li&gt;
+      &lt;li&gt;모바일매출은 총 매출의 56%&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;대리운전 시장규모는 2.5조원 이고, 시장점유율 40%, 수수료 10% 로 가정하면 연 수익 1,000억원 예상함. &lt;a href='#fn:8' class='footnote' id='fnref:8'&gt;[8]&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;페이스북&quot;&gt;페이스북&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;2015 3Q 실적 &lt;a href='#fn:9' class='footnote' id='fnref:9'&gt;[9]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;매출: YoY 40.5% (약 5.1조원)&lt;/li&gt;
+      &lt;li&gt;매출의 95% 는 광고 매출.
+        &lt;ul&gt;
+          &lt;li&gt;상욱: 역시 모바일 SNS 도 광고 수익에 의존함. BM은 변하지 않았음.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;광고 매출의 78% 는 모바일 매출. (전년 동기 66%)&lt;/li&gt;
+      &lt;li&gt;페이스북 직원수는 12,000명 (YoY 42%)&lt;/li&gt;
+      &lt;li&gt;MAU: 15.5억명&lt;/li&gt;
+      &lt;li&gt;DAU: 10.1억명
+        &lt;ul&gt;
+          &lt;li&gt;상욱: 즉, DAU/MAU 는 65% 이상이라는 얘기.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;미국 이외 지역에서 매출의 절반 이상이 나옴.&lt;/li&gt;
+      &lt;li&gt;페이스북에서 동영상 재생: 하루 평균 5억명이 80억회 재생
+        &lt;ul&gt;
+          &lt;li&gt;페이스북 동영상 광고에 대한 언급:
+            &lt;ul&gt;
+              &lt;li&gt;최근 닐슨의 조사에 따르면, TV광고와 페이스북 광고를 병행하는 것이 광고효과가 더 크고 브랜드에 대한 호감도가 올라간다고 함.&lt;/li&gt;
+              &lt;li&gt;TRP(Target Rating Point) 를 도입하여 TV광고와 마찬가지로 집행/효과측정 가능해짐.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;인스타그램: MAU 4억명. 하루 8,000만개 이상의 사진이 공유.&lt;/li&gt;
+      &lt;li&gt;WhatsApp: MAU 9억명&lt;/li&gt;
+      &lt;li&gt;Messenger: MAU 7억명&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;전세계 SNS 광고 매출 순위 &lt;a href='#fn:10' class='footnote' id='fnref:10'&gt;[10]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;페이스북(65.8%) &amp;gt; 트위터(9.7%) &amp;gt; 링크드인(3.2%)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;구글&quot;&gt;구글&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;2015 3Q 실적 &lt;a href='#fn:11' class='footnote' id='fnref:11'&gt;[11]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;매출: YoY 13% (약 21.9조원)&lt;/li&gt;
+      &lt;li&gt;광고매출: YoY 13% (약 19.6조원)&lt;/li&gt;
+      &lt;li&gt;성장 이유: 모바일 검색, 유튜브, Programmatic 광고&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;구글의 모바일 검색이 데스크탑 검색을 2015년 여름에 처음으로 넘어섰다. &lt;a href='#fn:12' class='footnote' id='fnref:12'&gt;[12]&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;텐센트&quot;&gt;텐센트&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;2015 3Q 실적 &lt;a href='#fn:13' class='footnote' id='fnref:13'&gt;[13]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;매출: YoY 34% (약 4.8조원)&lt;/li&gt;
+      &lt;li&gt;영업이익: YoY 37% (약 1.9조원)&lt;/li&gt;
+      &lt;li&gt;광고매출: YoY 102% (약 9060억원)
+        &lt;ul&gt;
+          &lt;li&gt;브랜드광고: YoY 67% (약 4682억원)
+            &lt;ul&gt;
+              &lt;li&gt;성장 이유: 동영상과 뉴스 플랫폼의 성장.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;성과형광고: YoY 160% (약 4377억원)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;텐센트가 발표한 위챗 관련 데이터 WeChat Life Report &lt;a href='#fn:14' class='footnote' id='fnref:14'&gt;[14]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;reading habits 을 주목할 필요가 있음. 아주 유용한 자료.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;광고-차단&quot;&gt;광고 차단&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;애플은 iOS9 에서 광고 차단앱을 만들 수 있는 기능(Content Blocking)을 추가했다. 2015 Apple &lt;a href='#fn:15' class='footnote' id='fnref:15'&gt;[15]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;모바일 디스플레이 광고 클릭의 50% 는 의도하지 않은 클릭이다. 2015 Google &lt;a href='#fn:16' class='footnote' id='fnref:16'&gt;[16]&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;2015년 Ad Blocker 때문에 발생한 매출 손실이 £14bn 로 예측됨. 2015 ExchangeWire &lt;a href='#fn:17' class='footnote' id='fnref:17'&gt;[17]&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;광고차단(adblock) 을 사용하는 사람은 미국 사용자의 15% 이다. &lt;a href='#fn:18' class='footnote' id='fnref:18'&gt;[18]&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;광고차단(adblock) 을 사용하는 사람은 한국 사용자의 2% 이다.&lt;/li&gt;
+      &lt;li&gt;iOS9 의 광고 차단 기능과 이 기능을 사용한 광고 차단 앱의 영향은 과장되어 있다. 2015 UBS &lt;a href='#fn:19' class='footnote' id='fnref:19'&gt;[19]&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;이유:
+            &lt;ul&gt;
+              &lt;li&gt;(네이티브)앱의 광고는 차단되지 않는다.
+                &lt;ul&gt;
+                  &lt;li&gt;모바일 광고 수익의 대부분은 앱 내부 광고이지 모바일 웹의 광고가 아니다.&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+              &lt;li&gt;차단 되는 것은 Safari 브라우저만 이다.
+                &lt;ul&gt;
+                  &lt;li&gt;Web 트래픽 중 Safari 의 비중은 22% 이다.&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+              &lt;li&gt;설정이 필요하다.
+                &lt;ul&gt;
+                  &lt;li&gt;광고차단앱을 받아서 환경설정을 변경해야 한다.&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+              &lt;li&gt;64비트 단말에서만 작동한다.
+                &lt;ul&gt;
+                  &lt;li&gt;iPhone5s, iPhone6, iPhone6s 에서 동작하고 오래된 아이폰이나 아이패드에선 동작하지 않는다.&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;UBS 의 추측은 iOS9 광고 차단 기능 때문에 발생하는 매체의 손해는 10억 달러.
+            &lt;ul&gt;
+              &lt;li&gt;이것은 전세계 디지털 광고비의 0.5% 모바일 광고의 1.3% 에 불과함.&lt;/li&gt;
+              &lt;li&gt;Safari 의 광고 차단의 비율은 높게 잡아도 20%&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;내 생각에
+        &lt;ul&gt;
+          &lt;li&gt;“설치만 하면 광고가 없어진다” 는 슬로건은 매우 매력적이다.&lt;/li&gt;
+          &lt;li&gt;몇몇의 매체는 광고를 엄격히 검수하여 품질을 관리했지만&lt;/li&gt;
+          &lt;li&gt;몇몇의 매체는 나쁜 광고를 허용 했다.&lt;/li&gt;
+          &lt;li&gt;나쁜 광고는 사용자의 인터넷을 느리게 만들고 배터리를 더 소모시켰다.&lt;/li&gt;
+          &lt;li&gt;결과적으로 광고 차단앱은 성장하고 있고, 광고 업계의 실패다.&lt;/li&gt;
+          &lt;li&gt;우리는 정말 더 나은 세상을 만들고 있는 걸까.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;내-생각&quot;&gt;내 생각&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;모바일에서 어떻게 수익화를 할 것인가를 3년 전에는 아무도 답을 못 찾았다.
+    &lt;ul&gt;
+      &lt;li&gt;하지만 지금은 답이 나와 있다.&lt;/li&gt;
+      &lt;li&gt;페이스북, 네이버의 라인, 텐센트의 WeChat 등 모두 하나로 수렴했다.&lt;/li&gt;
+      &lt;li&gt;이미 모범답안이 있고, 답안지를 보면서 시험을 치는데도 실패하는 것은 비정상이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;회사는 언제나 위기를 얘기하고.
+    &lt;ul&gt;
+      &lt;li&gt;예외 없이 선택과 집중, 개혁, 변화, 그리고 잘하자. 라는 식의 하나마나한 얘기들이 나온다.&lt;/li&gt;
+      &lt;li&gt;물론 밥을 먹으면 배부르고, 열심히 하면 성공하지.&lt;/li&gt;
+      &lt;li&gt;가장 중요한 것이 빠져 있는 게 아닐까?&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;요즘 이 바닥은 갈수록 사용자의 정보를 탐욕스럽게 빨아들이는 일을 고민하는 것 같다.
+    &lt;ul&gt;
+      &lt;li&gt;사용자에게 더 재밌는 컨텐츠, 유용한 정보를 주는 것 같지만.&lt;/li&gt;
+      &lt;li&gt;사실은 TV도, PC도, 스마트폰도 수십만 원 짜리 광고판을 집집마다 설치하게 하는 일이다.&lt;/li&gt;
+      &lt;li&gt;컨텐츠가 주도하는 것 같지만 사실은 광고가 주도한다.&lt;/li&gt;
+      &lt;li&gt;페이스북도 구글도 네이버도 텐센트도 모두 서비스의 변화를 보면 광고가 서비스를 리드한다.&lt;/li&gt;
+      &lt;li&gt;광고하기 쉽도록, 그래서 더 많은 이익창출을 하도록 서비스를 변화하고 정보를 이용한다.&lt;/li&gt;
+      &lt;li&gt;그래서 새롭게 만들어지는 부가가치는 도대체 무엇일까.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://recode.net/2015/10/09/twitter-is-planning-company-wide-layoffs-for-next-week/&quot;&gt;http://recode.net/2015/10/09/twitter-is-planning-company-wide-layoffs-for-next-week/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://kr.wsj.com/posts/2015/10/23/%ED%8A%B8%EC%9C%84%ED%84%B0-ceo-%EC%9E%AD-%EB%8F%84%EC%8B%9C-%EB%82%B4-%EC%A3%BC%EC%8B%9D-3%EB%B6%84%EC%9D%98-1-%EC%A7%81%EC%9B%90%EB%93%A4%EC%97%90%EA%B2%8C-%EA%B8%B0%EB%B6%80%ED%95%98%EA%B2%A0/&quot;&gt;http://kr.wsj.com/posts/2015/10/23/%ED%8A%B8%EC%9C%84%ED%84%B0-ceo-%EC%9E%AD-%EB%8F%84%EC%8B%9C-%EB%82%B4-%EC%A3%BC%EC%8B%9D-3%EB%B6%84%EC%9D%98-1-%EC%A7%81%EC%9B%90%EB%93%A4%EC%97%90%EA%B2%8C-%EA%B8%B0%EB%B6%80%ED%95%98%EA%B2%A0/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://investor.twitterinc.com/&quot;&gt;https://investor.twitterinc.com/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.navercorp.com/ko/ir/earningsRelease.nhn&quot;&gt;http://www.navercorp.com/ko/ir/earningsRelease.nhn&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://linecorp.com/ja/pr/news/ja/2015/1133&quot;&gt;http://linecorp.com/ja/pr/news/ja/2015/1133&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://tomomo.tistory.com/m/post/195&quot;&gt;http://tomomo.tistory.com/m/post/195&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.kakaocorp.com/ir/earnings&quot;&gt;http://www.kakaocorp.com/ir/earnings&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:8&quot; id=&quot;fn:8&quot; class=&quot;reversefootnote&quot;&gt;[8]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.focus.kr/view.php?key=2015110500161652472&quot;&gt;http://www.focus.kr/view.php?key=2015110500161652472&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:9&quot; id=&quot;fn:9&quot; class=&quot;reversefootnote&quot;&gt;[9]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://investor.fb.com/results.cfm?Quarter=3&amp;amp;Year=2015&quot;&gt;http://investor.fb.com/results.cfm?Quarter=3&amp;amp;Year=2015&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:10&quot; id=&quot;fn:10&quot; class=&quot;reversefootnote&quot;&gt;[10]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.emarketer.com/Article.aspx?R=1013015&amp;amp;ecid=NL1006&quot;&gt;http://www.emarketer.com/Article.aspx?R=1013015&amp;amp;ecid=NL1006&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:10&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:11&quot; id=&quot;fn:11&quot; class=&quot;reversefootnote&quot;&gt;[11]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://investor.google.com/earnings/2015/Q3_google_earnings.html&quot;&gt;https://investor.google.com/earnings/2015/Q3_google_earnings.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:11&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:12&quot; id=&quot;fn:12&quot; class=&quot;reversefootnote&quot;&gt;[12]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://techcrunch.com/2015/10/08/mobile-searches-surpass-desktop-searches-at-google-for-the-first-time/&quot;&gt;http://techcrunch.com/2015/10/08/mobile-searches-surpass-desktop-searches-at-google-for-the-first-time/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:12&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:13&quot; id=&quot;fn:13&quot; class=&quot;reversefootnote&quot;&gt;[13]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.tencent.com/en-us/ir/news/2015.shtml&quot;&gt;http://www.tencent.com/en-us/ir/news/2015.shtml&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:13&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:14&quot; id=&quot;fn:14&quot; class=&quot;reversefootnote&quot;&gt;[14]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://mp.weixin.qq.com/s?__biz=MzAxNzYxMzc0OA==&amp;amp;mid=400131662&amp;amp;idx=1&amp;amp;sn=9f24c35c801e6ea0a10275687b9612ff&amp;amp;scene=0#rd&quot;&gt;http://mp.weixin.qq.com/s?__biz=MzAxNzYxMzc0OA==&amp;amp;mid=400131662&amp;amp;idx=1&amp;amp;sn=9f24c35c801e6ea0a10275687b9612ff&amp;amp;scene=0#rd&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:14&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:15&quot; id=&quot;fn:15&quot; class=&quot;reversefootnote&quot;&gt;[15]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://developer.apple.com/library/prerelease/ios/releasenotes/General/WhatsNewInSafari/Articles/Safari_9.html#//apple_ref/doc/uid/TP40014305-CH9-SW9&quot;&gt;https://developer.apple.com/library/prerelease/ios/releasenotes/General/WhatsNewInSafari/Articles/Safari_9.html#//apple_ref/doc/uid/TP40014305-CH9-SW9&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:15&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:16&quot; id=&quot;fn:16&quot; class=&quot;reversefootnote&quot;&gt;[16]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://adwords.blogspot.com/2015/06/better-click-quality-on-display-ads.html&quot;&gt;http://adwords.blogspot.com/2015/06/better-click-quality-on-display-ads.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:16&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:17&quot; id=&quot;fn:17&quot; class=&quot;reversefootnote&quot;&gt;[17]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.exchangewire.com/blog/2015/09/03/ad-blocking-predicted-to-cost-14bn-in-2015-half-of-publishers-frustrated-by-programmatic-demand-incompletes-smartphones-account-for-20-of-ad-views-less-than-30-of-marketers-use-cross-channel/&quot;&gt;https://www.exchangewire.com/blog/2015/09/03/ad-blocking-predicted-to-cost-14bn-in-2015-half-of-publishers-frustrated-by-programmatic-demand-incompletes-smartphones-account-for-20-of-ad-views-less-than-30-of-marketers-use-cross-channel/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:17&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:18&quot; id=&quot;fn:18&quot; class=&quot;reversefootnote&quot;&gt;[18]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://blog.pagefair.com/2015/ad-blocking-report/&quot;&gt;http://blog.pagefair.com/2015/ad-blocking-report/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:18&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:19&quot; id=&quot;fn:19&quot; class=&quot;reversefootnote&quot;&gt;[19]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.businessinsider.com/ubs-says-ad-revenue-impact-of-ios-9-ad-blocking-will-only-be-1-billion-2015-9&quot;&gt;http://www.businessinsider.com/ubs-says-ad-revenue-impact-of-ios-9-ad-blocking-will-only-be-1-billion-2015-9&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:19&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><author><name>이상욱</name></author><summary type="html">트위터</summary></entry><entry><title type="html">Neovim 0.1.0 릴리즈</title><link href="/2015/11/03/neovim-vim.html" rel="alternate" type="text/html" title="Neovim 0.1.0 릴리즈" /><published>2015-11-03T17:34:00+09:00</published><updated>2015-11-03T17:34:00+09:00</updated><id>/2015/11/03/neovim-vim</id><content type="html" xml:base="/2015/11/03/neovim-vim.html">&lt;h3 id=&quot;어제-neovim-010-이-릴리즈-됨&quot;&gt;어제 Neovim 0.1.0 이 릴리즈 됨&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://news.ycombinator.com/item?id=10488188&quot;&gt;https://news.ycombinator.com/item?id=10488188&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.reddit.com/r/vim/comments/3r45y6/neovim_first_public_release_010/&quot;&gt;https://www.reddit.com/r/vim/comments/3r45y6/neovim_first_public_release_010/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.reddit.com/r/neovim/comments/3r4ciu/neovim_010/&quot;&gt;https://www.reddit.com/r/neovim/comments/3r4ciu/neovim_010/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;neovim-을-만든-이유-&quot;&gt;Neovim 을 만든 이유 &lt;a href='#fn:1' class='footnote' id='fnref:1'&gt;[1]&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;20년 이상의 시간동안, vim은 소수의 사람들만 이해할 수 있는 무시무시한 C89 코드를 조금씩 수정하여 30만 줄의 코드가 되었다.&lt;/li&gt;
+  &lt;li&gt;문제는 이 거대한 vim 코드 베이스가 오직 한 사람 Bram Moolenaar 의 책임으로 유지된다는 점이다.&lt;/li&gt;
+  &lt;li&gt;이것은 새로운 기능과 버그 수정을 어렵게 한다.&lt;/li&gt;
+  &lt;li&gt;vim 은 더이상 plugin 생태계의 개발속도를 따라갈 수 없다.&lt;/li&gt;
+  &lt;li&gt;그래서 우리는 다음의 목표를 위해 vim 의 코드를 공격적으로 refactor 하기로 했다.
+    &lt;ul&gt;
+      &lt;li&gt;버그 수정과 기능 추가를 빠르게 개선하기 위해 maintenance 를 단순화 한다.&lt;/li&gt;
+      &lt;li&gt;여러 개발자들과 분담하여 개발한다.&lt;/li&gt;
+      &lt;li&gt;core source 수정 없이 새롭고 현대적인 UI 구현이 가능하게 한다.&lt;/li&gt;
+      &lt;li&gt;플러그인은 어떤 프로그래밍 언어로도 쓸 수 있게 만든다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;이러한 목표를 달성해서 새로운 개발자가 커뮤니티에 참여하게 만들고
+    &lt;ul&gt;
+      &lt;li&gt;그러면 에디터는 개선된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;무엇보다 중요한 것은
+    &lt;ul&gt;
+      &lt;li&gt;Neovim 은 vim 을 처음부터 다시 쓰는 프로젝트가 아니다.&lt;/li&gt;
+      &lt;li&gt;기존 vim 의 편집 모델과 Vimscript 에 거의 영향을 주지 않는다.&lt;/li&gt;
+      &lt;li&gt;기존 Vimscript 플러그인은 Neovim 에서도 정상 작동한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;(플러그인은 msgpack-rpc API, TCP 통신으로 플러그인과 UI 를 구현하는 구조네요.) &lt;a href='#fn:2' class='footnote' id='fnref:2'&gt;[2]&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;vim-을-만든-bram-moolenaar-의-인터뷰-&quot;&gt;vim 을 만든 Bram Moolenaar 의 인터뷰 &lt;a href='#fn:3' class='footnote' id='fnref:3'&gt;[3]&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Neovim 에 대해 어떻게 생각하나?
+    &lt;ul&gt;
+      &lt;li&gt;하위호환을 무시하거나 특정 시스템 지원을 안 하는 것 등의 선택은 동의하지 않는다.&lt;/li&gt;
+      &lt;li&gt;vim 코드가 오래되고 싫어서 “올바로(right)” 구현하기 위한 것 같은데.&lt;/li&gt;
+      &lt;li&gt;오래된 코드는 ugly 하다는 것에 동의한다.&lt;/li&gt;
+      &lt;li&gt;하지만 새로 구현하는 것은 아주 많은 노력이 필요할 것이다.&lt;/li&gt;
+      &lt;li&gt;Elvis 텍스트 에디터도 새로운 코드로 다시 구현을 시도 했는데.&lt;/li&gt;
+      &lt;li&gt;vim 이 기능 확장을 하는 동안 Elvis 는 사용자를 잃었다.&lt;/li&gt;
+      &lt;li&gt;Elivs 가 좋은 코드로 작성되었는지 모르지만 사용자는 모른다.&lt;/li&gt;
+      &lt;li&gt;neovim 의 좋은 기능들이 다시 vim 에 돌아오길 바란다.
+        &lt;ul&gt;
+          &lt;li&gt;내 말은.&lt;/li&gt;
+          &lt;li&gt;누구나 좀더 좋은 플러그인 지원, 좀더 좋은 GUI 와 embedding 을 원한다.&lt;/li&gt;
+          &lt;li&gt;더 큰 질문은 그것을 어떻게 누가 적절하게 구현할 것이냐 이다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;덧, 요즘 블로그에 글이 뜸해서 회사에다 쓴 글을 올려봤음.&lt;/p&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/neovim/neovim/wiki/Introduction&quot;&gt;https://github.com/neovim/neovim/wiki/Introduction&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/neovim/neovim/wiki/Plugin-UI-architecture&quot;&gt;https://github.com/neovim/neovim/wiki/Plugin-UI-architecture&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.binpress.com/blog/2014/11/19/vim-creator-bram-moolenaar-interview/&quot;&gt;http://www.binpress.com/blog/2014/11/19/vim-creator-bram-moolenaar-interview/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><author><name>이상욱</name></author><summary type="html">어제 Neovim 0.1.0 이 릴리즈 됨</summary></entry><entry><title type="html">Google의 컨테이너 관리 논문 (Borg Paper, Kubernetes)</title><link href="/2015/06/03/google-borg-paper-kubernetes.html" rel="alternate" type="text/html" title="Google의 컨테이너 관리 논문 (Borg Paper, Kubernetes)" /><published>2015-06-03T15:17:00+09:00</published><updated>2015-06-03T15:17:00+09:00</updated><id>/2015/06/03/google-borg-paper-kubernetes</id><content type="html" xml:base="/2015/06/03/google-borg-paper-kubernetes.html">&lt;ul&gt;
+  &lt;li&gt;지난달 말(2015-04-17) Google 이 “Large-scale cluster management at Google with Borg” 라는 논문을 발표했다. &lt;a href='#fn:1' class='footnote' id='fnref:1'&gt;[1]&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;최근에 회사 업무로 kubernetes &lt;a href='#fn:2' class='footnote' id='fnref:2'&gt;[2]&lt;/a&gt; 를 검토하고 있어서
+    &lt;ul&gt;
+      &lt;li&gt;궁금한 부분에 대해서 kubernetes 코드를 보고, Borg 논문을 읽고 혼자 정리하고 있었는데.&lt;/li&gt;
+      &lt;li&gt;앞으로 회사에서 컨테이너 관련 업무를 안 하게 되서 정리한게 아까워서 블로그에라도 남김.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;초록&quot;&gt;초록&lt;/h3&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Google’s Borg system is a cluster manager that runs hundreds of thousands of jobs, from many thousands of different applications, across a number of clusters each with up to tens of thousands of machines. It achieves high utilization by combining admission control, efficient task-packing, over-commitment, and machine sharing with process-level performance isolation. It supports high-availability applications with runtime features that minimize fault-recovery time, and scheduling policies that reduce the probability of correlated failures. Borg simplifies life for its users by offering a declarative job specification language, name service integration, real-time job monitoring, and tools to analyze and simulate system behavior. We present a summary of the Borg system architecture and features, important design decisions, a quantitative analysis of some of its policy decisions, and a qualitative examination of lessons learned from a decade of operational experience with it.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;일단 초록은 위와 같다.&lt;/li&gt;
+  &lt;li&gt;한마디로 Google 의 Borg 시스템은 수만대의 머신으로 구성된 클러스터들에 수십만개의 jobs 을 실행하는 클러스터 매니저라는 소리.&lt;/li&gt;
+  &lt;li&gt;내용을 보면 borg 는 C++ 로 작성되어 있고, 이 노하우를 적용하여 오픈소스로 만든것이 kubernetes 이다.
+    &lt;ul&gt;
+      &lt;li&gt;kubernetes 는 현재 go 언어와 docker 기반으로 만들어져 있다.&lt;/li&gt;
+      &lt;li&gt;Borg 를 만들었던 엔지니어 대부분이 kubernetes 로 옮겼다고도 함.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;구글은 거의 모든 서버를 컨테이너로 돌린다고 하고, 매주 20억개의 컨테이너가 시작된다고 함. &lt;a href='#fn:3' class='footnote' id='fnref:3'&gt;[3]&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;논문에서-관심있게-본-부분만&quot;&gt;논문에서 관심있게 본 부분만.&lt;/h3&gt;
+
+&lt;h4 id=&quot;21-the-workload&quot;&gt;2.1 The workload&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;workload 를 아래의 2가지로 나눔.
+    &lt;ul&gt;
+      &lt;li&gt;long-running services (prod)
+        &lt;ul&gt;
+          &lt;li&gt;절대 죽으면 안 됨.&lt;/li&gt;
+          &lt;li&gt;빠른 응답시간 (a few μs to a few hundred ms)&lt;/li&gt;
+          &lt;li&gt;e.g. Gmail, Google Docs, web search, BigTable 같은 내부 인프라 서비스 등.&lt;/li&gt;
+          &lt;li&gt;CPU 70% 를 할당받고 60% 를 사용함.&lt;/li&gt;
+          &lt;li&gt;memory 55% 를 할당받고 85% 를 사용함.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;batch jobs (non-prod)
+        &lt;ul&gt;
+          &lt;li&gt;몇 초에 끝나는 작업 부터 몇일씩 걸리는 작업들.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;2가지 종류로 나눠서 같은 cell 에 함께 실행하는 것은 자원을 최대한 활용하기 위한 목적이라고 함.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;25-priority-quota-and-admission-control&quot;&gt;2.5 Priority, quota, and admission control&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;사용자별 quota 와 job 우선순위가 있는데 자세히 안 읽음.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;26-naming-and-monitoring&quot;&gt;2.6 Naming and monitoring&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;“Borg Name Service” (BNS) 를 만들었다. cell 이름, job 이름, task 번호를 포함한 이름을 각 task 에 붙인다.
+    &lt;ul&gt;
+      &lt;li&gt;목적: 새로운 머신에 task 를 할당하기 위해 다른 머신에 할당된 task를 찾기 위함.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;32-scheduling&quot;&gt;3.2 Scheduling&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;scoring 단계에서 선택된 machine 이 만약 새로운 task 를 돌리기에 충분한 자원이 없다면.&lt;/li&gt;
+  &lt;li&gt;Borg 는 (task 가 돌아갈 수 있을때까지) 우선순위가 낮은 tasks 를 죽이고 자원을 점유한다(preempts).&lt;/li&gt;
+  &lt;li&gt;그리고 죽은 tasks 는 scheduler 의 pending queue 에 들어가서 언젠가 돌아가는 방식인듯.&lt;/li&gt;
+  &lt;li&gt;Task startup latency 는 평균 25 초이다.
+    &lt;ul&gt;
+      &lt;li&gt;이것의 80% 는 패키지 설치. (병목은 local disk 쓰기 성능)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;참고로 kubernetes 의 소스코드도 요즘 오랫동안 훑어봤는데.
+    &lt;ul&gt;
+      &lt;li&gt;kubernetes 의 스케줄링은 score 가 동일하면 랜덤으로 하나 뽑아서 실행하도록 구현되어 있다. &lt;a href='#fn:4' class='footnote' id='fnref:4'&gt;[4]&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;33-borglet&quot;&gt;3.3 Borglet&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Borgmaster 는 각 Borglet 을 n 초에 한번씩 poll 해서, 머신의 현재 상태를 가져옴.
+    &lt;ul&gt;
+      &lt;li&gt;목적: 통신이 너무 많아 지는 것을 회피.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;34-scalability&quot;&gt;3.4 Scalability&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Borg 의 중앙집중적인 아키텍처의 확장성에 대해선 확신이 없음.&lt;/li&gt;
+  &lt;li&gt;지금까지는 limit 까지 근접하고 limit 을 제거해왔다.&lt;/li&gt;
+  &lt;li&gt;Borgmaster 는 10~14 CPU 코어와 50 GiB 메모리를 사용.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;4-availability&quot;&gt;4. Availability&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Borgmaster 의 가용성이 99.99% 라고 함.
+    &lt;ul&gt;
+      &lt;li&gt;어떻게?
+        &lt;ul&gt;
+          &lt;li&gt;replication for machine failures&lt;/li&gt;
+          &lt;li&gt;admission control to avoid overload&lt;/li&gt;
+          &lt;li&gt;deploying instances using simple, low-level tools to minimize external dependencies.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;6-isolation&quot;&gt;6. Isolation&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우리 machine 의 50% 는 9개 이상의 tasks 를 돌린다.&lt;/li&gt;
+  &lt;li&gt;90%ile 의 machine 은 약 25 tasks 를 가지고 있고, 4500 개의 스레드를 돌린다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;62-performance-isolation&quot;&gt;6.2 Performance isolation&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;compressible resources (압축 가능한 자원)
+    &lt;ul&gt;
+      &lt;li&gt;task 를 죽이지 않고도 서비스의 품질을 떨어뜨려서 task 로부터 자원을 돌려받는게 가능한 것들.&lt;/li&gt;
+      &lt;li&gt;e.g. CPU cycles, IO bandwidth&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;non-compressible resources (압축 불가능한 자원)
+    &lt;ul&gt;
+      &lt;li&gt;task 를 죽이지 않고는 자원을 돌려받는게 불가능한 것들.&lt;/li&gt;
+      &lt;li&gt;e.g. memory, disk 공간&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://research.google.com/pubs/pub43438.html&quot;&gt;https://research.google.com/pubs/pub43438.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/googlecloudplatform/kubernetes&quot;&gt;https://github.com/googlecloudplatform/kubernetes&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://speakerdeck.com/jbeda/containers-at-scale&quot;&gt;https://speakerdeck.com/jbeda/containers-at-scale&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/GoogleCloudPlatform/kubernetes/blob/907b83cd7d6b400725a1a0d0509d601172920fa4/plugin/pkg/scheduler/generic_scheduler.go#L88&quot;&gt;https://github.com/GoogleCloudPlatform/kubernetes/blob/907b83cd7d6b400725a1a0d0509d601172920fa4/plugin/pkg/scheduler/generic_scheduler.go#L88&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><author><name>이상욱</name></author><summary type="html">지난달 말(2015-04-17) Google 이 “Large-scale cluster management at Google with Borg” 라는 논문을 발표했다. [1]
+  최근에 회사 업무로 kubernetes [2] 를 검토하고 있어서
+    
+      궁금한 부분에 대해서 kubernetes 코드를 보고, Borg 논문을 읽고 혼자 정리하고 있었는데.
+      앞으로 회사에서 컨테이너 관련 업무를 안 하게 되서 정리한게 아까워서 블로그에라도 남김.
+    
+  
+
+
+         [1]:        https://research.google.com/pubs/pub43438.html&amp;nbsp;[return]             [2]:        https://github.com/googlecloudplatform/kubernetes&amp;nbsp;[return]</summary></entry><entry><title type="html">Docker 로 Heroku 에 배포하기</title><link href="/2015/05/08/docker-heroku.html" rel="alternate" type="text/html" title="Docker 로 Heroku 에 배포하기" /><published>2015-05-08T12:55:00+09:00</published><updated>2015-05-08T12:55:00+09:00</updated><id>/2015/05/08/docker-heroku</id><content type="html" xml:base="/2015/05/08/docker-heroku.html">&lt;p&gt;&lt;img src=&quot;http://68.media.tumblr.com/7125e6bbea1a644561eead81097e3518/tumblr_inline_no0iu5Ur9j1r7z9vf_540.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;며칠 전 5월 5일, 유명 PaaS 인 Heroku 가 Docker 로 배포하는 도구를 발표했다. &lt;a href='#fn:1' class='footnote' id='fnref:1'&gt;[1]&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;요즘 회사에서, 사내 개발자들을 위한 PaaS (Heroku 또는 AWS Beanstalk 와 비슷) 를 만들고 있고, Docker 에도 관심이 많기 때문에 한 번 살펴봤다.
+    &lt;ul&gt;
+      &lt;li&gt;(내가 안 하면 아무도 안 해줄것 같기도 하고)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;살펴본 결론은:
+    &lt;ul&gt;
+      &lt;li&gt;아무 Docker 이미지나 Heroku 에 올려서 돌릴 수 있는건 아니다.
+        &lt;ul&gt;
+          &lt;li&gt;Heroku 가 자동으로 만들어 주는 Dockerfile 을 사용하거나.&lt;/li&gt;
+          &lt;li&gt;&lt;code&gt;FROM heroku/cedar:14&lt;/code&gt; 이미지를 사용해야 Heroku에 올릴 수 있다. (&lt;code&gt;/app&lt;/code&gt; 아래에 파일들이 들어가는 조건도 있고)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;ONBUILD&lt;/code&gt; 로 코드를 이미지에 포함시키기 때문에, 소스코드를 수정하면 &lt;code&gt;heroku docker:start&lt;/code&gt; 를 해줘야 한다.
+        &lt;ul&gt;
+          &lt;li&gt;개발용으로 volume mount 를 하는 등의 다른 방법이 분명 있겠지?&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;장점은 (내 생각에는)
+        &lt;ul&gt;
+          &lt;li&gt;앱에 있는 바이너리 의존성 (e.g. imagemagick 같은것?) 을 buildpack 방식에서는 복잡하게 해결해야 했는데&lt;/li&gt;
+          &lt;li&gt;Docker 방식에서는 단순히 Dockerfile 에 의존성을 추가하고 PATH 를 추가하면 된다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;heroku-docker-설치&quot;&gt;heroku-docker 설치&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ heroku plugins:install heroku-docker
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;샘플-앱-clone&quot;&gt;샘플 앱 clone&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git clone [https://github.com/heroku/node-js-getting-started.git](https://github.com/heroku/node-js-getting-started.git)
+$ cd node-js-getting-started
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;dockerinit---현재-디렉터리의-언어에-따라-dockerfile-생성&quot;&gt;docker:init - 현재 디렉터리의 언어에 따라 Dockerfile 생성&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ heroku docker:init
+  Wrote Dockerfile (node)
+
+$ cat Dockerfile
+  FROM heroku/cedar:14
+
+  RUN useradd -d /app -m app
+  USER app
+  WORKDIR /app
+
+  ENV HOME /app
+  ENV NODE_ENGINE 0.12.2
+  ENV PORT 3000
+
+  RUN mkdir -p /app/heroku/node
+  RUN curl -s [https://s3pository.heroku.com/node/v](https://s3pository.heroku.com/node/v)$NODE_ENGINE/node-v$NODE_ENGINE-linux-x64.tar.gz | tar --strip-components=1 -xz -C /app/heroku/node
+  ENV PATH /app/heroku/node/bin:$PATH
+
+  RUN mkdir -p /app/.profile.d
+  RUN echo &quot;export PATH=\&quot;/app/heroku/node/bin:/app/bin:/app/node_modules/.bin:\$PATH\&quot;&quot; &amp;gt; /app/.profile.d/nodejs.sh
+  RUN echo &quot;cd /app/src&quot; &amp;gt;&amp;gt; /app/.profile.d/nodejs.sh
+
+  EXPOSE 3000
+
+  ONBUILD RUN mkdir -p /app/src
+  ONBUILD COPY . /app/src
+  ONBUILD WORKDIR /app/src
+  ONBUILD RUN npm install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;dockerinit-내부-구현&quot;&gt;docker:init 내부 구현&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;buildpack 과 동일한 방식으로 언어를 detect 한다.
+    &lt;ul&gt;
+      &lt;li&gt;e.g. &lt;code&gt;package.json&lt;/code&gt; 가 존재하면 Node.js 로 detect 함. &lt;a href='#fn:2' class='footnote' id='fnref:2'&gt;[2]&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;platforms.detect(dir); &lt;a href='#fn:3' class='footnote' id='fnref:3'&gt;[3]&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;fs.writeFileSync(dockerfile, contents); &lt;a href='#fn:4' class='footnote' id='fnref:4'&gt;[4]&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;현재 지원되는 언어는 node, python, ruby, scala &lt;a href='#fn:5' class='footnote' id='fnref:5'&gt;[5]&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;heroku docker:init --template minimal&lt;/code&gt; 으로 최소한의 Dockerfile 을 만들 수 있음.
+    &lt;ul&gt;
+      &lt;li&gt;여기서 생성되는 Dockerfile 이 &lt;a href='#fn:6' class='footnote' id='fnref:6'&gt;[6]&lt;/a&gt; 이것.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;herokucedar14-도커-이미지-내부-구현&quot;&gt;heroku/cedar:14 도커 이미지 내부 구현&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;이미지는 Docker Registry 에 올라가 있음. &lt;a href='#fn:7' class='footnote' id='fnref:7'&gt;[7]&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Cedar-14 는 ubuntu 14.04 LTS 를 기반으로 한 스택이고, 설치되는 ubuntu package 는 여기에. &lt;a href='#fn:8' class='footnote' id='fnref:8'&gt;[8]&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Dockerfile 은 아래와 같이 단순함. &lt;a href='#fn:9' class='footnote' id='fnref:9'&gt;[9]&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;FROM ubuntu-debootstrap:14.04
+COPY ./bin/cedar-14.sh /tmp/build.sh
+RUN LC_ALL=C DEBIAN_FRONTEND=noninteractive /tmp/build.sh \
+  &amp;amp;&amp;amp; rm -rf /var/lib/apt/lists/*
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ubuntu-debootstrap 의 Docker Registry &lt;a href='#fn:10' class='footnote' id='fnref:10'&gt;[10]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;github.com/tianon/docker-brew-ubuntu-debootstrap 여기에 Dockerfile 이 있다는 것을 알 수 있음. &lt;a href='#fn:11' class='footnote' id='fnref:11'&gt;[11]&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;ubuntu-debootstrap:14.04&lt;/code&gt; 의 Dockerfile &lt;a href='#fn:12' class='footnote' id='fnref:12'&gt;[12]&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;즉 &lt;code&gt;heroku/cedar:14&lt;/code&gt; 는 용량이 작은 최소한의 ubuntu docker image 에&lt;/li&gt;
+  &lt;li&gt;cedar-14.sh 를 실행시킨다. &lt;code&gt;cedar-14.sh&lt;/code&gt; 의 코드 &lt;a href='#fn:13' class='footnote' id='fnref:13'&gt;[13]&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;dockerstart---로컬에-컨테이너를-시작&quot;&gt;docker:start - 로컬에 컨테이너를 시작&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ heroku docker:start
+  building image...
+  Sending build context to Docker daemon 285.2 kB
+  Sending build context to Docker daemon
+  Step 0 : FROM heroku/cedar:14
+  Pulling repository heroku/cedar
+  66766a8c5395: Download complete
+  c40496787f7c: Download complete
+  f90b0e99841d: Download complete
+  ac0bf528748f: Download complete
+  Status: Downloaded newer image for heroku/cedar:14
+   ---&amp;gt; 66766a8c5395
+  ... docker 이미지 빌드 생략 ...
+  Successfully built d3e547511a82
+
+  starting container...
+  web process will be available at [http://localhost](http://localhost):3000/
+  Node app is running on port 3000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;dockerstart-내부-구현&quot;&gt;docker:start 내부 구현.&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;start.js &lt;a href='#fn:14' class='footnote' id='fnref:14'&gt;[14]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Procfile 을 읽어서 여기에 적혀있는 command 가 Docker 가 실행될때 command 로 전달됨.&lt;/li&gt;
+      &lt;li&gt;docker.ensureStartImage &lt;a href='#fn:15' class='footnote' id='fnref:15'&gt;[15]&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;docker.js#ensureStartImage() &lt;a href='#fn:16' class='footnote' id='fnref:16'&gt;[16]&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;docker.js#buildImage &lt;a href='#fn:17' class='footnote' id='fnref:17'&gt;[17]&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;&lt;code&gt;build --force-rm --file=&quot;${dockerfile}&quot; --tag=&quot;${id}&quot; &quot;${dir}&quot;&lt;/code&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;docker.js#runImage() &lt;a href='#fn:18' class='footnote' id='fnref:18'&gt;[18]&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code&gt;run -w /app/src -p 3000:3000 --rm -it ${mountComponent} ${envArgComponent} ${imageId} sh -c &quot;${command}&quot; || true&lt;/code&gt; &lt;a href='#fn:19' class='footnote' id='fnref:19'&gt;[19]&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;컨테이너에-명령-실행&quot;&gt;컨테이너에 명령 실행&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ heroku docker:exec npm install --save --no-bin-links cool-ascii-faces
+$ heroku docker:exec ls node_modules
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;dockerexec-내부-구현&quot;&gt;docker:exec 내부 구현&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;docker exec&lt;/code&gt; 를 한 번 감싼 형태.&lt;/li&gt;
+  &lt;li&gt;exec.js &lt;a href='#fn:20' class='footnote' id='fnref:20'&gt;[20]&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;docker.js#runImage() &lt;a href='#fn:21' class='footnote' id='fnref:21'&gt;[21]&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;dockerrelease---배포&quot;&gt;docker:release - 배포&lt;/h3&gt;
+
+&lt;p&gt;아래의 명령으로 배포 가능하다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ heroku docker:release
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;이것은 heroku 가 기존에 사용하던 Buildpack 기반의 빌드시스템을 사용하지 않음.&lt;/li&gt;
+  &lt;li&gt;대신, Docker 이미지에 앱의 코드와 의존성을 포함하고, 로컬의 Docker 이미지를 직접 배포함.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;dockerrelease-내부-구현&quot;&gt;docker:release 내부 구현&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Heroku 로 배포.&lt;/li&gt;
+  &lt;li&gt;컨테이너를 올려서 /app 디렉터리를 압축한다.
+    &lt;ul&gt;
+      &lt;li&gt;이 압축파일에는 language 의 runtime 과 앱의 소스코드를 포함함.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;release.js &lt;a href='#fn:22' class='footnote' id='fnref:22'&gt;[22]&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;docker run -d ${imageId} tar cfvz /tmp/slug.tgz -C / --exclude=.git --exclude=.heroku ./app
+docker wait ${containerId}
+docker cp ${containerId}:/tmp/slug.tgz ${slugPath}
+docker rm -f ${containerId}
+slug.tgz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;만들어진 slug 압축파일을 HTTP PUT 을 통해 업로드하도록 구현 되어 있음. &lt;a href='#fn:23' class='footnote' id='fnref:23'&gt;[23]&lt;/a&gt; &lt;a href='#fn:24' class='footnote' id='fnref:24'&gt;[24]&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://blog.heroku.com/archives/2015/5/5/introducing_heroku_docker_release_build_deploy_heroku_apps_with_docker&quot;&gt;https://blog.heroku.com/archives/2015/5/5/introducing_heroku_docker_release_build_deploy_heroku_apps_with_docker&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/master/commands/init.js#L27&quot;&gt;https://github.com/heroku/heroku-docker/blob/master/commands/init.js#L27&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/master/commands/init.js#L38&quot;&gt;https://github.com/heroku/heroku-docker/blob/master/commands/init.js#L38&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/master/platforms/node/index.js#L11-L12&quot;&gt;https://github.com/heroku/heroku-docker/blob/master/platforms/node/index.js#L11-L12&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/tree/master/platforms&quot;&gt;https://github.com/heroku/heroku-docker/tree/master/platforms&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/master/platforms/minimal/Dockerfile.t&quot;&gt;https://github.com/heroku/heroku-docker/blob/master/platforms/minimal/Dockerfile.t&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://registry.hub.docker.com/u/heroku/cedar/&quot;&gt;https://registry.hub.docker.com/u/heroku/cedar/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:8&quot; id=&quot;fn:8&quot; class=&quot;reversefootnote&quot;&gt;[8]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://devcenter.heroku.com/articles/cedar-ubuntu-packages&quot;&gt;https://devcenter.heroku.com/articles/cedar-ubuntu-packages&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:9&quot; id=&quot;fn:9&quot; class=&quot;reversefootnote&quot;&gt;[9]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/tt/stack-images/blob/master/Dockerfile&quot;&gt;https://github.com/tt/stack-images/blob/master/Dockerfile&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:10&quot; id=&quot;fn:10&quot; class=&quot;reversefootnote&quot;&gt;[10]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://registry.hub.docker.com/_/ubuntu-debootstrap/&quot;&gt;https://registry.hub.docker.com/_/ubuntu-debootstrap/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:10&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:11&quot; id=&quot;fn:11&quot; class=&quot;reversefootnote&quot;&gt;[11]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/docker-library/official-images/blob/master/library/ubuntu-debootstrap&quot;&gt;https://github.com/docker-library/official-images/blob/master/library/ubuntu-debootstrap&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:11&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:12&quot; id=&quot;fn:12&quot; class=&quot;reversefootnote&quot;&gt;[12]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/tianon/docker-brew-ubuntu-debootstrap/blob/dist/14.04/Dockerfile&quot;&gt;https://github.com/tianon/docker-brew-ubuntu-debootstrap/blob/dist/14.04/Dockerfile&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:12&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:13&quot; id=&quot;fn:13&quot; class=&quot;reversefootnote&quot;&gt;[13]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/tt/stack-images/blob/master/bin/cedar-14.sh&quot;&gt;https://github.com/tt/stack-images/blob/master/bin/cedar-14.sh&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:13&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:14&quot; id=&quot;fn:14&quot; class=&quot;reversefootnote&quot;&gt;[14]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/commands/start.js#L38&quot;&gt;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/commands/start.js#L38&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:14&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:15&quot; id=&quot;fn:15&quot; class=&quot;reversefootnote&quot;&gt;[15]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/lib/docker.js#L49&quot;&gt;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/lib/docker.js#L49&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:15&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:16&quot; id=&quot;fn:16&quot; class=&quot;reversefootnote&quot;&gt;[16]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/lib/docker.js#L54&quot;&gt;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/lib/docker.js#L54&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:16&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:17&quot; id=&quot;fn:17&quot; class=&quot;reversefootnote&quot;&gt;[17]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/commands/start.js#L31&quot;&gt;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/commands/start.js#L31&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:17&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:18&quot; id=&quot;fn:18&quot; class=&quot;reversefootnote&quot;&gt;[18]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/lib/docker.js#L96&quot;&gt;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/lib/docker.js#L96&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:18&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:19&quot; id=&quot;fn:19&quot; class=&quot;reversefootnote&quot;&gt;[19]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/lib/docker.js#L61&quot;&gt;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/lib/docker.js#L61&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:19&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:20&quot; id=&quot;fn:20&quot; class=&quot;reversefootnote&quot;&gt;[20]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/commands/exec.js#L22&quot;&gt;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/commands/exec.js#L22&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:20&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:21&quot; id=&quot;fn:21&quot; class=&quot;reversefootnote&quot;&gt;[21]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/lib/docker.js#L49&quot;&gt;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/lib/docker.js#L49&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:21&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:22&quot; id=&quot;fn:22&quot; class=&quot;reversefootnote&quot;&gt;[22]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/commands/release.js#L25&quot;&gt;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/commands/release.js#L25&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:22&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:23&quot; id=&quot;fn:23&quot; class=&quot;reversefootnote&quot;&gt;[23]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/commands/release.js#L74-L82&quot;&gt;https://github.com/heroku/heroku-docker/blob/f51d17601d997322a8d75f07d53afaa3b19a40b1/commands/release.js#L74-L82&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:23&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span&gt; &lt;a href=&quot;#fnref:24&quot; id=&quot;fn:24&quot; class=&quot;reversefootnote&quot;&gt;[24]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://devcenter.heroku.com/articles/platform-api-deploying-slugs&quot;&gt;https://devcenter.heroku.com/articles/platform-api-deploying-slugs&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:24&quot; class=&quot;reversefootnote&quot;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><author><name>이상욱</name></author><summary type="html"></summary></entry></feed>
