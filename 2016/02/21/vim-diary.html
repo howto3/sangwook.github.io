@@ -9,17 +9,20 @@
   
 
   
+  
+  
+  
 
   <meta name="title"       content="vim 일기" />
-  <meta name="author"      content="이상욱"/>
-  <meta name="description" content="151113금: 준건님이 splitjoin.vim [1] [2] 을 알려주셔서 사용해봤다. 사용 예 e.g. ruby 에서 { ~ } 블락을 do ~ end 블락으로 변경할 때. e.g. html 에서 많은 속성을 가진 태그를 들여쓰기 할 때. 처음 이 플러그인을 써보고 “우왕!!..."/>
+  <meta name="author"      content="sangwook.github.io"/>
+  <meta name="description" content="2015년 11월: splitjoin.vim"/>
 
   <meta name="og:site_name"    content="이상욱"/>
   <meta name="og:type"         content="article"/>
   <meta name="og:title"        content="vim 일기"/>
-  <meta name="og:description"  content="151113금: 준건님이 splitjoin.vim [1] [2] 을 알려주셔서 사용해봤다. 사용 예 e.g. ruby 에서 { ~ } 블락을 do ~ end 블락으로 변경할 때. e.g. html 에서 많은 속성을 가진 태그를 들여쓰기 할 때. 처음 이 플러그인을 써보고 “우왕!!..."/>
+  <meta name="og:description"  content="2015년 11월: splitjoin.vim"/>
   <meta name="og:url"          content="https://sangwook.github.io/2016/02/21/vim-diary.html"/>
-  <meta name="og:image"        content="https://sangwook.github.io/assets/img/default-cover.png"/>
+  <meta name="og:image"        content="https://sangwook.github.io/assets/default-cover-74207b0581538a82d56c930918dcada68e40c09aa969d63b206f04568eb3ed6e.png"/>
   <meta name="og:image:width"  content="600"/>
   <meta name="og:image:height" content="315"/>
 
@@ -27,13 +30,13 @@
   <meta name="twitter:site"        content="@yiisw">
   <meta name="twitter:creator"     content="@yiisw">
   <meta name="twitter:title"       content="vim 일기"/>
-  <meta name="twitter:description" content="151113금: 준건님이 splitjoin.vim [1] [2] 을 알려주셔서 사용해봤다. 사용 예 e.g. ruby 에서 { ~ } 블락을 do ~ end 블락으로 변경할 때. e.g. html 에서 많은 속성을 가진 태그를 들여쓰기 할 때. 처음 이 플러그인을 써보고 “우왕!!..."/>
-  <meta name="twitter:image"       content="https://sangwook.github.io/assets/img/default-cover.png">
+  <meta name="twitter:description" content="2015년 11월: splitjoin.vim"/>
+  <meta name="twitter:image"       content="https://sangwook.github.io/assets/default-cover-74207b0581538a82d56c930918dcada68e40c09aa969d63b206f04568eb3ed6e.png">
 
   <title>vim 일기</title>
 
   <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanumgothiccoding.css">
-  <link rel="stylesheet" href="/assets/main.css?1486823752570493000">
+  <link type="text/css" rel="stylesheet" href="/assets/main-7c4c979d2fd6aa4d26e14f0a24f38344db1f9db137ed4990fa590f6dd723babc.css">
   <link rel="canonical" href="https://sangwook.github.io/2016/02/21/vim-diary.html">
   <link rel="alternate" type="application/rss+xml" title="이상욱" href="http://feeds.feedburner.com/sangwook">
   <link rel="shortcut icon" href="https://avatars0.githubusercontent.com/u/123514?s=100">
@@ -49,34 +52,20 @@
     <a href="/" title="sangwook">
       <span style="background-image: url('https://avatars0.githubusercontent.com/u/123514?s=100'); width:100px; height:100px; display:block;">
       </span>
-      HOME 
     </a>
 
     <div class="about-desc">
-      <ul>
-        <li>
-          이상욱 <span style="color:gray;">(친구 추가 환영합니다!)</span>
-        </li>
-        <li>
-          <a href="https://twitter.com/yiisw">twitter</a>
-        </li>
-        <li>
-          <a href="https://www.facebook.com/2sangwook">facebook</a>
-        </li>
-        <li>
-          <a href="https://github.com/sangwook">github</a>
-        </li>
-        <li>
-          <a href="https://open.kakao.com/o/sUbQmYl">카카오톡</a>
-        </li>
-      </ul>
+      이상욱 <span style="color:gray;">(친구 추가 환영합니다!)</span>
+      <br/>
+      <a href="/">home</a>,
+      <a href="https://www.facebook.com/2sangwook">facebook</a>,
+      <a href="https://twitter.com/yiisw">twitter</a>,
+      <a href="https://github.com/sangwook">github</a>,
+      <a href="https://open.kakao.com/o/sUbQmYl">카카오톡</a>,
+      <a class="page-link" href="http://feeds.feedburner.com/sangwook">RSS</a>
+      <br/>
+      <a href="http://yisangwook.tumblr.com" target="_blank">텀블러 블로그</a>에서 여기로 이사왔어요.
     </div>
-
-    <nav class="site-nav">
-      <div class="trigger">
-          <a class="page-link" href="http://feeds.feedburner.com/sangwook">RSS</a>
-      </div>
-    </nav>
 
   </div>
 
@@ -94,8 +83,10 @@
 
 
   <div class="post-content" itemprop="articleBody">
-    <ul>
-  <li>151113금: 준건님이 splitjoin.vim <a href='#fn:1' class='footnote' id='fnref:1'>[1]</a> <a href='#fn:2' class='footnote' id='fnref:2'>[2]</a> 을 알려주셔서 사용해봤다.
+    <h2 id="2015년-11월-splitjoinvim">2015년 11월: splitjoin.vim</h2>
+
+<ul>
+  <li>준건님이 splitjoin.vim <a href='#fn:1' class='footnote' id='fnref:1'>[1]</a> <a href='#fn:2' class='footnote' id='fnref:2'>[2]</a> 을 알려주셔서 사용해봤다.
     <ul>
       <li>사용 예
         <ul>
@@ -110,7 +101,12 @@
       </li>
     </ul>
   </li>
-  <li>151218금: neovim 은 설정파일을 XDG directory specification <a href='#fn:3' class='footnote' id='fnref:3'>[3]</a> 를 따르도록 변경되었다. <a href='#fn:4' class='footnote' id='fnref:4'>[4]</a>
+</ul>
+
+<h2 id="2015년-12월-neovim">2015년 12월: neovim</h2>
+
+<ul>
+  <li>neovim 은 설정파일을 XDG directory specification <a href='#fn:3' class='footnote' id='fnref:3'>[3]</a> 를 따르도록 변경되었다. <a href='#fn:4' class='footnote' id='fnref:4'>[4]</a>
     <ul>
       <li>즉, <code>~/.nvimrc</code> 대신 <code>~/.config/nvim/init.vim</code> 을 사용.</li>
       <li>XDG directory specification 라는 것도 찾아보니.
@@ -121,15 +117,20 @@
       </li>
     </ul>
   </li>
-  <li>160105화: 준건님이 만든 zoom 함수 <a href='#fn:5' class='footnote' id='fnref:5'>[5]</a> 를 모방해서 많이 쓰고 있다.</li>
-  <li>160118월: gv.vim <a href='#fn:6' class='footnote' id='fnref:6'>[6]</a> 을 설치함. (fugitive 기반 git browser)
+</ul>
+
+<h2 id="2016년-1월-gvvim-fixeol-jsonencode">2016년 1월: gv.vim, fixeol, jsonencode</h2>
+
+<ul>
+  <li>준건님이 만든 zoom 함수 <a href='#fn:5' class='footnote' id='fnref:5'>[5]</a> 를 모방해서 많이 쓰고 있다.</li>
+  <li>gv.vim <a href='#fn:6' class='footnote' id='fnref:6'>[6]</a> 을 설치함. (fugitive 기반 git browser)
     <ul>
       <li>기존에 gitv <a href='#fn:7' class='footnote' id='fnref:7'>[7]</a> 를 사용하고 있었는데,</li>
       <li>gv.vim 이 훨씬 가볍고 단순해서 나한테 맞게 수정하기 좋다.</li>
       <li>그래서 gitv 는 지워버리고 gv.vim 만 쓰는 중.</li>
     </ul>
   </li>
-  <li>160121목: eol 문제가 vim 의 옵션으로 추가되었다! (fixeol)
+  <li>eol 문제가 vim 의 옵션으로 추가되었다! (fixeol)
     <ul>
       <li>문제:
         <ul>
@@ -151,14 +152,19 @@
       </li>
     </ul>
   </li>
-  <li>160124일: vim script 의 builtin function 으로 <code>jsonencode()</code> 와 <code>jsondecode()</code> 가 추가됨. <a href='#fn:9' class='footnote' id='fnref:9'>[9]</a>
+  <li>vim script 의 builtin function 으로 <code>jsonencode()</code> 와 <code>jsondecode()</code> 가 추가됨. <a href='#fn:9' class='footnote' id='fnref:9'>[9]</a>
     <ul>
       <li>사람들은 todo.txt <a href='#fn:10' class='footnote' id='fnref:10'>[10]</a> 와 channel.txt <a href='#fn:11' class='footnote' id='fnref:11'>[11]</a> 를 보고 비동기 작업 실행의 기반이라고 추측함. <a href='#fn:12' class='footnote' id='fnref:12'>[12]</a></li>
       <li>이것은 Neovim 의 좋은 feature 를 모방하는 것으로 보인다.</li>
       <li>사실 이렇게 vim 을 따라하는 app 들의 좋은 기능을 모방하는 것이 vim 의 성공이유라는 bram 의 인터뷰도 있었다. <a href='#fn:13' class='footnote' id='fnref:13'>[13]</a></li>
     </ul>
   </li>
-  <li>160202화: 오랫동안 tabular <a href='#fn:14' class='footnote' id='fnref:14'>[14]</a> 를 써왔고, 여기에 익숙해져 있어서 변경할 생각을 못했는데.
+</ul>
+
+<h2 id="2016년-2월-vim-easy-align-vim8">2016년 2월: vim-easy-align, vim8</h2>
+
+<ul>
+  <li>오랫동안 tabular <a href='#fn:14' class='footnote' id='fnref:14'>[14]</a> 를 써왔고, 여기에 익숙해져 있어서 변경할 생각을 못했는데.
     <ul>
       <li>이번에 마음먹고 준건님의 vim-easy-align <a href='#fn:15' class='footnote' id='fnref:15'>[15]</a> 을 사용하도록 변경했다.</li>
       <li>tabular 에 비해 장점은.
@@ -169,8 +175,8 @@
       </li>
     </ul>
   </li>
-  <li>160204목: pom.xml 파일을 더 예쁘게 보여준다길래 vim-maven-syntax 를 설치했다. <a href='#fn:16' class='footnote' id='fnref:16'>[16]</a></li>
-  <li>160208월: 비동기적으로 job 을 실행시킬 수 있는 기능이 vim 공식 feature 로 들어감. <a href='#fn:17' class='footnote' id='fnref:17'>[17]</a>
+  <li>pom.xml 파일을 더 예쁘게 보여준다길래 vim-maven-syntax 를 설치했다. <a href='#fn:16' class='footnote' id='fnref:16'>[16]</a></li>
+  <li>비동기적으로 job 을 실행시킬 수 있는 기능이 vim 공식 feature 로 들어감. <a href='#fn:17' class='footnote' id='fnref:17'>[17]</a>
     <ul>
       <li>neovim 과의 관계 때문에 reddit 의 스레드는 폭발함. <a href='#fn:18' class='footnote' id='fnref:18'>[18]</a>
         <ul>
@@ -188,7 +194,7 @@ let job = job_start('ls -alh ~/', { 'callback': 'Handler' })
 </code></pre>
 
 <ul>
-  <li>160219금: python 을 위한 braceless.vim <a href='#fn:19' class='footnote' id='fnref:19'>[19]</a> 을 설치함.
+  <li>python 을 위한 braceless.vim <a href='#fn:19' class='footnote' id='fnref:19'>[19]</a> 을 설치함.
     <ul>
       <li>python 같은 brace 가 없는 indent 기반 언어를 위한 플러그인.</li>
       <li>custom text object, fold, indent guide 를 제공한다.</li>
@@ -199,7 +205,7 @@ let job = job_start('ls -alh ~/', { 'callback': 'Handler' })
   </li>
 </ul>
 
-<div class="footnotes">  <ol>    <li> <div> <span> <a href="#fnref:1" id="fn:1" class="reversefootnote">[1]</a>: </span> <p>      <p><a href="https://github.com/AndrewRadev/splitjoin.vim">https://github.com/AndrewRadev/splitjoin.vim</a>&nbsp;<a href="#fnref:1" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:2" id="fn:2" class="reversefootnote">[2]</a>: </span> <p>      <p><a href="https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370">https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370</a>&nbsp;<a href="#fnref:2" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:3" id="fn:3" class="reversefootnote">[3]</a>: </span> <p>      <p><a href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html</a>&nbsp;<a href="#fnref:3" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:4" id="fn:4" class="reversefootnote">[4]</a>: </span> <p>      <p><a href="https://neovim.io/news/2015/december/">https://neovim.io/news/2015/december/</a>&nbsp;<a href="#fnref:4" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:5" id="fn:5" class="reversefootnote">[5]</a>: </span> <p>      <p><a href="https://neovim.io/doc/user/vim_diff.html#nvim-configuration">https://neovim.io/doc/user/vim_diff.html#nvim-configuration</a>&nbsp;<a href="#fnref:5" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:6" id="fn:6" class="reversefootnote">[6]</a>: </span> <p>      <p><a href="https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0">https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0</a>&nbsp;<a href="#fnref:6" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:7" id="fn:7" class="reversefootnote">[7]</a>: </span> <p>      <p><a href="https://github.com/junegunn/gv.vim">https://github.com/junegunn/gv.vim</a>&nbsp;<a href="#fnref:7" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:8" id="fn:8" class="reversefootnote">[8]</a>: </span> <p>      <p><a href="https://github.com/gregsexton/gitv">https://github.com/gregsexton/gitv</a>&nbsp;<a href="#fnref:8" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:9" id="fn:9" class="reversefootnote">[9]</a>: </span> <p>      <p><a href="https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc">https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc</a>&nbsp;<a href="#fnref:9" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:10" id="fn:10" class="reversefootnote">[10]</a>: </span> <p>      <p><a href="https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34">https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34</a>&nbsp;<a href="#fnref:10" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:11" id="fn:11" class="reversefootnote">[11]</a>: </span> <p>      <p><a href="https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168">https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168</a>&nbsp;<a href="#fnref:11" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:12" id="fn:12" class="reversefootnote">[12]</a>: </span> <p>      <p><a href="https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt">https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt</a>&nbsp;<a href="#fnref:12" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:13" id="fn:13" class="reversefootnote">[13]</a>: </span> <p>      <p><a href="https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/">https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/</a>&nbsp;<a href="#fnref:13" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:14" id="fn:14" class="reversefootnote">[14]</a>: </span> <p>      <p><a href="http://yisangwook.tumblr.com/post/132462551169/neovim-vim">http://yisangwook.tumblr.com/post/132462551169/neovim-vim</a>&nbsp;<a href="#fnref:14" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:15" id="fn:15" class="reversefootnote">[15]</a>: </span> <p>      <p><a href="https://github.com/godlygeek/tabular">https://github.com/godlygeek/tabular</a>&nbsp;<a href="#fnref:15" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:16" id="fn:16" class="reversefootnote">[16]</a>: </span> <p>      <p><a href="https://github.com/junegunn/vim-easy-align">https://github.com/junegunn/vim-easy-align</a>&nbsp;<a href="#fnref:16" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:17" id="fn:17" class="reversefootnote">[17]</a>: </span> <p>      <p><a href="https://github.com/NLKNguyen/vim-maven-syntax">https://github.com/NLKNguyen/vim-maven-syntax</a>&nbsp;<a href="#fnref:17" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:18" id="fn:18" class="reversefootnote">[18]</a>: </span> <p>      <p><a href="https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/">https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/</a>&nbsp;<a href="#fnref:18" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:19" id="fn:19" class="reversefootnote">[19]</a>: </span> <p>      <p><a href="https://github.com/tweekmonster/braceless.vim">https://github.com/tweekmonster/braceless.vim</a>&nbsp;<a href="#fnref:19" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>  </ol></div>
+<div class="footnotes">  <ol>    <li> <div> <span class="num"> <a href="#fnref:1" id="fn:1" class="reversefootnote">[1]</a>: </span> <p>      <p><a href="https://github.com/AndrewRadev/splitjoin.vim">https://github.com/AndrewRadev/splitjoin.vim</a>&nbsp;<a href="#fnref:1" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:2" id="fn:2" class="reversefootnote">[2]</a>: </span> <p>      <p><a href="https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370">https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370</a>&nbsp;<a href="#fnref:2" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:3" id="fn:3" class="reversefootnote">[3]</a>: </span> <p>      <p><a href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html</a>&nbsp;<a href="#fnref:3" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:4" id="fn:4" class="reversefootnote">[4]</a>: </span> <p>      <p><a href="https://neovim.io/news/2015/december/">https://neovim.io/news/2015/december/</a>&nbsp;<a href="#fnref:4" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:5" id="fn:5" class="reversefootnote">[5]</a>: </span> <p>      <p><a href="https://neovim.io/doc/user/vim_diff.html#nvim-configuration">https://neovim.io/doc/user/vim_diff.html#nvim-configuration</a>&nbsp;<a href="#fnref:5" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:6" id="fn:6" class="reversefootnote">[6]</a>: </span> <p>      <p><a href="https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0">https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0</a>&nbsp;<a href="#fnref:6" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:7" id="fn:7" class="reversefootnote">[7]</a>: </span> <p>      <p><a href="https://github.com/junegunn/gv.vim">https://github.com/junegunn/gv.vim</a>&nbsp;<a href="#fnref:7" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:8" id="fn:8" class="reversefootnote">[8]</a>: </span> <p>      <p><a href="https://github.com/gregsexton/gitv">https://github.com/gregsexton/gitv</a>&nbsp;<a href="#fnref:8" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:9" id="fn:9" class="reversefootnote">[9]</a>: </span> <p>      <p><a href="https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc">https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc</a>&nbsp;<a href="#fnref:9" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:10" id="fn:10" class="reversefootnote">[10]</a>: </span> <p>      <p><a href="https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34">https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34</a>&nbsp;<a href="#fnref:10" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:11" id="fn:11" class="reversefootnote">[11]</a>: </span> <p>      <p><a href="https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168">https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168</a>&nbsp;<a href="#fnref:11" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:12" id="fn:12" class="reversefootnote">[12]</a>: </span> <p>      <p><a href="https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt">https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt</a>&nbsp;<a href="#fnref:12" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:13" id="fn:13" class="reversefootnote">[13]</a>: </span> <p>      <p><a href="https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/">https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/</a>&nbsp;<a href="#fnref:13" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:14" id="fn:14" class="reversefootnote">[14]</a>: </span> <p>      <p><a href="http://yisangwook.tumblr.com/post/132462551169/neovim-vim">http://yisangwook.tumblr.com/post/132462551169/neovim-vim</a>&nbsp;<a href="#fnref:14" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:15" id="fn:15" class="reversefootnote">[15]</a>: </span> <p>      <p><a href="https://github.com/godlygeek/tabular">https://github.com/godlygeek/tabular</a>&nbsp;<a href="#fnref:15" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:16" id="fn:16" class="reversefootnote">[16]</a>: </span> <p>      <p><a href="https://github.com/junegunn/vim-easy-align">https://github.com/junegunn/vim-easy-align</a>&nbsp;<a href="#fnref:16" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:17" id="fn:17" class="reversefootnote">[17]</a>: </span> <p>      <p><a href="https://github.com/NLKNguyen/vim-maven-syntax">https://github.com/NLKNguyen/vim-maven-syntax</a>&nbsp;<a href="#fnref:17" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:18" id="fn:18" class="reversefootnote">[18]</a>: </span> <p>      <p><a href="https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/">https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/</a>&nbsp;<a href="#fnref:18" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:19" id="fn:19" class="reversefootnote">[19]</a>: </span> <p>      <p><a href="https://github.com/tweekmonster/braceless.vim">https://github.com/tweekmonster/braceless.vim</a>&nbsp;<a href="#fnref:19" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>  </ol></div>
   </div>
 
   

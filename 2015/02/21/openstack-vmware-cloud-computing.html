@@ -9,9 +9,12 @@
   
 
   
+  
+  
+  
 
   <meta name="title"       content="클라우드 컴퓨팅, OpenStack 메모" />
-  <meta name="author"      content="이상욱"/>
+  <meta name="author"      content="sangwook.github.io"/>
   <meta name="description" content="OpenStack 커뮤니티가 private 클라우드의 성장을 방해하고 있다는 Matt Asay의 2015년 1월 20일 글"/>
 
   <meta name="og:site_name"    content="이상욱"/>
@@ -19,7 +22,7 @@
   <meta name="og:title"        content="클라우드 컴퓨팅, OpenStack 메모"/>
   <meta name="og:description"  content="OpenStack 커뮤니티가 private 클라우드의 성장을 방해하고 있다는 Matt Asay의 2015년 1월 20일 글"/>
   <meta name="og:url"          content="https://sangwook.github.io/2015/02/21/openstack-vmware-cloud-computing.html"/>
-  <meta name="og:image"        content="https://sangwook.github.io/assets/img/default-cover.png"/>
+  <meta name="og:image"        content="https://sangwook.github.io/assets/default-cover-74207b0581538a82d56c930918dcada68e40c09aa969d63b206f04568eb3ed6e.png"/>
   <meta name="og:image:width"  content="600"/>
   <meta name="og:image:height" content="315"/>
 
@@ -28,12 +31,12 @@
   <meta name="twitter:creator"     content="@yiisw">
   <meta name="twitter:title"       content="클라우드 컴퓨팅, OpenStack 메모"/>
   <meta name="twitter:description" content="OpenStack 커뮤니티가 private 클라우드의 성장을 방해하고 있다는 Matt Asay의 2015년 1월 20일 글"/>
-  <meta name="twitter:image"       content="https://sangwook.github.io/assets/img/default-cover.png">
+  <meta name="twitter:image"       content="https://sangwook.github.io/assets/default-cover-74207b0581538a82d56c930918dcada68e40c09aa969d63b206f04568eb3ed6e.png">
 
   <title>클라우드 컴퓨팅, OpenStack 메모</title>
 
   <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanumgothiccoding.css">
-  <link rel="stylesheet" href="/assets/main.css?1486823752570493000">
+  <link type="text/css" rel="stylesheet" href="/assets/main-7c4c979d2fd6aa4d26e14f0a24f38344db1f9db137ed4990fa590f6dd723babc.css">
   <link rel="canonical" href="https://sangwook.github.io/2015/02/21/openstack-vmware-cloud-computing.html">
   <link rel="alternate" type="application/rss+xml" title="이상욱" href="http://feeds.feedburner.com/sangwook">
   <link rel="shortcut icon" href="https://avatars0.githubusercontent.com/u/123514?s=100">
@@ -49,34 +52,20 @@
     <a href="/" title="sangwook">
       <span style="background-image: url('https://avatars0.githubusercontent.com/u/123514?s=100'); width:100px; height:100px; display:block;">
       </span>
-      HOME 
     </a>
 
     <div class="about-desc">
-      <ul>
-        <li>
-          이상욱 <span style="color:gray;">(친구 추가 환영합니다!)</span>
-        </li>
-        <li>
-          <a href="https://twitter.com/yiisw">twitter</a>
-        </li>
-        <li>
-          <a href="https://www.facebook.com/2sangwook">facebook</a>
-        </li>
-        <li>
-          <a href="https://github.com/sangwook">github</a>
-        </li>
-        <li>
-          <a href="https://open.kakao.com/o/sUbQmYl">카카오톡</a>
-        </li>
-      </ul>
+      이상욱 <span style="color:gray;">(친구 추가 환영합니다!)</span>
+      <br/>
+      <a href="/">home</a>,
+      <a href="https://www.facebook.com/2sangwook">facebook</a>,
+      <a href="https://twitter.com/yiisw">twitter</a>,
+      <a href="https://github.com/sangwook">github</a>,
+      <a href="https://open.kakao.com/o/sUbQmYl">카카오톡</a>,
+      <a class="page-link" href="http://feeds.feedburner.com/sangwook">RSS</a>
+      <br/>
+      <a href="http://yisangwook.tumblr.com" target="_blank">텀블러 블로그</a>에서 여기로 이사왔어요.
     </div>
-
-    <nav class="site-nav">
-      <div class="trigger">
-          <a class="page-link" href="http://feeds.feedburner.com/sangwook">RSS</a>
-      </div>
-    </nav>
 
   </div>
 
@@ -156,7 +145,7 @@
   </li>
 </ul>
 
-<div class="footnotes">  <ol>    <li> <div> <span> <a href="#fnref:1" id="fn:1" class="reversefootnote">[1]</a>: </span> <p>      <p><a href="http://news.investors.com/technology/011615-735080-amazon-aws-leads-in-cloud-msft-googl-crm-rising.htm">http://news.investors.com/technology/011615-735080-amazon-aws-leads-in-cloud-msft-googl-crm-rising.htm</a>&nbsp;<a href="#fnref:1" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:2" id="fn:2" class="reversefootnote">[2]</a>: </span> <p>      <p><a href="http://www.infoworld.com/article/2842618/cloud-computing/openstack-users-we-need-more-experienced-staff.html">http://www.infoworld.com/article/2842618/cloud-computing/openstack-users-we-need-more-experienced-staff.html</a>&nbsp;<a href="#fnref:2" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:3" id="fn:3" class="reversefootnote">[3]</a>: </span> <p>      <p><a href="http://www.redhat.com/files/resources/en-opst-idg-openstack-platform-choice-cloud-infographic.pdf">http://www.redhat.com/files/resources/en-opst-idg-openstack-platform-choice-cloud-infographic.pdf</a>&nbsp;<a href="#fnref:3" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:4" id="fn:4" class="reversefootnote">[4]</a>: </span> <p>      <p><a href="http://superuser.openstack.org/articles/openstack-user-survey-insights-november-2014">http://superuser.openstack.org/articles/openstack-user-survey-insights-november-2014</a>&nbsp;<a href="#fnref:4" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:5" id="fn:5" class="reversefootnote">[5]</a>: </span> <p>      <p><a href="http://www.cloudscaling.com/blog/openstack/the-future-of-openstack-is-now-2015/">http://www.cloudscaling.com/blog/openstack/the-future-of-openstack-is-now-2015/</a>&nbsp;<a href="#fnref:5" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:6" id="fn:6" class="reversefootnote">[6]</a>: </span> <p>      <p><a href="https://www.packet.net/blog/how-we-failed-at-openstack">우리가 4개월 동안 한 작업을 쓰레기통에 던진 이유; 우리의 OpenStack 실패기</a>&nbsp;<a href="#fnref:6" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:7" id="fn:7" class="reversefootnote">[7]</a>: </span> <p>      <p><a href="http://www.rightscale.com/blog/cloud-industry-insights/cloud-computing-trends-2014-state-cloud-survey">http://www.rightscale.com/blog/cloud-industry-insights/cloud-computing-trends-2014-state-cloud-survey</a>&nbsp;<a href="#fnref:7" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:8" id="fn:8" class="reversefootnote">[8]</a>: </span> <p>      <p><a href="http://www.vmware.com/company/news/releases/vmw-newsfeed/Introducing-VMware-vSphere-6---The-Foundation-for-Hybrid-Cloud/1920294">http://www.vmware.com/company/news/releases/vmw-newsfeed/Introducing-VMware-vSphere-6—The-Foundation-for-Hybrid-Cloud/1920294</a>&nbsp;<a href="#fnref:8" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>    <li> <div> <span> <a href="#fnref:9" id="fn:9" class="reversefootnote">[9]</a>: </span> <p>      <p><a href="http://blogs.vmware.com/openstack/2015/02/02/vmware-integrated-openstack-arrives/">http://blogs.vmware.com/openstack/2015/02/02/vmware-integrated-openstack-arrives/</a>&nbsp;<a href="#fnref:9" class="reversefootnote"><sup>[return]</sup></a></p>    </p> </div> </li>  </ol></div>
+<div class="footnotes">  <ol>    <li> <div> <span class="num"> <a href="#fnref:1" id="fn:1" class="reversefootnote">[1]</a>: </span> <p>      <p><a href="http://news.investors.com/technology/011615-735080-amazon-aws-leads-in-cloud-msft-googl-crm-rising.htm">http://news.investors.com/technology/011615-735080-amazon-aws-leads-in-cloud-msft-googl-crm-rising.htm</a>&nbsp;<a href="#fnref:1" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:2" id="fn:2" class="reversefootnote">[2]</a>: </span> <p>      <p><a href="http://www.infoworld.com/article/2842618/cloud-computing/openstack-users-we-need-more-experienced-staff.html">http://www.infoworld.com/article/2842618/cloud-computing/openstack-users-we-need-more-experienced-staff.html</a>&nbsp;<a href="#fnref:2" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:3" id="fn:3" class="reversefootnote">[3]</a>: </span> <p>      <p><a href="http://www.redhat.com/files/resources/en-opst-idg-openstack-platform-choice-cloud-infographic.pdf">http://www.redhat.com/files/resources/en-opst-idg-openstack-platform-choice-cloud-infographic.pdf</a>&nbsp;<a href="#fnref:3" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:4" id="fn:4" class="reversefootnote">[4]</a>: </span> <p>      <p><a href="http://superuser.openstack.org/articles/openstack-user-survey-insights-november-2014">http://superuser.openstack.org/articles/openstack-user-survey-insights-november-2014</a>&nbsp;<a href="#fnref:4" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:5" id="fn:5" class="reversefootnote">[5]</a>: </span> <p>      <p><a href="http://www.cloudscaling.com/blog/openstack/the-future-of-openstack-is-now-2015/">http://www.cloudscaling.com/blog/openstack/the-future-of-openstack-is-now-2015/</a>&nbsp;<a href="#fnref:5" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:6" id="fn:6" class="reversefootnote">[6]</a>: </span> <p>      <p><a href="https://www.packet.net/blog/how-we-failed-at-openstack">우리가 4개월 동안 한 작업을 쓰레기통에 던진 이유; 우리의 OpenStack 실패기</a>&nbsp;<a href="#fnref:6" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:7" id="fn:7" class="reversefootnote">[7]</a>: </span> <p>      <p><a href="http://www.rightscale.com/blog/cloud-industry-insights/cloud-computing-trends-2014-state-cloud-survey">http://www.rightscale.com/blog/cloud-industry-insights/cloud-computing-trends-2014-state-cloud-survey</a>&nbsp;<a href="#fnref:7" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:8" id="fn:8" class="reversefootnote">[8]</a>: </span> <p>      <p><a href="http://www.vmware.com/company/news/releases/vmw-newsfeed/Introducing-VMware-vSphere-6---The-Foundation-for-Hybrid-Cloud/1920294">http://www.vmware.com/company/news/releases/vmw-newsfeed/Introducing-VMware-vSphere-6—The-Foundation-for-Hybrid-Cloud/1920294</a>&nbsp;<a href="#fnref:8" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>    <li> <div> <span class="num"> <a href="#fnref:9" id="fn:9" class="reversefootnote">[9]</a>: </span> <p>      <p><a href="http://blogs.vmware.com/openstack/2015/02/02/vmware-integrated-openstack-arrives/">http://blogs.vmware.com/openstack/2015/02/02/vmware-integrated-openstack-arrives/</a>&nbsp;<a href="#fnref:9" class="reversefootnote"><span class="return">[return]</span></a></p>    </p> </div> </li>  </ol></div>
   </div>
 
   
