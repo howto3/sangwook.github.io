@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://sangwook.github.io/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="https://sangwook.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://sangwook.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2017-02-21T21:52:44+09:00</updated><id>https://sangwook.github.io//</id><title type="html">이상욱</title><subtitle>프로그래머</subtitle><entry><title type="html">2017년 Rails, JavaScript에 대한 DHH의 생각</title><link href="https://sangwook.github.io/2017/02/21/ruby-dhh-javascript-rails-redux.html" rel="alternate" type="text/html" title="2017년 Rails, JavaScript에 대한 DHH의 생각" /><published>2017-02-21T21:51:00+09:00</published><updated>2017-02-21T21:51:00+09:00</updated><id>https://sangwook.github.io/2017/02/21/ruby-dhh-javascript-rails-redux</id><content type="html" xml:base="https://sangwook.github.io/2017/02/21/ruby-dhh-javascript-rails-redux.html">&lt;p&gt;&lt;img src=&quot;/assets/2017/170221-1-f052746c2682481166b401cc114c3579db315f87be47ec17c73e58fb61a748f3.jpg&quot; alt=&quot;2017/170221-1.jpg&quot; /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://sangwook.github.io/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="https://sangwook.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://sangwook.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2017-02-21T22:30:35+09:00</updated><id>https://sangwook.github.io//</id><title type="html">이상욱</title><subtitle>프로그래머</subtitle><entry><title type="html">2017년 Rails, JavaScript에 대한 DHH의 생각</title><link href="https://sangwook.github.io/2017/02/21/ruby-dhh-javascript-rails-redux.html" rel="alternate" type="text/html" title="2017년 Rails, JavaScript에 대한 DHH의 생각" /><published>2017-02-21T21:51:00+09:00</published><updated>2017-02-21T21:51:00+09:00</updated><id>https://sangwook.github.io/2017/02/21/ruby-dhh-javascript-rails-redux</id><content type="html" xml:base="https://sangwook.github.io/2017/02/21/ruby-dhh-javascript-rails-redux.html">&lt;p&gt;&lt;img src=&quot;/assets/2017/170221-1-f052746c2682481166b401cc114c3579db315f87be47ec17c73e58fb61a748f3.jpg&quot; alt=&quot;2017/170221-1.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;dhh의-생각&quot;&gt;DHH의 생각&lt;/h2&gt;
 &lt;ul&gt;
@@ -145,7 +145,152 @@ I dare you not to fall in love.&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.quora.com/session/David-Heinemeier-Hansson/1&quot;&gt;https://www.quora.com/session/David-Heinemeier-Hansson/1&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/String_interpolation#Ruby_.2F_Crystal&quot;&gt;https://en.wikipedia.org/wiki/String_interpolation#Ruby_.2F_Crystal&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.python.org/dev/peps/pep-0498/&quot;&gt;https://www.python.org/dev/peps/pep-0498/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.ruby-lang.org/en/news/2016/12/25/ruby-2-4-0-released/&quot;&gt;https://www.ruby-lang.org/en/news/2016/12/25/ruby-2-4-0-released/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://nithinbekal.com/posts/ruby-2-4-features/&quot;&gt;http://nithinbekal.com/posts/ruby-2-4-features/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><summary type="html"></summary></entry><entry><title type="html">Uber의 Message Queue, Akka, Vim, Java</title><link href="https://sangwook.github.io/2016/12/14/uber-message-queue-akka-vim-java.html" rel="alternate" type="text/html" title="Uber의 Message Queue, Akka, Vim, Java" /><published>2016-12-14T21:59:00+09:00</published><updated>2016-12-14T21:59:00+09:00</updated><id>https://sangwook.github.io/2016/12/14/uber-message-queue-akka-vim-java</id><content type="html" xml:base="https://sangwook.github.io/2016/12/14/uber-message-queue-akka-vim-java.html">&lt;h3 id=&quot;uber가-만든-mq-디자인-task-queue-용도&quot;&gt;Uber가 만든 MQ 디자인. (task-queue 용도)&lt;/h3&gt;
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.quora.com/session/David-Heinemeier-Hansson/1&quot;&gt;https://www.quora.com/session/David-Heinemeier-Hansson/1&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/String_interpolation#Ruby_.2F_Crystal&quot;&gt;https://en.wikipedia.org/wiki/String_interpolation#Ruby_.2F_Crystal&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.python.org/dev/peps/pep-0498/&quot;&gt;https://www.python.org/dev/peps/pep-0498/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.ruby-lang.org/en/news/2016/12/25/ruby-2-4-0-released/&quot;&gt;https://www.ruby-lang.org/en/news/2016/12/25/ruby-2-4-0-released/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://nithinbekal.com/posts/ruby-2-4-features/&quot;&gt;http://nithinbekal.com/posts/ruby-2-4-features/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><summary type="html">DHH의 생각
+
+  (Rails를 만든 것으로 유명한) DHH가 Quora에서 질문을 받는 세션을 가졌다. [1]
+  재밌는 질문들이 많았다.
+  예를 들면
+    
+      “2017년에 Rails 프레임워크를 배울 가치가 뭐야?”
+      “JavaScript 프레임워크가 Rails를 먹게될까?”
+      “왜 Python이 아니라 Ruby로 Rails를 만들었니?”
+      등
+    
+  
+  질문만 봐도 막 읽고 싶어진다.
+  게다가 DHH는 글을 잘 쓴다.
+  전부 읽은 후, 내 생각과 비슷하다고 느꼈다.
+    
+      오래전부터 내가 DHH에게 영향을 많이 받았다는 증거겠지.
+    
+  
+
+
+
+  While we’ve seen a lot a progress in the JavaScript world, we’ve also seen a regression to the complexity-laden world that Rails offered refuge from in the early days.
+Back then the complexity merchant of choice was J2EE, but the complaints are uncannily similar to those leveled against JavaScript today.
+That people spent hours, if not days, just setting up the skeletons.
+The basic build configurations.
+Assembling and cherry-picking from lots of little libraries and frameworks to put together their own snowflake house variety.
+
+
+
+  13년 전 J2EE와 비교할 정도로 현재의 JavaScript world를 복잡하다고 DHH는 생각하고 있다.
+  나도 현재 JavaScript world에서 만들어지는 것들을 좋아하지 않는다.
+    
+      만약 spreadsheet 정도의 SPA를 만들어야 한다면 redux 등은 어쩔 수 없는 선택지다.
+      하지만 선택하기 전에, 오버엔지니어링이 아닌지 일단 의심해봐야 한다.
+        
+          오버엔지니어링, 이른 최적화는 모든 악의 근원이다.
+        
+      
+      JavaScript world는 앞으로 크게 변할 것이다.
+      아마 몇년 뒤에는 지금과 많이 달라지고, 그 때는 나도 생각이 달라질 수 있겠지.
+        
+          hibernate를 처음 봤을 때의 생각과, 지금의 생각이 다른 것 처럼.
+        
+      
+    
+  
+
+
+
+  That by formalizing conventions, eliminating valueless choices, and offering a full-stack framework that provides great defaults for anyone who wants to create a complete application, we can make dramatic strides of productivity.
+…
+The vast majority of activity today is for yet another option on the a la carte menu. Yet another build system, yet another view library, yet another ORM. Very little activity in integrated solutions.
+
+
+
+  Rails는 full-stack framework를 목표로 하고 있다.
+    
+      conventions을 formalizing
+      가치없는 선택지 제거
+      디폴트 제공
+      등으로 높은 생산성을 만든다.
+    
+  
+  즉, Rails는 integrated solutions 를 지향한다.
+  이 목표의 프레임워크는 Rails가 독보적이다.
+  Rails 이외의 대다수 프레임워크는 그 반대편에 있고, 아래의 방향으로 개발된다.
+    
+      또 다른 option을 만든다.
+      또 다른 빌드 시스템을 만든다.
+      또 다른 view library를 만든다.
+      또 다른 ORM을 만든다.
+    
+  
+
+
+
+  You get to use Ruby, which, even in a world that has rediscovered the benefits of functional programming and immutability, remains the most extraordinarily beautiful and luxurious language I’ve yet to encounter.
+Just look at some code.
+I dare you not to fall in love.
+
+
+
+  Ruby는 함수형 언어의 장점이 재발견된 이 시대에 와서도 DHH가 본 언어중 가장 아름다운 언어라고.
+  동의 한다.
+  사실 난 python과 ruby의 선택 시점에서 ruby를 선택했던 이유는 처음엔 단순했다.
+    
+      string interpolation이 ruby에선 되고, python은 안 되는게 가장 컸다. [2]
+        
+          최근 python3.6 부터 python도 가능하게 됐다. [3]
+          하지만 앞에 f를 붙이는 것을 보니, 역시 python과 ruby는 보는 길이 다르다.
+        
+      
+      나는 4-spaces 보다 2-spaces가 좋다. (사소하다.)
+      python 코드도 가끔 읽을 때가 있는데,
+        
+          매일 python을 쓰는게 아닌 나에겐 python의 list comprehensions는 익숙해 지지가 않는다.
+            
+              e.g. [x**2 for x in range(10)]
+            
+          
+          그보다 ruby의 블록이 나에게는 훨씬 쉽고, 코딩도 생각의 속도로 가능하고, 읽는 것도 자연스럽다.
+            
+              e.g. (0..9).map{|x|x**2}
+            
+          
+        
+      
+    
+  
+
+
+Ruby 2.4
+
+  지난 크리스마스, (2016-12-25)
+  ruby2.3 이후 1년만에 ruby2.4가 나왔다. [4] [5]
+  반올림 함수(Float#round)의 디폴트 동작이 even-half가 뒤는 무시무시한 이야기가 있었다.
+    
+      실제 preview3 까지 2.5.round의 결과가 2 였다.
+      많은 논란 끝에 결과적으로는 even-half로 동작하는 옵션이 추가되는 걸로 끝났다.
+      even-half 옵션을 내가 쓸 일이 있을까.
+    
+  
+  rails의 ActiveSupport에 있던 Hash#transform_values가 core에 포함되었다.
+  pry의 binding.pry와 동일한 기능이 irb에도 binding.irb로 추가됐다고 한다.
+    
+      하지만 pry대신 irb를 쓸 이유는 딱히 없어보인다.
+    
+  
+  true/false만 리턴하는 Regexp#match? 가 추가되었다.
+    
+      Regexp#match 보다 (당연히) 빠르다고 한다.
+    
+  
+  MatchData#named_captures가 추가되었다.
+    
+      아래처럼 이름있는 captures를 Hash로 리턴하는 메소드인데, 아주 편하겠다.
+        /(?&amp;lt;fname&amp;gt;.+) (?&amp;lt;lname&amp;gt;.+)/.match('Ned Stark').named_captures
+#=&amp;gt; {&quot;fname&quot;=&amp;gt;&quot;Ned&quot;, &quot;lname&quot;=&amp;gt;&quot;Stark&quot;}
+
+      
+    
+  
+
+
+         [1]:        https://www.quora.com/session/David-Heinemeier-Hansson/1&amp;nbsp;&amp;#91;return&amp;#93;             [2]:        https://en.wikipedia.org/wiki/String_interpolation#Ruby_.2F_Crystal&amp;nbsp;&amp;#91;return&amp;#93;             [3]:        https://www.python.org/dev/peps/pep-0498/&amp;nbsp;&amp;#91;return&amp;#93;             [4]:        https://www.ruby-lang.org/en/news/2016/12/25/ruby-2-4-0-released/&amp;nbsp;&amp;#91;return&amp;#93;             [5]:        http://nithinbekal.com/posts/ruby-2-4-features/&amp;nbsp;&amp;#91;return&amp;#93;</summary></entry><entry><title type="html">Uber의 Message Queue, Akka, Vim, Java</title><link href="https://sangwook.github.io/2016/12/14/uber-message-queue-akka-vim-java.html" rel="alternate" type="text/html" title="Uber의 Message Queue, Akka, Vim, Java" /><published>2016-12-14T21:59:00+09:00</published><updated>2016-12-14T21:59:00+09:00</updated><id>https://sangwook.github.io/2016/12/14/uber-message-queue-akka-vim-java</id><content type="html" xml:base="https://sangwook.github.io/2016/12/14/uber-message-queue-akka-vim-java.html">&lt;h3 id=&quot;uber가-만든-mq-디자인-task-queue-용도&quot;&gt;Uber가 만든 MQ 디자인. (task-queue 용도)&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;uber가 며칠전(12/6) 아래의 제목으로 글을 썼다.
@@ -417,7 +562,279 @@ I dare you not to fall in love.&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=XA2WjJbmmoM&quot;&gt;https://www.youtube.com/watch?v=XA2WjJbmmoM&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/mcantor/no_plugins/blob/master/no_plugins.vim&quot;&gt;https://github.com/mcantor/no_plugins/blob/master/no_plugins.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://ricostacruz.com/cheatsheets/vimscript.html&quot;&gt;http://ricostacruz.com/cheatsheets/vimscript.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=xDz8WVO_wjE&quot;&gt;https://www.youtube.com/watch?v=xDz8WVO_wjE&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/davidhalter/jedi-vim&quot;&gt;https://github.com/davidhalter/jedi-vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://howivim.com/2016/salvatore-sanfilippo/&quot;&gt;http://howivim.com/2016/salvatore-sanfilippo/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://gist.github.com/antirez/3860461&quot;&gt;https://gist.github.com/antirez/3860461&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:8&quot; id=&quot;fn:8&quot; class=&quot;reversefootnote&quot;&gt;[8]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/spilth/savant&quot;&gt;https://github.com/spilth/savant&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:9&quot; id=&quot;fn:9&quot; class=&quot;reversefootnote&quot;&gt;[9]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://openjdk.java.net/jeps/286&quot;&gt;http://openjdk.java.net/jeps/286&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><summary type="html">Uber가 만든 MQ 디자인. (task-queue 용도)</summary></entry><entry><title type="html">우분투16과 KDE</title><link href="https://sangwook.github.io/2016/10/11/ubuntu-1604-kde.html" rel="alternate" type="text/html" title="우분투16과 KDE" /><published>2016-10-11T21:36:00+09:00</published><updated>2016-10-11T21:36:00+09:00</updated><id>https://sangwook.github.io/2016/10/11/ubuntu-1604-kde</id><content type="html" xml:base="https://sangwook.github.io/2016/10/11/ubuntu-1604-kde.html">&lt;ul&gt;
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=XA2WjJbmmoM&quot;&gt;https://www.youtube.com/watch?v=XA2WjJbmmoM&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/mcantor/no_plugins/blob/master/no_plugins.vim&quot;&gt;https://github.com/mcantor/no_plugins/blob/master/no_plugins.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://ricostacruz.com/cheatsheets/vimscript.html&quot;&gt;http://ricostacruz.com/cheatsheets/vimscript.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=xDz8WVO_wjE&quot;&gt;https://www.youtube.com/watch?v=xDz8WVO_wjE&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/davidhalter/jedi-vim&quot;&gt;https://github.com/davidhalter/jedi-vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://howivim.com/2016/salvatore-sanfilippo/&quot;&gt;http://howivim.com/2016/salvatore-sanfilippo/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://gist.github.com/antirez/3860461&quot;&gt;https://gist.github.com/antirez/3860461&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:8&quot; id=&quot;fn:8&quot; class=&quot;reversefootnote&quot;&gt;[8]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/spilth/savant&quot;&gt;https://github.com/spilth/savant&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:9&quot; id=&quot;fn:9&quot; class=&quot;reversefootnote&quot;&gt;[9]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://openjdk.java.net/jeps/286&quot;&gt;http://openjdk.java.net/jeps/286&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><summary type="html">Uber가 만든 MQ 디자인. (task-queue 용도)
+
+
+  uber가 며칠전(12/6) 아래의 제목으로 글을 썼다.
+    
+      “Cherami: Uber Engineering’s Durable and Scalable Task Queue in Go - Uber Engineering Blog”
+      https://eng.uber.com/cherami/
+    
+  
+  uber는 microservice-architecture(이하 MSA)로 운영하는 것으로 유명하다.
+    
+      이 글로 MSA에 필수인 queue를 uber는 어떤 디자인으로 만들었는지 알 수 있다.
+      또 어떤 디자인이 실제로 어떻게 구현되고 무슨 고민이 있는지도 알 수 있다.
+      남이 만든 디자인을 관찰하는건 재밌는 일이다.
+      나는 주로 가용성과 확장성에 주목한다.
+        
+          (나에게) 처리량은 확장성에 포함되고.
+          (나에게) fault-tolerance는 가용성에 포함된다.
+          (물론 엄격히 말하면 다르다.)
+        
+      
+      uber는 1억개/일 메시지가 오간다고 한다.
+        
+          계산해보면 평균 1,157개/초 메시지로 추정할 수 있다.
+        
+      
+      이 메시지가 uber에서 사용되는 사례로 밝힌 것:
+        
+          post-trip processing
+          fraud detection
+          user notification
+          incentive campaigns
+          등
+        
+      
+    
+  
+  주요 디자인 선택.
+    
+      가용성을 위한 선택.
+        
+          competing consumers.
+          replicating messages.
+          eventual consistency.
+            
+              이 선택은 아마도 순서를 보장하지 않는단 얘기.
+            
+          
+        
+      
+      확장성을 위한 선택.
+        
+          competing consumers.
+          write 처리량을 관찰하다가 확장하는 역할도 미들웨어에서 하는 듯 하다.
+        
+      
+    
+  
+  나는 새로운 솔루션을 사용 하는 일에는 보수적이다.
+    
+      새로운 솔루션을 선택하는 일은 많은 단점이 있다.
+        
+          (논증 생략.)
+        
+      
+      나는 둘 중 하나의 길을 선호한다.
+        
+          새로운 솔루션의 “디자인”만 이해하고, 기존 기술로 요구사항에 맞춰 구현한다.
+          아래 조건을 만족한 경우 새로운 솔루션을 사용한다.
+            
+              솔루션을 아주 깊이 이해했다.
+              동시에 전파하기 쉬운 솔루션이다.
+            
+          
+        
+      
+      보통은 디자인을 제대로 이해하지 못하고, 유행을 쫓아 도입하는 경우가 많다.
+      그 중 queue 시스템은 다양한 장단점의 솔루션이 있다.
+        
+          각 회사마다 각 팀마다 저마다의 queue를 만드는 경향도 있다.
+        
+      
+      고가용성, 고확장성을 가지고.
+        
+          보장옵션을 선택하게 하면 좋을텐데.
+          현재는 Amazon SQS 가 그것에 가장 가까웠다.
+        
+      
+    
+  
+
+
+Akka
+
+
+  최근에 Akka와 Actor model의 디자인도 잠깐 검토할 일이 있었다.
+  Akka는 해주는게 거의 없는 틀 이었다.
+  나는 이런 프레임워크를 좋아한다.
+  보통은 X를 보장하면 Y가 떨어진다.
+    
+      풍선을 누르면 다른 부분이 올라가는 것 처럼.
+      세상의 일은 대부분 tradeoff 다.
+      어떤 프레임워크가 X를 보장한다고 주장한다고 해도.
+        
+          사실은 그 보장의 경계를 증명하기 위해 많은 비용을 써야한다.
+        
+      
+    
+  
+  Akka는 오버헤드가 없는 틀만 있고 대부분을 개발자에게 위임한다.
+    
+      그리고 actor model이 구조적으로 살을 붙이기 좋아 보였다.
+    
+  
+
+
+vim
+
+
+  vim 관련 링크들.
+  2016 NYC Vim talk에서 있었던 “vim 플러그인이 하는 일의 90% 를 플러그인 없이 하는 방법” 이라는 제목의 발표.
+    
+      영상 [1], 슬라이드 [2]
+      재밌게 보긴 했지만, 남는건 별로 없었다.
+      다른 내용은 좀 억지스럽고 부자연스럽게 문제를 해결하려는것 같았다.
+        
+          플러그인으로 하면 쉬운데 왜 이렇게까지? 하는 기분.
+        
+      
+      file browser는 나도 nerdtree 보다 netrw 계열을 쓰는데 동의한다.
+      하지만 nerdtree 를 여전히 사용은 하고 있다.
+      그리고 내장된 순수 netrw 는 문제가 좀 있다.
+    
+  
+  vim 스크립트 칫싯. [3]
+    
+      스니핏으로 저장해두고 쓰기 좋다.
+    
+  
+  파이콘2016 에서 vim과 gnome-desktop을 사용하시는 분이 있었다. [4]
+    
+      ruby의 byebug 같은 역할을 python에서는 pudb로 하는것 같다.
+        
+          gdb와 매핑되는 네이밍으로 보인다.
+          근데 저렇게 UI까지 제공하는건 좋은 선택일까?
+        
+      
+      nautilus 를 터미널에서 입력하시는거 보니 오래된 gnome-desktop 유저 분이시구나 하는 생각이 들었다.
+      vim에서 python 자동완성을 위해 jedi-vim [5] 을 사용하신다.
+    
+  
+  redis를 만든 antirez가 vim을 어떻게 사용하는지 쓴 글을 읽었다. [6]
+    
+      antirez가 쓰는 전체 vimrc 는 이것인듯. [7]
+      특별한건 없고, vim을 최소한의 설정으로 사용한다.
+        
+          vim을 많이 사용하는 유저는 아닌것 같다.
+        
+      
+      실수방지를 위해 map 4 $ 을 한건 귀요미.
+        
+          나도 설정해봤는데.
+          너무 불편하여 며칠후에 관뒀다.
+        
+      
+      r!date 는 나도 설정해서 쓰는데, 나같은 사람을 또 만나다니!
+    
+  
+
+
+java
+
+
+  java 생태계는 unix철학을 따르지 않고, 내가 쓰기엔 불편한 점이 많다.
+    
+      (나와는 정말 안 맞는것 같ㄷ…)
+    
+  
+  예를 들어.
+    
+      현재 프로젝트의 dependency 목록을 보여주는 shell 함수를 만들고 싶었다.
+        
+          당연히 mvn help:effective-pom | xml2json | jq '...생략...' 이런식으로 간단히 되겠지. 라고 생각했다.
+          하지만 mvn help:effective-pom 결과는 xml 외에도 info log정보를 (verbose하게) stdout에 뿌린다.
+          xml만 출력하려면 파일에 쓰고, 그 파일을 읽으면서 작업해야한다.
+          불편하다.
+          verbose 옵션이 디폴트라니.
+          quite 옵션도 없다니.
+        
+      
+      remote 의존성을 shell에서 검색하고 싶었다.
+        
+          만약 ruby라면 gem search kafka
+            
+              (덧, ruby kafka 라이브러리가 옛날 버전만 지원하는 것을 보고 좀 우울해졌다.)
+            
+          
+          만약 python이라면 pip search kafka
+          만약 docker라면 docker search kafka
+          만약 apt라면 apt search kafka
+          를 했는데. java에서는 도대체 왜 mvn search kafka 같은게 없는걸까.
+          라고 생각했는데
+            
+              mvn-search kafka 식으로 만들 수 있게, 누군가 savant [8] 라는 도구를 만드셨다.
+            
+          
+        
+      
+      모든 dependency의 문자열 검색을 ag 같은 외부 툴로 하고 싶었다.
+        
+          ruby라면 ag ~/.rvm/gems/ruby-2.3.1/gems/으로 검색하면 된다.
+            
+              실제로 이런 검색을 하는 vim 커맨드를 만들고, 키 하나로 찾아간다.
+            
+          
+          java에서도 이걸 해볼까 해서 시도했는데.
+            
+              일단 maven repository 에 소스를 올리지 않는 라이브러리가 많다.
+              그리고 모두 jar로 압축된 형태로 ~/.m2/repository 아래에 저장된다.
+            
+          
+          jar를 풀고 class 를 decompile 해서 저장해야.
+            
+              ag 같은 외부 툴로 검색하는 기능을 만들 수 있다.
+            
+          
+          악.
+          안 한다 안 해!
+        
+      
+    
+  
+  java에도 타입추론이 제안되었다. [9]
+    
+      자바커뮤니티는 세계 최고의 보수적인 프로그래머 집단이기 때문에
+        
+          스칼라와 코틀린의 기능들을 아주 천천히 흡수하고 있다.
+            
+              neovim 의 핵심기능을 vim8 이 흡수하면서 neovim을 죽이고.
+              coffeescript 같은 언어도 결국 흡수되면서 죽는 것 처럼.
+              kotlin 같은 언어는 (너무!) 좋지만 언젠가 죽을 운명의 기술이라 생각한다.
+            
+          
+          타입추론의 문법은 아래 중 하나로 결정될 것 같다.
+            
+              var x = expr only (like C#)
+              var, plus val for immutable locals (like Scala, Kotlin)
+              var, plus let for immutable locals (like Swift)
+              auto x = expr (like C++)
+              const x = expr (already a reserved word)
+              final x = expr (already a reserved word)
+              let x = expr
+              def x = expr (like Groovy)
+              x := expr (like Go)
+            
+          
+          나는 Go 스타일의 x := expr 으로 선택되면 좋겠는데.
+            
+              자바스럽지 않다며 기각되었다.
+                
+                  The Go syntax (a different kind of assignment operator) seems pretty un-Javaish.
+                
+              
+              자바스럽지 않다니! (하.)
+            
+          
+        
+      
+    
+  
+
+
+         [1]:        https://www.youtube.com/watch?v=XA2WjJbmmoM&amp;nbsp;&amp;#91;return&amp;#93;             [2]:        https://github.com/mcantor/no_plugins/blob/master/no_plugins.vim&amp;nbsp;&amp;#91;return&amp;#93;             [3]:        http://ricostacruz.com/cheatsheets/vimscript.html&amp;nbsp;&amp;#91;return&amp;#93;             [4]:        https://www.youtube.com/watch?v=xDz8WVO_wjE&amp;nbsp;&amp;#91;return&amp;#93;             [5]:        https://github.com/davidhalter/jedi-vim&amp;nbsp;&amp;#91;return&amp;#93;             [6]:        http://howivim.com/2016/salvatore-sanfilippo/&amp;nbsp;&amp;#91;return&amp;#93;             [7]:        https://gist.github.com/antirez/3860461&amp;nbsp;&amp;#91;return&amp;#93;             [8]:        https://github.com/spilth/savant&amp;nbsp;&amp;#91;return&amp;#93;             [9]:        http://openjdk.java.net/jeps/286&amp;nbsp;&amp;#91;return&amp;#93;</summary></entry><entry><title type="html">우분투16과 KDE</title><link href="https://sangwook.github.io/2016/10/11/ubuntu-1604-kde.html" rel="alternate" type="text/html" title="우분투16과 KDE" /><published>2016-10-11T21:36:00+09:00</published><updated>2016-10-11T21:36:00+09:00</updated><id>https://sangwook.github.io/2016/10/11/ubuntu-1604-kde</id><content type="html" xml:base="https://sangwook.github.io/2016/10/11/ubuntu-1604-kde.html">&lt;ul&gt;
   &lt;li&gt;&lt;img src=&quot;/assets/2016/161011-ubuntu16-screenfetch-d309a0fce49f7abaf5a95f61a72481466e2187b8b361c52f334b03de5a55c92d.jpg&quot; alt=&quot;2016/161011-ubuntu16-screenfetch.jpg&quot; /&gt;&lt;/li&gt;
   &lt;li&gt;오랫동안 Ubuntu 14.04 LTS 를 사용하고 있었다.
     &lt;ul&gt;
@@ -737,7 +1154,111 @@ I dare you not to fall in love.&lt;/p&gt;
   
 
 
-         [1]:        http://pollmill.com/f/which-tiling-window-manager-do-you-use-dax6md8/answers&amp;nbsp;&amp;#91;return&amp;#93;             [2]:        https://www.reddit.com/r/archlinux/comments/2t7cek/poll_which_tiling_window_manager_do_you_use/&amp;nbsp;&amp;#91;return&amp;#93;             [3]:        https://www.slant.co/topics/390/~window-managers-for-linux&amp;nbsp;&amp;#91;return&amp;#93;             [4]:        https://www.reddit.com/r/linux/comments/4ftq8e/ubuntu_1604_lts_has_been_officially_released/&amp;nbsp;&amp;#91;return&amp;#93;             [5]:        https://www.reddit.com/r/Ubuntu/comments/4ftqs0/ubuntu_1604_lts_has_been_released/&amp;nbsp;&amp;#91;return&amp;#93;             [6]:        https://www.reddit.com/r/linux/comments/4txzoa/ubuntu_16041_lts_released/&amp;nbsp;&amp;#91;return&amp;#93;</summary></entry><entry><title type="html">Uber가 PostgreSQL을 MySQL로 바꾼 이유</title><link href="https://sangwook.github.io/2016/09/13/uber-mysql-postgresql.html" rel="alternate" type="text/html" title="Uber가 PostgreSQL을 MySQL로 바꾼 이유" /><published>2016-09-13T19:05:00+09:00</published><updated>2016-09-13T19:05:00+09:00</updated><id>https://sangwook.github.io/2016/09/13/uber-mysql-postgresql</id><content type="html" xml:base="https://sangwook.github.io/2016/09/13/uber-mysql-postgresql.html">&lt;ul&gt;
+Ubuntu14 Unity 에서 -&amp;gt; Ubuntu16 KDE 로 넘어오면서 생긴 문제/해결
+
+
+  [문제] 부팅했을 때 fcitx가 자동실행되지 않음.
+    
+      [해결] ~/.config/autostart/fcitx-autostart.desktop 파일을 만들었음.
+    
+  
+  [문제] zshrc 안에서 DE가 KDE 인지 여부에 따라 분기하는 로직이 필요하다.
+    
+      [해결] $DESKTOP_SESSION 을 쓸까 고민하다가, $XDG_CURRENT_DESKTOP을 사용함.
+    
+  
+  [문제] KDE가 ~/.xprofile 을 읽지 않는다.
+    
+      [해결] /etc/X11/Xsession.d/ 아래에 파일을 생성함.
+    
+  
+  [문제] 나눔고딕코딩 글꼴 설치가 안 된다.
+    
+      공식 사이트의 설치 가이드 [7] 처럼 하면 오류가 난다.
+      [해결] 패키지 설치.
+        
+          sudo apt install fonts-nanum fonts-nanum-extra fonts-nanum-coding fonts-baekmuk fonts-unfonts-core fonts-unfonts-extra
+        
+      
+    
+  
+  [문제] KDE 기본 터미널인 konsole 에서 NanumGothicCoding 폰트를 선택할 수 없다.
+    
+      [해결] konsole 대신 다른 터미널을 쓰기로 함.
+        
+          처음에는 top-down terminal 을 써보다가.
+            
+              top-down terminal: 게임 Quake의 채팅창 처럼 F12를 누르면 위에서 터미널이 (언제나) 내려오는 스타일
+              e.g. Guake, Yakuake, Tilda
+            
+          
+          여기서도 설정 문제가 있어서. terminator 에 적응했다.
+        
+      
+    
+  
+  [문제] app launcher 를 meta 키 하나로 실행하고 싶다.
+    
+      [해결?] KDE config 전체적으로 mod 키 만으로는 shortcut 을 지정할 수 없다.
+        
+          할 수 없이 meta+z 로 shortcut을 지정했다.
+        
+      
+    
+  
+  [문제] 특정 키를 누르면 -&amp;gt; 특정 앱이 실행 되거나 focus가 되는 shortcut을 지정하고 싶다.
+    
+      [해결] KDE는 command를 global shortcut으로 지정할 수 있고.
+        
+          아래와 같이 focus 하거나 실행할 수 있다.
+            
+              wmctrl -xa terminator.Terminator || terminator
+            
+          
+          
+        
+      
+    
+  
+  [문제] R_ALT 를 한/영 키로 설정했는데, 빠르게 한영전환이 안 됨.
+    
+      [해결?] right alt 만 전체적으로 disable 하고 싶은데.
+        
+          불가능한 것 같다.
+          사용하지 않는 ALT로 조합되는 shortcut 을 보이는데로 제거했다.
+        
+      
+    
+  
+  [문제] proxy 설정을 shell 에서 하고 싶다.
+    
+      Ubuntu14 Unity 에서는 gsettings 명령으로 설정했었다.
+      [해결] KDE에서는 아래의 파일과 명령으로 가능한 것 같은데. 필요할 때 적용하는 걸로…
+        
+          ~/.kde/share/config/kioslaverc
+          kreadconfig --file kioslaverc --group &quot;Proxy Settings&quot; --key httpproxy
+        
+      
+    
+  
+  [문제] vim을 소스에서 직접 빌드가 제대로 안 됨.
+    
+      --enable-gui=auto 옵션으로 빌드하면.
+      checking --enable-gui argument... no GUI support 이런 에러가 남.
+      [해결] /etc/apt/sources.list 가 디폴트로 deb만 활성화 되어 있는데 deb-src 를 주석 해제하고 build-dep을 하면 된다.
+      
+    
+  
+  [문제] headphone으로 음악을 듣다가, headphone을 뽑으면 speaker를 음소거 상태로 만들고 싶다.
+    
+      Ubuntu14 Unity 에서는 자동으로 headphone, speaker 별로 내가 조정한 소리 크기를 기억했다.
+      그래서 자동으로 내가 원하는대로 동작했다.
+      KDE는 내 선택을 기억하지 않았고. 해결책을 시간 있을 때 찾아봐야겠다.
+    
+  
+
+
+         [1]:        http://pollmill.com/f/which-tiling-window-manager-do-you-use-dax6md8/answers&amp;nbsp;&amp;#91;return&amp;#93;             [2]:        https://www.reddit.com/r/archlinux/comments/2t7cek/poll_which_tiling_window_manager_do_you_use/&amp;nbsp;&amp;#91;return&amp;#93;             [3]:        https://www.slant.co/topics/390/~window-managers-for-linux&amp;nbsp;&amp;#91;return&amp;#93;             [4]:        https://www.reddit.com/r/linux/comments/4ftq8e/ubuntu_1604_lts_has_been_officially_released/&amp;nbsp;&amp;#91;return&amp;#93;             [5]:        https://www.reddit.com/r/Ubuntu/comments/4ftqs0/ubuntu_1604_lts_has_been_released/&amp;nbsp;&amp;#91;return&amp;#93;             [6]:        https://www.reddit.com/r/linux/comments/4txzoa/ubuntu_16041_lts_released/&amp;nbsp;&amp;#91;return&amp;#93;             [7]:        http://dev.naver.com/projects/nanumfont/wiki/Install&amp;nbsp;&amp;#91;return&amp;#93;</summary></entry><entry><title type="html">Uber가 PostgreSQL을 MySQL로 바꾼 이유</title><link href="https://sangwook.github.io/2016/09/13/uber-mysql-postgresql.html" rel="alternate" type="text/html" title="Uber가 PostgreSQL을 MySQL로 바꾼 이유" /><published>2016-09-13T19:05:00+09:00</published><updated>2016-09-13T19:05:00+09:00</updated><id>https://sangwook.github.io/2016/09/13/uber-mysql-postgresql</id><content type="html" xml:base="https://sangwook.github.io/2016/09/13/uber-mysql-postgresql.html">&lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://eng.uber.com/mysql-migration/&quot;&gt;https://eng.uber.com/mysql-migration/&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;Postgres의 단점을 매우 잘 정리한 글.&lt;/li&gt;
   &lt;li&gt;사실 이 글은 아래 그림 하나로 요약할 수 있다.&lt;/li&gt;
@@ -816,7 +1337,72 @@ I dare you not to fall in love.&lt;/p&gt;
   Postgres의 단점을 매우 잘 정리한 글.
   사실 이 글은 아래 그림 하나로 요약할 수 있다.
   
-  읽은 후 쓴 내 메모를 최대한 짧게 요약:</summary></entry><entry><title type="html">“Rails 이제 안 써” 를 읽고</title><link href="https://sangwook.github.io/2016/06/14/ruby-rails-solnic.html" rel="alternate" type="text/html" title="&quot;Rails 이제 안 써&quot; 를 읽고" /><published>2016-06-14T23:31:00+09:00</published><updated>2016-06-14T23:31:00+09:00</updated><id>https://sangwook.github.io/2016/06/14/ruby-rails-solnic</id><content type="html" xml:base="https://sangwook.github.io/2016/06/14/ruby-rails-solnic.html">&lt;ul&gt;
+  읽은 후 쓴 내 메모를 최대한 짧게 요약:
+
+
+
+  
+    
+      항목
+      PostgreSQL
+      MySQL (InnoDB)
+    
+  
+  
+    
+      secondary index
+      directly
+      indirectly
+    
+    
+      secondary key lookup
+      유리
+      불리 (index 2개를 찾아야 하니)
+    
+    
+      row update 시
+      모든 index 업데이트
+      해당 row의 index만 업데이트
+    
+    
+      replication
+      WAL을 보냄
+      commands를 보냄
+    
+    
+      MVCC
+      row를 항상 씀
+      변경전 row를 rollback segment에 복사.
+    
+    
+      cache
+      OS의 page cache
+      buffer pool
+    
+    
+      connection
+      conn 당 process 생성
+      conn 당 thread 생성
+    
+    
+      upgrade
+      downtime 필요.
+      downtime 없이 가능.
+    
+  
+
+
+덧,
+
+
+  사실 이 글을 보면 pg의 단점만 썼는데.
+    
+      pg가 tuple 방식의 디자인을 선택한건 tradeoff.
+      장점도 많다.
+      그래도 conn 당 process 를 생성하는건 어떤 장점이 있는지 아직 이해가 안 됨.
+        
+          내가 모르는 이유가 있을지 모르지만.
+          어떤 기술을 비판하는 일은, 무지가 원인인 경우가 많아 조심.</summary></entry><entry><title type="html">“Rails 이제 안 써” 를 읽고</title><link href="https://sangwook.github.io/2016/06/14/ruby-rails-solnic.html" rel="alternate" type="text/html" title="&quot;Rails 이제 안 써&quot; 를 읽고" /><published>2016-06-14T23:31:00+09:00</published><updated>2016-06-14T23:31:00+09:00</updated><id>https://sangwook.github.io/2016/06/14/ruby-rails-solnic</id><content type="html" xml:base="https://sangwook.github.io/2016/06/14/ruby-rails-solnic.html">&lt;ul&gt;
   &lt;li&gt;며칠전 solnic이 rails를 더이상 쓰지 않는 이유를 썼다.
     &lt;ul&gt;
       &lt;li&gt;&lt;a href=&quot;http://solnic.eu/2016/05/22/my-time-with-rails-is-up.html&quot;&gt;http://solnic.eu/2016/05/22/my-time-with-rails-is-up.html&lt;/a&gt;&lt;/li&gt;
@@ -1160,7 +1746,129 @@ let job = job_start('ls -alh ~/', { 'callback': 'Handler' })
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/AndrewRadev/splitjoin.vim&quot;&gt;https://github.com/AndrewRadev/splitjoin.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370&quot;&gt;https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html&quot;&gt;https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://neovim.io/news/2015/december/&quot;&gt;https://neovim.io/news/2015/december/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://neovim.io/doc/user/vim_diff.html#nvim-configuration&quot;&gt;https://neovim.io/doc/user/vim_diff.html#nvim-configuration&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0&quot;&gt;https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/gv.vim&quot;&gt;https://github.com/junegunn/gv.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:8&quot; id=&quot;fn:8&quot; class=&quot;reversefootnote&quot;&gt;[8]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/gregsexton/gitv&quot;&gt;https://github.com/gregsexton/gitv&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:9&quot; id=&quot;fn:9&quot; class=&quot;reversefootnote&quot;&gt;[9]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc&quot;&gt;https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:10&quot; id=&quot;fn:10&quot; class=&quot;reversefootnote&quot;&gt;[10]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34&quot;&gt;https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:10&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:11&quot; id=&quot;fn:11&quot; class=&quot;reversefootnote&quot;&gt;[11]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168&quot;&gt;https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:11&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:12&quot; id=&quot;fn:12&quot; class=&quot;reversefootnote&quot;&gt;[12]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt&quot;&gt;https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:12&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:13&quot; id=&quot;fn:13&quot; class=&quot;reversefootnote&quot;&gt;[13]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/&quot;&gt;https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:13&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:14&quot; id=&quot;fn:14&quot; class=&quot;reversefootnote&quot;&gt;[14]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://yisangwook.tumblr.com/post/132462551169/neovim-vim&quot;&gt;http://yisangwook.tumblr.com/post/132462551169/neovim-vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:14&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:15&quot; id=&quot;fn:15&quot; class=&quot;reversefootnote&quot;&gt;[15]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/godlygeek/tabular&quot;&gt;https://github.com/godlygeek/tabular&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:15&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:16&quot; id=&quot;fn:16&quot; class=&quot;reversefootnote&quot;&gt;[16]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/vim-easy-align&quot;&gt;https://github.com/junegunn/vim-easy-align&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:16&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:17&quot; id=&quot;fn:17&quot; class=&quot;reversefootnote&quot;&gt;[17]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/NLKNguyen/vim-maven-syntax&quot;&gt;https://github.com/NLKNguyen/vim-maven-syntax&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:17&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:18&quot; id=&quot;fn:18&quot; class=&quot;reversefootnote&quot;&gt;[18]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/&quot;&gt;https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:18&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:19&quot; id=&quot;fn:19&quot; class=&quot;reversefootnote&quot;&gt;[19]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/tweekmonster/braceless.vim&quot;&gt;https://github.com/tweekmonster/braceless.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:19&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><summary type="html">2015년 11월: splitjoin.vim</summary></entry><entry><title type="html">파이썬 역설 The Python Paradox</title><link href="https://sangwook.github.io/2015/12/16/python-paradox.html" rel="alternate" type="text/html" title="파이썬 역설 The Python Paradox" /><published>2015-12-16T23:28:00+09:00</published><updated>2015-12-16T23:28:00+09:00</updated><id>https://sangwook.github.io/2015/12/16/python-paradox</id><content type="html" xml:base="https://sangwook.github.io/2015/12/16/python-paradox.html">&lt;ul&gt;
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/AndrewRadev/splitjoin.vim&quot;&gt;https://github.com/AndrewRadev/splitjoin.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370&quot;&gt;https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html&quot;&gt;https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://neovim.io/news/2015/december/&quot;&gt;https://neovim.io/news/2015/december/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://neovim.io/doc/user/vim_diff.html#nvim-configuration&quot;&gt;https://neovim.io/doc/user/vim_diff.html#nvim-configuration&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0&quot;&gt;https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/gv.vim&quot;&gt;https://github.com/junegunn/gv.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:8&quot; id=&quot;fn:8&quot; class=&quot;reversefootnote&quot;&gt;[8]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/gregsexton/gitv&quot;&gt;https://github.com/gregsexton/gitv&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:9&quot; id=&quot;fn:9&quot; class=&quot;reversefootnote&quot;&gt;[9]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc&quot;&gt;https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:10&quot; id=&quot;fn:10&quot; class=&quot;reversefootnote&quot;&gt;[10]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34&quot;&gt;https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:10&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:11&quot; id=&quot;fn:11&quot; class=&quot;reversefootnote&quot;&gt;[11]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168&quot;&gt;https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:11&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:12&quot; id=&quot;fn:12&quot; class=&quot;reversefootnote&quot;&gt;[12]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt&quot;&gt;https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:12&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:13&quot; id=&quot;fn:13&quot; class=&quot;reversefootnote&quot;&gt;[13]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/&quot;&gt;https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:13&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:14&quot; id=&quot;fn:14&quot; class=&quot;reversefootnote&quot;&gt;[14]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://yisangwook.tumblr.com/post/132462551169/neovim-vim&quot;&gt;http://yisangwook.tumblr.com/post/132462551169/neovim-vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:14&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:15&quot; id=&quot;fn:15&quot; class=&quot;reversefootnote&quot;&gt;[15]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/godlygeek/tabular&quot;&gt;https://github.com/godlygeek/tabular&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:15&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:16&quot; id=&quot;fn:16&quot; class=&quot;reversefootnote&quot;&gt;[16]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/junegunn/vim-easy-align&quot;&gt;https://github.com/junegunn/vim-easy-align&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:16&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:17&quot; id=&quot;fn:17&quot; class=&quot;reversefootnote&quot;&gt;[17]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/NLKNguyen/vim-maven-syntax&quot;&gt;https://github.com/NLKNguyen/vim-maven-syntax&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:17&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:18&quot; id=&quot;fn:18&quot; class=&quot;reversefootnote&quot;&gt;[18]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/&quot;&gt;https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:18&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:19&quot; id=&quot;fn:19&quot; class=&quot;reversefootnote&quot;&gt;[19]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/tweekmonster/braceless.vim&quot;&gt;https://github.com/tweekmonster/braceless.vim&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:19&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><summary type="html">2015년 11월: splitjoin.vim
+
+
+  준건님이 splitjoin.vim [1] [2] 을 알려주셔서 사용해봤다.
+    
+      사용 예
+        
+          e.g. ruby 에서 { ~ } 블락을 do ~ end 블락으로 변경할 때.
+          e.g. html 에서 많은 속성을 가진 태그를 들여쓰기 할 때.
+        
+      
+      처음 이 플러그인을 써보고 “우왕!!!” 했지만
+        
+          시간이 지나고 당장 급하면 이 플러그인이 있다는 사실은 망각하고 macro 를 쓰게 된다.
+        
+      
+    
+  
+
+
+2015년 12월: neovim
+
+
+  neovim 은 설정파일을 XDG directory specification [3] 를 따르도록 변경되었다. [4]
+    
+      즉, ~/.nvimrc 대신 ~/.config/nvim/init.vim 을 사용.
+      XDG directory specification 라는 것도 찾아보니.
+        
+          application 의 user 별 설정파일을 홈의 닷파일로 저장하면서 홈 디렉터리가 지저분해져서
+          디렉터리 구조의 표준 사양을 만든 것.
+        
+      
+    
+  
+
+
+2016년 1월: gv.vim, fixeol, jsonencode
+
+
+  준건님이 만든 zoom 함수 [5] 를 모방해서 많이 쓰고 있다.
+  gv.vim [6] 을 설치함. (fugitive 기반 git browser)
+    
+      기존에 gitv [7] 를 사용하고 있었는데,
+      gv.vim 이 훨씬 가볍고 단순해서 나한테 맞게 수정하기 좋다.
+      그래서 gitv 는 지워버리고 gv.vim 만 쓰는 중.
+    
+  
+  eol 문제가 vim 의 옵션으로 추가되었다! (fixeol)
+    
+      문제:
+        
+          IntelliJ IDEA 는 default 로 EOL 을 붙이지 않고
+          vim 은 default 로 EOL 을 붙임.
+          그래서 intellij 로 작성한 파일을 vim 에서 write 할 때 마다 변경사항이 발생함.
+        
+      
+      옛날 해결책:
+        
+          현재 파일이 eol 이면 set eol, 현재 파일이 noeol 이면 set noeol 로 저장하도록 꼼수 스크립트를 만들어 쓰고 있었음.
+        
+      
+      새로운 해결책:
+        
+          vim v7.4.785 에서 fixeol 옵션이 추가 되었고 [8]
+          default 가 on 이기 때문에 set nofixeol 옵션을 넣으면 eol 을 vim 이 강제로 고치지 않음.
+        
+      
+    
+  
+  vim script 의 builtin function 으로 jsonencode() 와 jsondecode() 가 추가됨. [9]
+    
+      사람들은 todo.txt [10] 와 channel.txt [11] 를 보고 비동기 작업 실행의 기반이라고 추측함. [12]
+      이것은 Neovim 의 좋은 feature 를 모방하는 것으로 보인다.
+      사실 이렇게 vim 을 따라하는 app 들의 좋은 기능을 모방하는 것이 vim 의 성공이유라는 bram 의 인터뷰도 있었다. [13]
+    
+  
+
+
+2016년 2월: vim-easy-align, vim8
+
+
+  오랫동안 tabular [14] 를 써왔고, 여기에 익숙해져 있어서 변경할 생각을 못했는데.
+    
+      이번에 마음먹고 준건님의 vim-easy-align [15] 을 사용하도록 변경했다.
+      tabular 에 비해 장점은.
+        
+          옵션이 많고. (아직 다 모르겠지만)
+          align 할때 ignore 할 수 있는 옵션이 정말 좋다!!
+        
+      
+    
+  
+  pom.xml 파일을 더 예쁘게 보여준다길래 vim-maven-syntax 를 설치했다. [16]
+  비동기적으로 job 을 실행시킬 수 있는 기능이 vim 공식 feature 로 들어감. [17]
+    
+      neovim 과의 관계 때문에 reddit 의 스레드는 폭발함. [18]
+        
+          내 생각엔 이제 Neovim 은 망할 것 같다.
+        
+      
+    
+  
+
+
+아무튼 이제 아래와 같은 코드가 가능해졌다.
+
+function! Handler(ch, msg) echom a:msg endfunction
+let job = job_start('ls -alh ~/', { 'callback': 'Handler' })
+
+
+
+  python 을 위한 braceless.vim [19] 을 설치함.
+    
+      python 같은 brace 가 없는 indent 기반 언어를 위한 플러그인.
+      custom text object, fold, indent guide 를 제공한다.
+      처음에는 설치할만큼 매력적이지 않다고 생각했다.
+      하지만 설치하고 써보니 생각보다 편한듯.
+      특히 custom text object 는 많이 쓸 것 같은데, 왠지 모르게 첫번째 로딩이 느려진다.
+    
+  
+
+
+         [1]:        https://github.com/AndrewRadev/splitjoin.vim&amp;nbsp;&amp;#91;return&amp;#93;             [2]:        https://github.com/junegunn/dotfiles/commit/ff8b6a105f2bfdc04c53931cca77af4047531370&amp;nbsp;&amp;#91;return&amp;#93;             [3]:        https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html&amp;nbsp;&amp;#91;return&amp;#93;             [4]:        https://neovim.io/news/2015/december/&amp;nbsp;&amp;#91;return&amp;#93;             [5]:        https://neovim.io/doc/user/vim_diff.html#nvim-configuration&amp;nbsp;&amp;#91;return&amp;#93;             [6]:        https://github.com/junegunn/dotfiles/commit/12093663094a7c68d8fae58208686517a6bd8bf0&amp;nbsp;&amp;#91;return&amp;#93;             [7]:        https://github.com/junegunn/gv.vim&amp;nbsp;&amp;#91;return&amp;#93;             [8]:        https://github.com/gregsexton/gitv&amp;nbsp;&amp;#91;return&amp;#93;             [9]:        https://github.com/vim/vim/commit/34d72d4b6c1a2b04a214d8a49b7d22c97bc7a8bc&amp;nbsp;&amp;#91;return&amp;#93;             [10]:        https://github.com/vim/vim/commit/520e1e41f35b063ede63b41738c82d6636e78c34&amp;nbsp;&amp;#91;return&amp;#93;             [11]:        https://github.com/vim/vim/blob/13d5aee/runtime/doc/todo.txt#L2138-L2168&amp;nbsp;&amp;#91;return&amp;#93;             [12]:        https://github.com/vim/vim/blob/3b5f929/runtime/doc/channel.txt&amp;nbsp;&amp;#91;return&amp;#93;             [13]:        https://www.reddit.com/r/vim/comments/42gfs6/patch_741154_adds_native_jsonencodejsondecode/&amp;nbsp;&amp;#91;return&amp;#93;             [14]:        http://yisangwook.tumblr.com/post/132462551169/neovim-vim&amp;nbsp;&amp;#91;return&amp;#93;             [15]:        https://github.com/godlygeek/tabular&amp;nbsp;&amp;#91;return&amp;#93;             [16]:        https://github.com/junegunn/vim-easy-align&amp;nbsp;&amp;#91;return&amp;#93;             [17]:        https://github.com/NLKNguyen/vim-maven-syntax&amp;nbsp;&amp;#91;return&amp;#93;             [18]:        https://www.reddit.com/r/vim/comments/44qgn0/vim_patch_741274_adds_job_functionality_not/&amp;nbsp;&amp;#91;return&amp;#93;             [19]:        https://github.com/tweekmonster/braceless.vim&amp;nbsp;&amp;#91;return&amp;#93;</summary></entry><entry><title type="html">파이썬 역설 The Python Paradox</title><link href="https://sangwook.github.io/2015/12/16/python-paradox.html" rel="alternate" type="text/html" title="파이썬 역설 The Python Paradox" /><published>2015-12-16T23:28:00+09:00</published><updated>2015-12-16T23:28:00+09:00</updated><id>https://sangwook.github.io/2015/12/16/python-paradox</id><content type="html" xml:base="https://sangwook.github.io/2015/12/16/python-paradox.html">&lt;ul&gt;
   &lt;li&gt;2004년 8월 Paul Graham 의 “The Python Paradox” 라는 제목의 글
     &lt;ul&gt;
       &lt;li&gt;원문: &lt;a href=&quot;http://paulgraham.com/pypar.html&quot;&gt;http://paulgraham.com/pypar.html&lt;/a&gt;&lt;/li&gt;
@@ -1351,7 +2059,56 @@ let job = job_start('ls -alh ~/', { 'callback': 'Handler' })
     
       두 언어 모두 움직이고 있다.
       중요한 것은 Python, Perl, Ruby (and Icon, and Joy, and J, and Lisp, and Smalltalk) 모두 프로그래밍을 정말 좋아하는 사람들이 만들었고, 사용되고 있다는 점이다.
-      그리고 그러한 사람들이 더 잘 하는 경향이 있다는 점이다.</summary></entry><entry><title type="html">관심있게 본 facts</title><link href="https://sangwook.github.io/2015/11/21/advertisement-facts.html" rel="alternate" type="text/html" title="관심있게 본 facts" /><published>2015-11-21T23:58:00+09:00</published><updated>2015-11-21T23:58:00+09:00</updated><id>https://sangwook.github.io/2015/11/21/advertisement-facts</id><content type="html" xml:base="https://sangwook.github.io/2015/11/21/advertisement-facts.html">&lt;h3 id=&quot;트위터&quot;&gt;트위터&lt;/h3&gt;
+      그리고 그러한 사람들이 더 잘 하는 경향이 있다는 점이다.
+    
+  
+
+
+내 생각
+
+
+  이 글은 2004년 당시의 글이고, 지금의 Python 은 당시와 많이 다르다.
+  내가 아주 좋아하는 글이지만, 오랜만에 이 글을 다시 보고 옮긴 이유는 사실은 무엇인가를 홍보하기 위함이다.
+  아래 내용은 윗 내용과 아무 관련이 없다.
+    
+      일종의 광고다.
+    
+  
+  좋아하는 국회의원에게 10만원을 후원하면 연말정산때 돌려 받는다는 사실을 알리고 싶었다. (정확히는 세액공제 됨)
+    
+      아래의 선관위 사이트에서 선호하는 당을 선택해서 찾기를 누르면 국회의원이 모두 나오고 골라서 후원하면 된다.
+      https://www.give.go.kr/portalnew/donation/donation_sup.jsp
+    
+  
+  사실은 정치와 사회 문제에 관심이 많아서 내가 할 수 있는 일이 없을까 고민했던 적이 많았지만.
+  최근 몇년간 무력감을 느끼고, 할 수 있는게 거의 없다는 생각이 들었다.
+  왜냐하면 선거제도가 가장 문제인데.
+    
+      정당 지지율이 10% 라면 10%의 국회 의석을 차지해야 정상이다.
+      하지만 지역구의 1등만 뽑히는 소선거구제, 단순다수제 에서는 거대정당이 지지율 이상의 의석을 차지하는 구조이다.
+        
+          비례대표가 일부 보완하고 있지만 비율이 낮다.
+        
+      
+      그리고 이 선거제도의 수혜자(여당이든 제1야당이든 모두 수혜자다)가 선거제도를 만드는 한
+      이 선거제도를 고칠 동기는 지지율 보다 적은 의석을 차지하는 제3당 밖에 없다.
+      동기가 없으면 선거제도는 바뀌기 어렵고,
+      선거제도가 바뀌지 않으면 아마 변화는 힘들 것이다. (아마 안 될꺼야…)
+    
+  
+  그래도 이 글로 1명이라도 더 후원을 하고, 자본을 기반으로 조금 더 내 자식 세대가 살기 좋은 나라가 되었으면 좋겠다.
+    
+      (10만원 까지는 전액 세액공제가 되니 부담도 없다.)
+    
+  
+  내가 블로그에 글을 쓰면서 얻는 이익은 아무것도 없는데.
+    
+      이렇게 글 뒷부분이나마 하고싶은 말을 써도 괜찮을 것이라 생각했다.
+        
+          배너 광고를 잔뜩 붙이는 것 보다 좋지 않을까?
+        
+      
+      만약 동의하지 않는 사람이 많다면 다시는 이런 옮김은 안 할 것이다.</summary></entry><entry><title type="html">관심있게 본 facts</title><link href="https://sangwook.github.io/2015/11/21/advertisement-facts.html" rel="alternate" type="text/html" title="관심있게 본 facts" /><published>2015-11-21T23:58:00+09:00</published><updated>2015-11-21T23:58:00+09:00</updated><id>https://sangwook.github.io/2015/11/21/advertisement-facts</id><content type="html" xml:base="https://sangwook.github.io/2015/11/21/advertisement-facts.html">&lt;h3 id=&quot;트위터&quot;&gt;트위터&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;트위터가 339명을 해고함. 2015년 10월 &lt;a href='#fn:1' class='footnote' id='fnref:1'&gt;[1]&lt;/a&gt;
@@ -1598,7 +2355,254 @@ let job = job_start('ls -alh ~/', { 'callback': 'Handler' })
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://recode.net/2015/10/09/twitter-is-planning-company-wide-layoffs-for-next-week/&quot;&gt;http://recode.net/2015/10/09/twitter-is-planning-company-wide-layoffs-for-next-week/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://kr.wsj.com/posts/2015/10/23/%ED%8A%B8%EC%9C%84%ED%84%B0-ceo-%EC%9E%AD-%EB%8F%84%EC%8B%9C-%EB%82%B4-%EC%A3%BC%EC%8B%9D-3%EB%B6%84%EC%9D%98-1-%EC%A7%81%EC%9B%90%EB%93%A4%EC%97%90%EA%B2%8C-%EA%B8%B0%EB%B6%80%ED%95%98%EA%B2%A0/&quot;&gt;http://kr.wsj.com/posts/2015/10/23/%ED%8A%B8%EC%9C%84%ED%84%B0-ceo-%EC%9E%AD-%EB%8F%84%EC%8B%9C-%EB%82%B4-%EC%A3%BC%EC%8B%9D-3%EB%B6%84%EC%9D%98-1-%EC%A7%81%EC%9B%90%EB%93%A4%EC%97%90%EA%B2%8C-%EA%B8%B0%EB%B6%80%ED%95%98%EA%B2%A0/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://investor.twitterinc.com/&quot;&gt;https://investor.twitterinc.com/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.navercorp.com/ko/ir/earningsRelease.nhn&quot;&gt;http://www.navercorp.com/ko/ir/earningsRelease.nhn&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://linecorp.com/ja/pr/news/ja/2015/1133&quot;&gt;http://linecorp.com/ja/pr/news/ja/2015/1133&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://tomomo.tistory.com/m/post/195&quot;&gt;http://tomomo.tistory.com/m/post/195&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.kakaocorp.com/ir/earnings&quot;&gt;http://www.kakaocorp.com/ir/earnings&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:8&quot; id=&quot;fn:8&quot; class=&quot;reversefootnote&quot;&gt;[8]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.focus.kr/view.php?key=2015110500161652472&quot;&gt;http://www.focus.kr/view.php?key=2015110500161652472&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:9&quot; id=&quot;fn:9&quot; class=&quot;reversefootnote&quot;&gt;[9]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://investor.fb.com/results.cfm?Quarter=3&amp;amp;Year=2015&quot;&gt;http://investor.fb.com/results.cfm?Quarter=3&amp;amp;Year=2015&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:10&quot; id=&quot;fn:10&quot; class=&quot;reversefootnote&quot;&gt;[10]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.emarketer.com/Article.aspx?R=1013015&amp;amp;ecid=NL1006&quot;&gt;http://www.emarketer.com/Article.aspx?R=1013015&amp;amp;ecid=NL1006&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:10&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:11&quot; id=&quot;fn:11&quot; class=&quot;reversefootnote&quot;&gt;[11]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://investor.google.com/earnings/2015/Q3_google_earnings.html&quot;&gt;https://investor.google.com/earnings/2015/Q3_google_earnings.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:11&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:12&quot; id=&quot;fn:12&quot; class=&quot;reversefootnote&quot;&gt;[12]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://techcrunch.com/2015/10/08/mobile-searches-surpass-desktop-searches-at-google-for-the-first-time/&quot;&gt;http://techcrunch.com/2015/10/08/mobile-searches-surpass-desktop-searches-at-google-for-the-first-time/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:12&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:13&quot; id=&quot;fn:13&quot; class=&quot;reversefootnote&quot;&gt;[13]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.tencent.com/en-us/ir/news/2015.shtml&quot;&gt;http://www.tencent.com/en-us/ir/news/2015.shtml&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:13&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:14&quot; id=&quot;fn:14&quot; class=&quot;reversefootnote&quot;&gt;[14]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://mp.weixin.qq.com/s?__biz=MzAxNzYxMzc0OA==&amp;amp;mid=400131662&amp;amp;idx=1&amp;amp;sn=9f24c35c801e6ea0a10275687b9612ff&amp;amp;scene=0#rd&quot;&gt;http://mp.weixin.qq.com/s?__biz=MzAxNzYxMzc0OA==&amp;amp;mid=400131662&amp;amp;idx=1&amp;amp;sn=9f24c35c801e6ea0a10275687b9612ff&amp;amp;scene=0#rd&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:14&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:15&quot; id=&quot;fn:15&quot; class=&quot;reversefootnote&quot;&gt;[15]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://developer.apple.com/library/prerelease/ios/releasenotes/General/WhatsNewInSafari/Articles/Safari_9.html#//apple_ref/doc/uid/TP40014305-CH9-SW9&quot;&gt;https://developer.apple.com/library/prerelease/ios/releasenotes/General/WhatsNewInSafari/Articles/Safari_9.html#//apple_ref/doc/uid/TP40014305-CH9-SW9&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:15&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:16&quot; id=&quot;fn:16&quot; class=&quot;reversefootnote&quot;&gt;[16]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://adwords.blogspot.com/2015/06/better-click-quality-on-display-ads.html&quot;&gt;http://adwords.blogspot.com/2015/06/better-click-quality-on-display-ads.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:16&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:17&quot; id=&quot;fn:17&quot; class=&quot;reversefootnote&quot;&gt;[17]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.exchangewire.com/blog/2015/09/03/ad-blocking-predicted-to-cost-14bn-in-2015-half-of-publishers-frustrated-by-programmatic-demand-incompletes-smartphones-account-for-20-of-ad-views-less-than-30-of-marketers-use-cross-channel/&quot;&gt;https://www.exchangewire.com/blog/2015/09/03/ad-blocking-predicted-to-cost-14bn-in-2015-half-of-publishers-frustrated-by-programmatic-demand-incompletes-smartphones-account-for-20-of-ad-views-less-than-30-of-marketers-use-cross-channel/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:17&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:18&quot; id=&quot;fn:18&quot; class=&quot;reversefootnote&quot;&gt;[18]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://blog.pagefair.com/2015/ad-blocking-report/&quot;&gt;http://blog.pagefair.com/2015/ad-blocking-report/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:18&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:19&quot; id=&quot;fn:19&quot; class=&quot;reversefootnote&quot;&gt;[19]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.businessinsider.com/ubs-says-ad-revenue-impact-of-ios-9-ad-blocking-will-only-be-1-billion-2015-9&quot;&gt;http://www.businessinsider.com/ubs-says-ad-revenue-impact-of-ios-9-ad-blocking-will-only-be-1-billion-2015-9&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:19&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><summary type="html">트위터</summary></entry><entry><title type="html">Neovim 0.1.0 릴리즈</title><link href="https://sangwook.github.io/2015/11/03/neovim-vim.html" rel="alternate" type="text/html" title="Neovim 0.1.0 릴리즈" /><published>2015-11-03T17:34:00+09:00</published><updated>2015-11-03T17:34:00+09:00</updated><id>https://sangwook.github.io/2015/11/03/neovim-vim</id><content type="html" xml:base="https://sangwook.github.io/2015/11/03/neovim-vim.html">&lt;h3 id=&quot;어제-neovim-010-이-릴리즈-됨&quot;&gt;어제 Neovim 0.1.0 이 릴리즈 됨&lt;/h3&gt;
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://recode.net/2015/10/09/twitter-is-planning-company-wide-layoffs-for-next-week/&quot;&gt;http://recode.net/2015/10/09/twitter-is-planning-company-wide-layoffs-for-next-week/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://kr.wsj.com/posts/2015/10/23/%ED%8A%B8%EC%9C%84%ED%84%B0-ceo-%EC%9E%AD-%EB%8F%84%EC%8B%9C-%EB%82%B4-%EC%A3%BC%EC%8B%9D-3%EB%B6%84%EC%9D%98-1-%EC%A7%81%EC%9B%90%EB%93%A4%EC%97%90%EA%B2%8C-%EA%B8%B0%EB%B6%80%ED%95%98%EA%B2%A0/&quot;&gt;http://kr.wsj.com/posts/2015/10/23/%ED%8A%B8%EC%9C%84%ED%84%B0-ceo-%EC%9E%AD-%EB%8F%84%EC%8B%9C-%EB%82%B4-%EC%A3%BC%EC%8B%9D-3%EB%B6%84%EC%9D%98-1-%EC%A7%81%EC%9B%90%EB%93%A4%EC%97%90%EA%B2%8C-%EA%B8%B0%EB%B6%80%ED%95%98%EA%B2%A0/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://investor.twitterinc.com/&quot;&gt;https://investor.twitterinc.com/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:4&quot; id=&quot;fn:4&quot; class=&quot;reversefootnote&quot;&gt;[4]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.navercorp.com/ko/ir/earningsRelease.nhn&quot;&gt;http://www.navercorp.com/ko/ir/earningsRelease.nhn&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:5&quot; id=&quot;fn:5&quot; class=&quot;reversefootnote&quot;&gt;[5]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://linecorp.com/ja/pr/news/ja/2015/1133&quot;&gt;http://linecorp.com/ja/pr/news/ja/2015/1133&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:6&quot; id=&quot;fn:6&quot; class=&quot;reversefootnote&quot;&gt;[6]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://tomomo.tistory.com/m/post/195&quot;&gt;http://tomomo.tistory.com/m/post/195&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:7&quot; id=&quot;fn:7&quot; class=&quot;reversefootnote&quot;&gt;[7]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.kakaocorp.com/ir/earnings&quot;&gt;http://www.kakaocorp.com/ir/earnings&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:8&quot; id=&quot;fn:8&quot; class=&quot;reversefootnote&quot;&gt;[8]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.focus.kr/view.php?key=2015110500161652472&quot;&gt;http://www.focus.kr/view.php?key=2015110500161652472&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:9&quot; id=&quot;fn:9&quot; class=&quot;reversefootnote&quot;&gt;[9]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://investor.fb.com/results.cfm?Quarter=3&amp;amp;Year=2015&quot;&gt;http://investor.fb.com/results.cfm?Quarter=3&amp;amp;Year=2015&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:10&quot; id=&quot;fn:10&quot; class=&quot;reversefootnote&quot;&gt;[10]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.emarketer.com/Article.aspx?R=1013015&amp;amp;ecid=NL1006&quot;&gt;http://www.emarketer.com/Article.aspx?R=1013015&amp;amp;ecid=NL1006&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:10&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:11&quot; id=&quot;fn:11&quot; class=&quot;reversefootnote&quot;&gt;[11]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://investor.google.com/earnings/2015/Q3_google_earnings.html&quot;&gt;https://investor.google.com/earnings/2015/Q3_google_earnings.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:11&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:12&quot; id=&quot;fn:12&quot; class=&quot;reversefootnote&quot;&gt;[12]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://techcrunch.com/2015/10/08/mobile-searches-surpass-desktop-searches-at-google-for-the-first-time/&quot;&gt;http://techcrunch.com/2015/10/08/mobile-searches-surpass-desktop-searches-at-google-for-the-first-time/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:12&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:13&quot; id=&quot;fn:13&quot; class=&quot;reversefootnote&quot;&gt;[13]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.tencent.com/en-us/ir/news/2015.shtml&quot;&gt;http://www.tencent.com/en-us/ir/news/2015.shtml&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:13&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:14&quot; id=&quot;fn:14&quot; class=&quot;reversefootnote&quot;&gt;[14]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://mp.weixin.qq.com/s?__biz=MzAxNzYxMzc0OA==&amp;amp;mid=400131662&amp;amp;idx=1&amp;amp;sn=9f24c35c801e6ea0a10275687b9612ff&amp;amp;scene=0#rd&quot;&gt;http://mp.weixin.qq.com/s?__biz=MzAxNzYxMzc0OA==&amp;amp;mid=400131662&amp;amp;idx=1&amp;amp;sn=9f24c35c801e6ea0a10275687b9612ff&amp;amp;scene=0#rd&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:14&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:15&quot; id=&quot;fn:15&quot; class=&quot;reversefootnote&quot;&gt;[15]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://developer.apple.com/library/prerelease/ios/releasenotes/General/WhatsNewInSafari/Articles/Safari_9.html#//apple_ref/doc/uid/TP40014305-CH9-SW9&quot;&gt;https://developer.apple.com/library/prerelease/ios/releasenotes/General/WhatsNewInSafari/Articles/Safari_9.html#//apple_ref/doc/uid/TP40014305-CH9-SW9&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:15&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:16&quot; id=&quot;fn:16&quot; class=&quot;reversefootnote&quot;&gt;[16]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://adwords.blogspot.com/2015/06/better-click-quality-on-display-ads.html&quot;&gt;http://adwords.blogspot.com/2015/06/better-click-quality-on-display-ads.html&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:16&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:17&quot; id=&quot;fn:17&quot; class=&quot;reversefootnote&quot;&gt;[17]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://www.exchangewire.com/blog/2015/09/03/ad-blocking-predicted-to-cost-14bn-in-2015-half-of-publishers-frustrated-by-programmatic-demand-incompletes-smartphones-account-for-20-of-ad-views-less-than-30-of-marketers-use-cross-channel/&quot;&gt;https://www.exchangewire.com/blog/2015/09/03/ad-blocking-predicted-to-cost-14bn-in-2015-half-of-publishers-frustrated-by-programmatic-demand-incompletes-smartphones-account-for-20-of-ad-views-less-than-30-of-marketers-use-cross-channel/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:17&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:18&quot; id=&quot;fn:18&quot; class=&quot;reversefootnote&quot;&gt;[18]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://blog.pagefair.com/2015/ad-blocking-report/&quot;&gt;http://blog.pagefair.com/2015/ad-blocking-report/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:18&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:19&quot; id=&quot;fn:19&quot; class=&quot;reversefootnote&quot;&gt;[19]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.businessinsider.com/ubs-says-ad-revenue-impact-of-ios-9-ad-blocking-will-only-be-1-billion-2015-9&quot;&gt;http://www.businessinsider.com/ubs-says-ad-revenue-impact-of-ios-9-ad-blocking-will-only-be-1-billion-2015-9&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:19&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><summary type="html">트위터
+
+
+  트위터가 339명을 해고함. 2015년 10월 [1]
+    
+      트위터는 이전 분기 직원수가 4,100명 이었음.
+      해고한 339명은 전체 직원수의 약 8%
+      그리고 일주일 후 (살아)남은 직원들에게 Jack Dorsey 자신의 주식 1/3 을(약 2,200억원) 분배했다. [2]
+      상욱: 이 두 선택(해고와 주식 재분배)은 직원들의 “동기”가 무엇보다 중요하다는 jack dorsey 의 판단으로 생각한다.
+        
+          나는 회사의 성공은 “사람” x “동기” 라고 생각한다.
+          능력 있는 사람들로 채워져 있고, 헌신할 동기가 있으면 성공한다.
+            
+              (가장 큰 동기는 존경하는 사람들로 둘러싸여 있는 환경이 아닐까?)
+            
+          
+        
+      
+    
+  
+  트위터 2015 3Q 실적 [3]
+    
+      매출: YoY 58% (약 6,570억원)
+      광고매출: YoY 60% (약 5,924억원)
+      광고매출의 86% 가 모바일.
+      MAU: YoY 11%, 3억2천만명
+      미국 내 TV광고 계획.
+    
+  
+
+
+네이버, LINE
+
+
+  네이버 2015 3Q 실적
+  매출: YoY 20% (8397억원) [4]
+  영업이익: YoY 5.6% (1995억원)
+  영업이익률: 23.8%
+  상욱: PC매출은 정체지만 크게 줄지는 않아 보임.
+    
+      PC매출이 정체상태에서 모바일 매출이 성장함.
+    
+  
+  LINE 전체 매출은 322억엔 (약 3,030 억원) YoY 35% [5]
+    
+      MAU: 전체 2억1,200만명
+      인도네시아의 점유율을 꾸준히 올리고 있다는 대표의 발언.
+      라인 매출 비중은 게임(41%) &amp;gt; 광고(30%) &amp;gt; 스티커(24%) &amp;gt; 기타
+      스탬프 매출이 증가함. (공식 스탬프, 크리에이터 스탬프 모두)
+      광고사업에서는 동영상 시청에 대한 인센티브형 광고 실험이 주목할만 하다고 생각함.
+      게임사업에서는 원피스(ANI)를 주제로한 게임을 대만, 홍콩에 출시하여 대만 앱스토어 매출 순위 1위라는 사실은 주목할만 함.
+    
+  
+  LINE MUSIC: 다운로드 860만, MAU 400만명
+  B612: 다운로드 1억, MAU 5,000만명
+  LINE 바이트: 600만명 가입. 아르바이트 구인 서비스. TV광고를 하면서 적극적으로 마케팅중.
+  LINE 만화: 2015년 10월 말. 만화 출판 시장에 진출. 구입하면 만화의 LINE 스탬프를 무료로 다운로드.
+  네이버 커넥트 2015 (컨퍼런스) [6]
+    
+      별 내용 없었다.
+    
+  
+
+
+카카오
+
+
+  카카오 2015 3Q 실적 [7]
+    
+      매출: YoY 4% (2,296억원)
+      영업이익: YoY -47% (162억원)
+      광고매출: YoY 1% (1,429억원)
+      게임매출: YoY -24% (514억원)
+      매출비중: 광고(62%) &amp;gt; 게임(22%) &amp;gt; 기타(9%) &amp;gt; 커머스(7%)
+      모바일매출은 총 매출의 56%
+    
+  
+  대리운전 시장규모는 2.5조원 이고, 시장점유율 40%, 수수료 10% 로 가정하면 연 수익 1,000억원 예상함. [8]
+
+
+페이스북
+
+
+  2015 3Q 실적 [9]
+    
+      매출: YoY 40.5% (약 5.1조원)
+      매출의 95% 는 광고 매출.
+        
+          상욱: 역시 모바일 SNS 도 광고 수익에 의존함. BM은 변하지 않았음.
+        
+      
+      광고 매출의 78% 는 모바일 매출. (전년 동기 66%)
+      페이스북 직원수는 12,000명 (YoY 42%)
+      MAU: 15.5억명
+      DAU: 10.1억명
+        
+          상욱: 즉, DAU/MAU 는 65% 이상이라는 얘기.
+        
+      
+      미국 이외 지역에서 매출의 절반 이상이 나옴.
+      페이스북에서 동영상 재생: 하루 평균 5억명이 80억회 재생
+        
+          페이스북 동영상 광고에 대한 언급:
+            
+              최근 닐슨의 조사에 따르면, TV광고와 페이스북 광고를 병행하는 것이 광고효과가 더 크고 브랜드에 대한 호감도가 올라간다고 함.
+              TRP(Target Rating Point) 를 도입하여 TV광고와 마찬가지로 집행/효과측정 가능해짐.
+            
+          
+        
+      
+      인스타그램: MAU 4억명. 하루 8,000만개 이상의 사진이 공유.
+      WhatsApp: MAU 9억명
+      Messenger: MAU 7억명
+    
+  
+  전세계 SNS 광고 매출 순위 [10]
+    
+      페이스북(65.8%) &amp;gt; 트위터(9.7%) &amp;gt; 링크드인(3.2%)
+    
+  
+
+
+구글
+
+
+  2015 3Q 실적 [11]
+    
+      매출: YoY 13% (약 21.9조원)
+      광고매출: YoY 13% (약 19.6조원)
+      성장 이유: 모바일 검색, 유튜브, Programmatic 광고
+    
+  
+  구글의 모바일 검색이 데스크탑 검색을 2015년 여름에 처음으로 넘어섰다. [12]
+
+
+텐센트
+
+
+  2015 3Q 실적 [13]
+    
+      매출: YoY 34% (약 4.8조원)
+      영업이익: YoY 37% (약 1.9조원)
+      광고매출: YoY 102% (약 9060억원)
+        
+          브랜드광고: YoY 67% (약 4682억원)
+            
+              성장 이유: 동영상과 뉴스 플랫폼의 성장.
+            
+          
+          성과형광고: YoY 160% (약 4377억원)
+        
+      
+    
+  
+  텐센트가 발표한 위챗 관련 데이터 WeChat Life Report [14]
+    
+      reading habits 을 주목할 필요가 있음. 아주 유용한 자료.
+    
+  
+
+
+광고 차단
+
+
+  애플은 iOS9 에서 광고 차단앱을 만들 수 있는 기능(Content Blocking)을 추가했다. 2015 Apple [15]
+    
+      모바일 디스플레이 광고 클릭의 50% 는 의도하지 않은 클릭이다. 2015 Google [16]
+      2015년 Ad Blocker 때문에 발생한 매출 손실이 £14bn 로 예측됨. 2015 ExchangeWire [17]
+      광고차단(adblock) 을 사용하는 사람은 미국 사용자의 15% 이다. [18]
+      광고차단(adblock) 을 사용하는 사람은 한국 사용자의 2% 이다.
+      iOS9 의 광고 차단 기능과 이 기능을 사용한 광고 차단 앱의 영향은 과장되어 있다. 2015 UBS [19]
+        
+          이유:
+            
+              (네이티브)앱의 광고는 차단되지 않는다.
+                
+                  모바일 광고 수익의 대부분은 앱 내부 광고이지 모바일 웹의 광고가 아니다.
+                
+              
+              차단 되는 것은 Safari 브라우저만 이다.
+                
+                  Web 트래픽 중 Safari 의 비중은 22% 이다.
+                
+              
+              설정이 필요하다.
+                
+                  광고차단앱을 받아서 환경설정을 변경해야 한다.
+                
+              
+              64비트 단말에서만 작동한다.
+                
+                  iPhone5s, iPhone6, iPhone6s 에서 동작하고 오래된 아이폰이나 아이패드에선 동작하지 않는다.
+                
+              
+            
+          
+          UBS 의 추측은 iOS9 광고 차단 기능 때문에 발생하는 매체의 손해는 10억 달러.
+            
+              이것은 전세계 디지털 광고비의 0.5% 모바일 광고의 1.3% 에 불과함.
+              Safari 의 광고 차단의 비율은 높게 잡아도 20%
+            
+          
+        
+      
+      내 생각에
+        
+          “설치만 하면 광고가 없어진다” 는 슬로건은 매우 매력적이다.
+          몇몇의 매체는 광고를 엄격히 검수하여 품질을 관리했지만
+          몇몇의 매체는 나쁜 광고를 허용 했다.
+          나쁜 광고는 사용자의 인터넷을 느리게 만들고 배터리를 더 소모시켰다.
+          결과적으로 광고 차단앱은 성장하고 있고, 광고 업계의 실패다.
+          우리는 정말 더 나은 세상을 만들고 있는 걸까.
+        
+      
+    
+  
+
+
+내 생각
+
+
+  모바일에서 어떻게 수익화를 할 것인가를 3년 전에는 아무도 답을 못 찾았다.
+    
+      하지만 지금은 답이 나와 있다.
+      페이스북, 네이버의 라인, 텐센트의 WeChat 등 모두 하나로 수렴했다.
+      이미 모범답안이 있고, 답안지를 보면서 시험을 치는데도 실패하는 것은 비정상이다.
+    
+  
+  회사는 언제나 위기를 얘기하고.
+    
+      예외 없이 선택과 집중, 개혁, 변화, 그리고 잘하자. 라는 식의 하나마나한 얘기들이 나온다.
+      물론 밥을 먹으면 배부르고, 열심히 하면 성공하지.
+      가장 중요한 것이 빠져 있는 게 아닐까?
+    
+  
+  요즘 이 바닥은 갈수록 사용자의 정보를 탐욕스럽게 빨아들이는 일을 고민하는 것 같다.
+    
+      사용자에게 더 재밌는 컨텐츠, 유용한 정보를 주는 것 같지만.
+      사실은 TV도, PC도, 스마트폰도 수십만 원 짜리 광고판을 집집마다 설치하게 하는 일이다.
+      컨텐츠가 주도하는 것 같지만 사실은 광고가 주도한다.
+      페이스북도 구글도 네이버도 텐센트도 모두 서비스의 변화를 보면 광고가 서비스를 리드한다.
+      광고하기 쉽도록, 그래서 더 많은 이익창출을 하도록 서비스를 변화하고 정보를 이용한다.
+      그래서 새롭게 만들어지는 부가가치는 도대체 무엇일까.
+    
+  
+
+
+         [1]:        http://recode.net/2015/10/09/twitter-is-planning-company-wide-layoffs-for-next-week/&amp;nbsp;&amp;#91;return&amp;#93;             [2]:        http://kr.wsj.com/posts/2015/10/23/%ED%8A%B8%EC%9C%84%ED%84%B0-ceo-%EC%9E%AD-%EB%8F%84%EC%8B%9C-%EB%82%B4-%EC%A3%BC%EC%8B%9D-3%EB%B6%84%EC%9D%98-1-%EC%A7%81%EC%9B%90%EB%93%A4%EC%97%90%EA%B2%8C-%EA%B8%B0%EB%B6%80%ED%95%98%EA%B2%A0/&amp;nbsp;&amp;#91;return&amp;#93;             [3]:        https://investor.twitterinc.com/&amp;nbsp;&amp;#91;return&amp;#93;             [4]:        http://www.navercorp.com/ko/ir/earningsRelease.nhn&amp;nbsp;&amp;#91;return&amp;#93;             [5]:        http://linecorp.com/ja/pr/news/ja/2015/1133&amp;nbsp;&amp;#91;return&amp;#93;             [6]:        http://tomomo.tistory.com/m/post/195&amp;nbsp;&amp;#91;return&amp;#93;             [7]:        http://www.kakaocorp.com/ir/earnings&amp;nbsp;&amp;#91;return&amp;#93;             [8]:        http://www.focus.kr/view.php?key=2015110500161652472&amp;nbsp;&amp;#91;return&amp;#93;             [9]:        http://investor.fb.com/results.cfm?Quarter=3&amp;amp;Year=2015&amp;nbsp;&amp;#91;return&amp;#93;             [10]:        http://www.emarketer.com/Article.aspx?R=1013015&amp;amp;ecid=NL1006&amp;nbsp;&amp;#91;return&amp;#93;             [11]:        https://investor.google.com/earnings/2015/Q3_google_earnings.html&amp;nbsp;&amp;#91;return&amp;#93;             [12]:        http://techcrunch.com/2015/10/08/mobile-searches-surpass-desktop-searches-at-google-for-the-first-time/&amp;nbsp;&amp;#91;return&amp;#93;             [13]:        http://www.tencent.com/en-us/ir/news/2015.shtml&amp;nbsp;&amp;#91;return&amp;#93;             [14]:        http://mp.weixin.qq.com/s?__biz=MzAxNzYxMzc0OA==&amp;amp;mid=400131662&amp;amp;idx=1&amp;amp;sn=9f24c35c801e6ea0a10275687b9612ff&amp;amp;scene=0#rd&amp;nbsp;&amp;#91;return&amp;#93;             [15]:        https://developer.apple.com/library/prerelease/ios/releasenotes/General/WhatsNewInSafari/Articles/Safari_9.html#//apple_ref/doc/uid/TP40014305-CH9-SW9&amp;nbsp;&amp;#91;return&amp;#93;             [16]:        http://adwords.blogspot.com/2015/06/better-click-quality-on-display-ads.html&amp;nbsp;&amp;#91;return&amp;#93;             [17]:        https://www.exchangewire.com/blog/2015/09/03/ad-blocking-predicted-to-cost-14bn-in-2015-half-of-publishers-frustrated-by-programmatic-demand-incompletes-smartphones-account-for-20-of-ad-views-less-than-30-of-marketers-use-cross-channel/&amp;nbsp;&amp;#91;return&amp;#93;             [18]:        http://blog.pagefair.com/2015/ad-blocking-report/&amp;nbsp;&amp;#91;return&amp;#93;             [19]:        http://www.businessinsider.com/ubs-says-ad-revenue-impact-of-ios-9-ad-blocking-will-only-be-1-billion-2015-9&amp;nbsp;&amp;#91;return&amp;#93;</summary></entry><entry><title type="html">Neovim 0.1.0 릴리즈</title><link href="https://sangwook.github.io/2015/11/03/neovim-vim.html" rel="alternate" type="text/html" title="Neovim 0.1.0 릴리즈" /><published>2015-11-03T17:34:00+09:00</published><updated>2015-11-03T17:34:00+09:00</updated><id>https://sangwook.github.io/2015/11/03/neovim-vim</id><content type="html" xml:base="https://sangwook.github.io/2015/11/03/neovim-vim.html">&lt;h3 id=&quot;어제-neovim-010-이-릴리즈-됨&quot;&gt;어제 Neovim 0.1.0 이 릴리즈 됨&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://news.ycombinator.com/item?id=10488188&quot;&gt;https://news.ycombinator.com/item?id=10488188&lt;/a&gt;&lt;/li&gt;
@@ -1662,7 +2666,71 @@ let job = job_start('ls -alh ~/', { 'callback': 'Handler' })
 
 &lt;p&gt;덧, 요즘 블로그에 글이 뜸해서 회사에다 쓴 글을 올려봤음.&lt;/p&gt;
 
-&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/neovim/neovim/wiki/Introduction&quot;&gt;https://github.com/neovim/neovim/wiki/Introduction&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/neovim/neovim/wiki/Plugin-UI-architecture&quot;&gt;https://github.com/neovim/neovim/wiki/Plugin-UI-architecture&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.binpress.com/blog/2014/11/19/vim-creator-bram-moolenaar-interview/&quot;&gt;http://www.binpress.com/blog/2014/11/19/vim-creator-bram-moolenaar-interview/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><summary type="html">어제 Neovim 0.1.0 이 릴리즈 됨</summary></entry><entry><title type="html">Google의 컨테이너 관리 논문 (Borg Paper, Kubernetes)</title><link href="https://sangwook.github.io/2015/06/03/google-borg-paper-kubernetes.html" rel="alternate" type="text/html" title="Google의 컨테이너 관리 논문 (Borg Paper, Kubernetes)" /><published>2015-06-03T15:17:00+09:00</published><updated>2015-06-03T15:17:00+09:00</updated><id>https://sangwook.github.io/2015/06/03/google-borg-paper-kubernetes</id><content type="html" xml:base="https://sangwook.github.io/2015/06/03/google-borg-paper-kubernetes.html">&lt;ul&gt;
+&lt;div class=&quot;footnotes&quot;&gt;  &lt;ol&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:1&quot; id=&quot;fn:1&quot; class=&quot;reversefootnote&quot;&gt;[1]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/neovim/neovim/wiki/Introduction&quot;&gt;https://github.com/neovim/neovim/wiki/Introduction&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:2&quot; id=&quot;fn:2&quot; class=&quot;reversefootnote&quot;&gt;[2]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;https://github.com/neovim/neovim/wiki/Plugin-UI-architecture&quot;&gt;https://github.com/neovim/neovim/wiki/Plugin-UI-architecture&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;    &lt;li&gt; &lt;div&gt; &lt;span class=&quot;num&quot;&gt; &lt;a href=&quot;#fnref:3&quot; id=&quot;fn:3&quot; class=&quot;reversefootnote&quot;&gt;[3]&lt;/a&gt;: &lt;/span&gt; &lt;p&gt;      &lt;p&gt;&lt;a href=&quot;http://www.binpress.com/blog/2014/11/19/vim-creator-bram-moolenaar-interview/&quot;&gt;http://www.binpress.com/blog/2014/11/19/vim-creator-bram-moolenaar-interview/&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&lt;span class=&quot;return&quot;&gt;&amp;#91;return&amp;#93;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;    &lt;/p&gt; &lt;/div&gt; &lt;/li&gt;  &lt;/ol&gt;&lt;/div&gt;</content><summary type="html">어제 Neovim 0.1.0 이 릴리즈 됨
+
+
+  https://news.ycombinator.com/item?id=10488188
+  https://www.reddit.com/r/vim/comments/3r45y6/neovim_first_public_release_010/
+  https://www.reddit.com/r/neovim/comments/3r4ciu/neovim_010/
+
+
+Neovim 을 만든 이유 [1]
+
+
+  20년 이상의 시간동안, vim은 소수의 사람들만 이해할 수 있는 무시무시한 C89 코드를 조금씩 수정하여 30만 줄의 코드가 되었다.
+  문제는 이 거대한 vim 코드 베이스가 오직 한 사람 Bram Moolenaar 의 책임으로 유지된다는 점이다.
+  이것은 새로운 기능과 버그 수정을 어렵게 한다.
+  vim 은 더이상 plugin 생태계의 개발속도를 따라갈 수 없다.
+  그래서 우리는 다음의 목표를 위해 vim 의 코드를 공격적으로 refactor 하기로 했다.
+    
+      버그 수정과 기능 추가를 빠르게 개선하기 위해 maintenance 를 단순화 한다.
+      여러 개발자들과 분담하여 개발한다.
+      core source 수정 없이 새롭고 현대적인 UI 구현이 가능하게 한다.
+      플러그인은 어떤 프로그래밍 언어로도 쓸 수 있게 만든다.
+    
+  
+  이러한 목표를 달성해서 새로운 개발자가 커뮤니티에 참여하게 만들고
+    
+      그러면 에디터는 개선된다.
+    
+  
+  무엇보다 중요한 것은
+    
+      Neovim 은 vim 을 처음부터 다시 쓰는 프로젝트가 아니다.
+      기존 vim 의 편집 모델과 Vimscript 에 거의 영향을 주지 않는다.
+      기존 Vimscript 플러그인은 Neovim 에서도 정상 작동한다.
+    
+  
+
+
+(플러그인은 msgpack-rpc API, TCP 통신으로 플러그인과 UI 를 구현하는 구조네요.) [2]
+
+vim 을 만든 Bram Moolenaar 의 인터뷰 [3]
+
+
+  Neovim 에 대해 어떻게 생각하나?
+    
+      하위호환을 무시하거나 특정 시스템 지원을 안 하는 것 등의 선택은 동의하지 않는다.
+      vim 코드가 오래되고 싫어서 “올바로(right)” 구현하기 위한 것 같은데.
+      오래된 코드는 ugly 하다는 것에 동의한다.
+      하지만 새로 구현하는 것은 아주 많은 노력이 필요할 것이다.
+      Elvis 텍스트 에디터도 새로운 코드로 다시 구현을 시도 했는데.
+      vim 이 기능 확장을 하는 동안 Elvis 는 사용자를 잃었다.
+      Elivs 가 좋은 코드로 작성되었는지 모르지만 사용자는 모른다.
+      neovim 의 좋은 기능들이 다시 vim 에 돌아오길 바란다.
+        
+          내 말은.
+          누구나 좀더 좋은 플러그인 지원, 좀더 좋은 GUI 와 embedding 을 원한다.
+          더 큰 질문은 그것을 어떻게 누가 적절하게 구현할 것이냐 이다.
+        
+      
+    
+  
+
+
+덧, 요즘 블로그에 글이 뜸해서 회사에다 쓴 글을 올려봤음.
+
+         [1]:        https://github.com/neovim/neovim/wiki/Introduction&amp;nbsp;&amp;#91;return&amp;#93;             [2]:        https://github.com/neovim/neovim/wiki/Plugin-UI-architecture&amp;nbsp;&amp;#91;return&amp;#93;             [3]:        http://www.binpress.com/blog/2014/11/19/vim-creator-bram-moolenaar-interview/&amp;nbsp;&amp;#91;return&amp;#93;</summary></entry><entry><title type="html">Google의 컨테이너 관리 논문 (Borg Paper, Kubernetes)</title><link href="https://sangwook.github.io/2015/06/03/google-borg-paper-kubernetes.html" rel="alternate" type="text/html" title="Google의 컨테이너 관리 논문 (Borg Paper, Kubernetes)" /><published>2015-06-03T15:17:00+09:00</published><updated>2015-06-03T15:17:00+09:00</updated><id>https://sangwook.github.io/2015/06/03/google-borg-paper-kubernetes</id><content type="html" xml:base="https://sangwook.github.io/2015/06/03/google-borg-paper-kubernetes.html">&lt;ul&gt;
   &lt;li&gt;지난달 말(2015-04-17) Google 이 “Large-scale cluster management at Google with Borg” 라는 논문을 발표했다. &lt;a href='#fn:1' class='footnote' id='fnref:1'&gt;[1]&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;최근에 회사 업무로 kubernetes &lt;a href='#fn:2' class='footnote' id='fnref:2'&gt;[2]&lt;/a&gt; 를 검토하고 있어서
     &lt;ul&gt;
@@ -1816,4 +2884,139 @@ let job = job_start('ls -alh ~/', { 'callback': 'Handler' })
   
 
 
-         [1]:        https://research.google.com/pubs/pub43438.html&amp;nbsp;&amp;#91;return&amp;#93;             [2]:        https://github.com/googlecloudplatform/kubernetes&amp;nbsp;&amp;#91;return&amp;#93;</summary></entry></feed>
+초록
+
+  Google’s Borg system is a cluster manager that runs hundreds of thousands of jobs, from many thousands of different applications, across a number of clusters each with up to tens of thousands of machines. It achieves high utilization by combining admission control, efficient task-packing, over-commitment, and machine sharing with process-level performance isolation. It supports high-availability applications with runtime features that minimize fault-recovery time, and scheduling policies that reduce the probability of correlated failures. Borg simplifies life for its users by offering a declarative job specification language, name service integration, real-time job monitoring, and tools to analyze and simulate system behavior. We present a summary of the Borg system architecture and features, important design decisions, a quantitative analysis of some of its policy decisions, and a qualitative examination of lessons learned from a decade of operational experience with it.
+
+
+
+  일단 초록은 위와 같다.
+  한마디로 Google 의 Borg 시스템은 수만대의 머신으로 구성된 클러스터들에 수십만개의 jobs 을 실행하는 클러스터 매니저라는 소리.
+  내용을 보면 borg 는 C++ 로 작성되어 있고, 이 노하우를 적용하여 오픈소스로 만든것이 kubernetes 이다.
+    
+      kubernetes 는 현재 go 언어와 docker 기반으로 만들어져 있다.
+      Borg 를 만들었던 엔지니어 대부분이 kubernetes 로 옮겼다고도 함.
+    
+  
+  구글은 거의 모든 서버를 컨테이너로 돌린다고 하고, 매주 20억개의 컨테이너가 시작된다고 함. [3]
+
+
+논문에서 관심있게 본 부분만.
+
+2.1 The workload
+
+
+  workload 를 아래의 2가지로 나눔.
+    
+      long-running services (prod)
+        
+          절대 죽으면 안 됨.
+          빠른 응답시간 (a few μs to a few hundred ms)
+          e.g. Gmail, Google Docs, web search, BigTable 같은 내부 인프라 서비스 등.
+          CPU 70% 를 할당받고 60% 를 사용함.
+          memory 55% 를 할당받고 85% 를 사용함.
+        
+      
+      batch jobs (non-prod)
+        
+          몇 초에 끝나는 작업 부터 몇일씩 걸리는 작업들.
+        
+      
+    
+  
+  2가지 종류로 나눠서 같은 cell 에 함께 실행하는 것은 자원을 최대한 활용하기 위한 목적이라고 함.
+
+
+2.5 Priority, quota, and admission control
+
+
+  사용자별 quota 와 job 우선순위가 있는데 자세히 안 읽음.
+
+
+2.6 Naming and monitoring
+
+
+  “Borg Name Service” (BNS) 를 만들었다. cell 이름, job 이름, task 번호를 포함한 이름을 각 task 에 붙인다.
+    
+      목적: 새로운 머신에 task 를 할당하기 위해 다른 머신에 할당된 task를 찾기 위함.
+    
+  
+
+
+3.2 Scheduling
+
+
+  scoring 단계에서 선택된 machine 이 만약 새로운 task 를 돌리기에 충분한 자원이 없다면.
+  Borg 는 (task 가 돌아갈 수 있을때까지) 우선순위가 낮은 tasks 를 죽이고 자원을 점유한다(preempts).
+  그리고 죽은 tasks 는 scheduler 의 pending queue 에 들어가서 언젠가 돌아가는 방식인듯.
+  Task startup latency 는 평균 25 초이다.
+    
+      이것의 80% 는 패키지 설치. (병목은 local disk 쓰기 성능)
+    
+  
+  참고로 kubernetes 의 소스코드도 요즘 오랫동안 훑어봤는데.
+    
+      kubernetes 의 스케줄링은 score 가 동일하면 랜덤으로 하나 뽑아서 실행하도록 구현되어 있다. [4]
+    
+  
+
+
+3.3 Borglet
+
+
+  Borgmaster 는 각 Borglet 을 n 초에 한번씩 poll 해서, 머신의 현재 상태를 가져옴.
+    
+      목적: 통신이 너무 많아 지는 것을 회피.
+    
+  
+
+
+3.4 Scalability
+
+
+  Borg 의 중앙집중적인 아키텍처의 확장성에 대해선 확신이 없음.
+  지금까지는 limit 까지 근접하고 limit 을 제거해왔다.
+  Borgmaster 는 10~14 CPU 코어와 50 GiB 메모리를 사용.
+
+
+4. Availability
+
+
+  Borgmaster 의 가용성이 99.99% 라고 함.
+    
+      어떻게?
+        
+          replication for machine failures
+          admission control to avoid overload
+          deploying instances using simple, low-level tools to minimize external dependencies.
+        
+      
+    
+  
+
+
+6. Isolation
+
+
+  우리 machine 의 50% 는 9개 이상의 tasks 를 돌린다.
+  90%ile 의 machine 은 약 25 tasks 를 가지고 있고, 4500 개의 스레드를 돌린다.
+
+
+6.2 Performance isolation
+
+
+  compressible resources (압축 가능한 자원)
+    
+      task 를 죽이지 않고도 서비스의 품질을 떨어뜨려서 task 로부터 자원을 돌려받는게 가능한 것들.
+      e.g. CPU cycles, IO bandwidth
+    
+  
+  non-compressible resources (압축 불가능한 자원)
+    
+      task 를 죽이지 않고는 자원을 돌려받는게 불가능한 것들.
+      e.g. memory, disk 공간
+    
+  
+
+
+         [1]:        https://research.google.com/pubs/pub43438.html&amp;nbsp;&amp;#91;return&amp;#93;             [2]:        https://github.com/googlecloudplatform/kubernetes&amp;nbsp;&amp;#91;return&amp;#93;             [3]:        https://speakerdeck.com/jbeda/containers-at-scale&amp;nbsp;&amp;#91;return&amp;#93;             [4]:        https://github.com/GoogleCloudPlatform/kubernetes/blob/907b83cd7d6b400725a1a0d0509d601172920fa4/plugin/pkg/scheduler/generic_scheduler.go#L88&amp;nbsp;&amp;#91;return&amp;#93;</summary></entry></feed>
